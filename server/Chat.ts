@@ -1,6 +1,5 @@
 
 import mongoose = require('mongoose');
-import { User } from './User';
 
 export interface Chat extends mongoose.Document {
     readonly _id: mongoose.Schema.Types.ObjectId,
