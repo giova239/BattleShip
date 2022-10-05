@@ -276,6 +276,11 @@ app.post('/chat/:userID', auth, (req, res, next) => {
     catch (error) {
         return next({ statusCode: 404, error: true, errormessage: "Invalid UserID" });
     }
+    user.getModel().findById(req.user.id).then(currentUser => {
+        if (!currentUser.friends.includes(u2)) {
+            return next({ statusCode: 404, error: true, errormessage: "You can't chat with a user not in your friendlist" });
+        }
+    });
     chat.getModel().findOne({ $or: [
             { 'user1': u1, 'user2': u2 },
             { 'user1': u2, 'user2': u1 }
