@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Message } from '../Message';
+import { Chat } from '../Chat';
 import { MessageHttpService } from '../message-http.service';
 import { UserHttpService } from '../user-http.service';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { SocketioService } from '../socketio.service';
 })
 export class MessageListComponent implements OnInit {
 
-  public messages: Message[] = [];
+  public chat: Chat;
 
   constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private router: Router ) { }
 
@@ -25,9 +25,8 @@ export class MessageListComponent implements OnInit {
 
   public get_messages() {
     this.ms.get_messages().subscribe(
-      ( messages ) => {
-        this.messages = messages;
-
+      ( chat ) => {
+        this.chat = chat;
       } , (err) => {
         // We need to login again
         this.logout();

@@ -1,13 +1,8 @@
-
-<app-message-editor (posted)="get_messages()" ></app-message-editor>
-
-<div *ngFor="let message of messages" class="card" style="margin: 5px" > 
-    <div class="card-body">
-        <h5 class="card-title"><i class="far fa-envelope"></i>&nbsp;{{message.authormail}}</h5>        
-        <h6 class="card-subtitle mb-2 text-muted">{{message.timestamp | date}} / {{message.timestamp | date:'shortTime'}}</h6>
-        <p class="card-text">{{ message.content }}</p>
-        <span *ngFor="let tag of message.tags" class="badge badge-secondary tag">{{tag}}</span>
+<div *ngFor="let message of chat.messages" [ngClass]="message.isFromUser1 ? 'card bg-primary w-75' : 'card bg-secondary w-75 ml-auto'" style="margin: 5px" > 
+    <div class="card-body">       
+        <h4 class="card-text">{{ message.text }}</h4>
     </div>
+    <div class="card-footer text-right font-weight-light">{{message.date | date}} / {{message.date | date:'shortTime'}}</div>
 </div>
 
 <ul class="nav justify-content-end bottomfooter">

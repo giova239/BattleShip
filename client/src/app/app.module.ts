@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
-import { MessageEditorComponent } from './message-editor/message-editor.component';
 import { MessageListComponent } from './message-list/message-list.component';
 
 // Services
@@ -20,7 +19,6 @@ import { SocketioService } from './socketio.service';
 @NgModule({
   declarations: [
     AppComponent,
-    MessageEditorComponent,
     MessageListComponent,
     UserLoginComponent,
     UserSignupComponent

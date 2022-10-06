@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Message } from './Message';
+import { Chat } from './Chat';
 import { Observable } from 'rxjs';
 import { throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
@@ -45,16 +45,16 @@ export class MessageHttpService {
 
   }
 
-  get_messages(): Observable<Message[]> {
-    return this.http.get<Message[]>( this.us.url + '/messages', this.create_options( {limit: '10', skip: '0'} ) ).pipe(
+  get_messages(): Observable<Chat> {
+    return this.http.get<Chat>( this.us.url + '/chat/633af81678b4d7050836c7c0', this.create_options() ).pipe(
         tap( (data) => console.log(JSON.stringify(data))) ,
         catchError( this.handleError )
       );
   }
 
-  post_message( m: Message ): Observable<Message> {
+  post_message( m: Chat ): Observable<Chat> {
     console.log('Posting ' + JSON.stringify(m) );
-    return this.http.post<Message>( this.us.url + '/messages', m,  this.create_options() ).pipe(
+    return this.http.post<Chat>( this.us.url + '/messages', m,  this.create_options() ).pipe(
       catchError(this.handleError)
     );
   }
