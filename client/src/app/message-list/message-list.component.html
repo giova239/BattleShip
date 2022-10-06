@@ -5,19 +5,10 @@
     <div class="card-footer text-right font-weight-light">{{message.date | date}} / {{message.date | date:'shortTime'}}</div>
 </div>
 
-<ul class="nav justify-content-end bottomfooter">
-  <li class="nav-item">
-    <div class="btn-group dropup">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{us.get_username()}}
-      </button>
-      <div class="dropdown-menu">
-        <div class="dropdown-item" href="#">{{us.get_mail()}}</div>
-        <div *ngIf="us.is_admin()" class="dropdown-item" href="#"><i class="fas fa-check"></i> Admin role</div>
-        <div *ngIf="us.is_moderator()" class="dropdown-item" href="#"><i class="fas fa-check"></i> Moderator role</div>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item nav-link" (click)="logout()" >Logout</a>
-      </div>
-    </div>
-  </li>
-</ul>
+  <div class="container mt-5">
+  <div class="form-group">
+    <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
+    rows="1" (keyup.enter)="post_message()" placeholder="Enter your message here"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary float-right" (click)="post_message()" >Send <i class="fas fa-paper-plane"></i></button>
+  </div>

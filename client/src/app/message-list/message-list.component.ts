@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Chat } from '../Chat';
 import { MessageHttpService } from '../message-http.service';
 import { UserHttpService } from '../user-http.service';
@@ -13,14 +13,18 @@ import { SocketioService } from '../socketio.service';
 export class MessageListComponent implements OnInit {
 
   public chat: Chat;
+  public message: string;
 
   constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private router: Router ) { }
+
+  @Output() posted = new EventEmitter<Chat>();
 
   ngOnInit() {
     this.get_messages();
     this.sio.connect().subscribe( (m) => {
       this.get_messages();
     });
+    this.set_empty();
   }
 
   public get_messages() {
@@ -32,6 +36,22 @@ export class MessageListComponent implements OnInit {
         this.logout();
       }
     );
+  }
+
+  set_empty() {
+    this.message = "";
+  }
+
+  post_message( ) {
+    this.ms.post_message( this.message ).subscribe( (m) => {
+
+      console.log('Message sent');
+      this.set_empty();
+      this.posted.emit( m );
+
+    }, (error) => {
+      console.log('Error occurred while sending the message: ' + error);
+    });
   }
 
   logout() {
