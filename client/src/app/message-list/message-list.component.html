@@ -1,18 +1,26 @@
-<div *ngFor="let message of chat.messages" [ngClass]="message.isFromUser1 ? 'card bg-primary w-75' : 'card bg-secondary w-75 ml-auto'" style="margin: 5px" > 
+<div class="send-container">
+  <h4 class="text-center font-weight-bold ">User</h4>
+</div>
+
+<div class="chat-container bg-light">
+  <div *ngFor="let message of chat.messages.slice().reverse()" [ngClass]="message.isFromUser1 ? 'card bg-primary w-75' : 'card bg-secondary w-75 ml-auto'" style="margin: 5px" > 
     <div class="card-body">       
         <h4 class="card-text">{{ message.text }}</h4>
     </div>
     <div class="card-footer text-right font-weight-light">{{message.date | date}} / {{message.date | date:'shortTime'}}</div>
+  </div>
 </div>
 
-<div class="row">
-  <div class="form-group col">
-    <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
-    rows="1" (keyup.enter)="post_message()" placeholder="Enter your message here"></textarea>
-  </div>
-  <div class="col-auto">
-    <button type="submit" class="btn btn-primary" (click)="post_message()" >
-      <i class="fas fa-paper-plane"></i>
-    </button>
+<div class="send-container">
+  <div class="row">
+    <div class="form-group col">
+      <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
+      rows="1" (keyup.enter)="post_message()" placeholder="Enter your message here"></textarea>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary" (click)="post_message()" >
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
   </div>
 </div>
