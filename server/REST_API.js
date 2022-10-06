@@ -291,6 +291,7 @@ app.post('/chat/:userID', auth, (req, res, next) => {
             }
             found.messages.push(newMessage);
             found.save().then((data) => {
+                ios.emit('broadcast', data);
                 return res.status(200).json({ error: false, errormessage: "" });
             }).catch((reason) => {
                 return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
@@ -303,6 +304,7 @@ app.post('/chat/:userID', auth, (req, res, next) => {
                 messages: [newMessage]
             });
             c.save().then((data) => {
+                ios.emit('broadcast', data);
                 return res.status(200).json({ error: false, errormessage: "" });
             }).catch((reason) => {
                 return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
