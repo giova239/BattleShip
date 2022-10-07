@@ -14,6 +14,7 @@ import { UserLoginComponent } from './user-login/user-login.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { UserSignupComponent } from './user-signup/user-signup.component';
 import { SocketioService } from './socketio.service';
+import { FriendListComponent } from './friend-list/friend-list.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SocketioService } from './socketio.service';
     AppComponent,
     MessageListComponent,
     UserLoginComponent,
-    UserSignupComponent
+    UserSignupComponent,
+    FriendListComponent
   ],
   imports: [
     BrowserModule,

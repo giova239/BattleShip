@@ -1,0 +1,16 @@
+<div class="title-container">
+    <h4 class="text-center font-weight-bold ">Friends</h4>
+</div>
+
+<div class="friends-container bg-light">
+  <div *ngFor="let friend of friends" class="card bg-primary" style="margin: 5px" > 
+    <div class="card-body">       
+        <h4 class="card-text">{{ friend.username }}</h4>
+    </div>
+    <div class="card-footer text-right font-weight-light">
+        <button type="submit" class="btn btn-secondary" (click)="open_chat(friend._id)" >
+            CHAT <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+  </div>
+</div>

@@ -31,6 +31,28 @@ export class UserHttpService {
     }
   }
 
+  private create_options( params = {} ) {
+    return  {
+      headers: new HttpHeaders({
+        authorization: 'Bearer ' + this.get_token(),
+        'cache-control': 'no-cache',
+        'Content-Type':  'application/json',
+      }),
+      params: new HttpParams( {fromObject: params} )
+    };
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      console.error('An error occurred:', error.error.message);
+    } else {
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        'body was: ' + JSON.stringify(error.error));
+    }
+    return throwError('Something bad happened; please try again later.');
+  }
+
   login( mail: string, password: string, remember: boolean ): Observable<any> {
 
     console.log('Login: ' + mail + ' ' + password );
@@ -108,5 +130,12 @@ export class UserHttpService {
       }
     }
     return false;
+  }
+
+  get_friends(){
+    return this.http.get<JSON>( this.url + '/friends',  this.create_options() ).pipe(
+      tap( (data) => console.log(JSON.stringify(data))) ,
+      catchError(this.handleError)
+    );
   }
 }

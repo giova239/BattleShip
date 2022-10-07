@@ -1,0 +1,15 @@
+.friends-container{
+    height: 89vh;
+    max-height: 89vh;
+    margin-top: 2vh;
+    border-radius: 1%;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: scroll;
+}
+
+.title-container{
+    height: 6vh;
+    max-height: 6vh;
+    padding-top: 2vh;
+}
