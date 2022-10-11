@@ -47,9 +47,9 @@ export class MessageHttpService {
       );
   }
 
-  post_message( userID: string, m: string ): Observable<Chat> {
-    console.log('Posting ' + JSON.stringify(m) );
-    return this.http.post<Chat>( this.us.url + '/chat/' + userID, {text: m},  this.create_options() ).pipe(
+  post_message( userID: string, message: string ): Observable<Chat> {
+    console.log('Posting: ' + message );
+    return this.http.post<Chat>( this.us.url + '/chat/' + userID, {text: message},  this.create_options() ).pipe(
       catchError(this.handleError)
     );
   }

@@ -1,5 +1,3 @@
-// A message has some text content, a list of tags and a timestamp
-//
 export interface Chat {
     user1: string,
     user2: string,

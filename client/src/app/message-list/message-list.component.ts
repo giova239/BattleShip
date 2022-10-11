@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Chat } from '../Chat';
+import { Chat, isChat } from '../Chat';
 import { MessageHttpService } from '../message-http.service';
 import { UserHttpService } from '../user-http.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -39,7 +39,15 @@ export class MessageListComponent implements OnInit {
   public get_messages() {
     this.ms.get_messages(this.userID).subscribe(
       ( chat ) => {
-        this.chat = chat;
+        if(isChat(chat)){
+          this.chat = chat;
+        }else{
+          this.chat = {
+            user1 : this.us.get_id(),
+            user2 : this.userID,
+            messages: []
+          }
+        }
       } , (err) => {
         // We need to login again
         this.logout();
