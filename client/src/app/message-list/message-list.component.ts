@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Chat } from '../Chat';
 import { MessageHttpService } from '../message-http.service';
 import { UserHttpService } from '../user-http.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SocketioService } from '../socketio.service';
 
 @Component({
@@ -14,21 +14,30 @@ export class MessageListComponent implements OnInit {
 
   public chat: Chat;
   public message: string;
+  private userID: string;
+  private sub: any;
 
-  constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private router: Router ) { }
+  constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private router: Router, private route: ActivatedRoute) { }
 
   @Output() posted = new EventEmitter<Chat>();
 
   ngOnInit() {
-    this.get_messages();
+    this.sub = this.route.params.subscribe(params => {
+      this.userID = params['userID'];
+   });
     this.sio.connect().subscribe( (m) => {
       this.get_messages();
     });
+    this.get_messages();
     this.set_empty();
   }
 
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
   public get_messages() {
-    this.ms.get_messages().subscribe(
+    this.ms.get_messages(this.userID).subscribe(
       ( chat ) => {
         this.chat = chat;
       } , (err) => {
@@ -43,7 +52,7 @@ export class MessageListComponent implements OnInit {
   }
 
   post_message( ) {
-    this.ms.post_message( this.message ).subscribe( (m) => {
+    this.ms.post_message( this.userID, this.message ).subscribe( (m) => {
 
       console.log('Message sent');
       this.set_empty();

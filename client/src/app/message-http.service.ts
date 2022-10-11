@@ -40,16 +40,16 @@ export class MessageHttpService {
     };
   }
 
-  get_messages(): Observable<Chat> {
-    return this.http.get<Chat>( this.us.url + '/chat/633af81678b4d7050836c7c0', this.create_options() ).pipe(
+  get_messages( userID: string ): Observable<Chat> {
+    return this.http.get<Chat>( this.us.url + '/chat/' + userID, this.create_options() ).pipe(
         tap( (data) => console.log(JSON.stringify(data))) ,
         catchError( this.handleError )
       );
   }
 
-  post_message( m: string ): Observable<Chat> {
+  post_message( userID: string, m: string ): Observable<Chat> {
     console.log('Posting ' + JSON.stringify(m) );
-    return this.http.post<Chat>( this.us.url + '/chat/633af81678b4d7050836c7c0', {text: m},  this.create_options() ).pipe(
+    return this.http.post<Chat>( this.us.url + '/chat/' + userID, {text: m},  this.create_options() ).pipe(
       catchError(this.handleError)
     );
   }

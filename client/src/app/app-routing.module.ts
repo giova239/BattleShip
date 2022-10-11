@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'login', component: UserLoginComponent },
   { path: 'signup', component: UserSignupComponent },
   { path: 'friends', component: FriendListComponent},
-  { path: 'messages', component: MessageListComponent }
+  { path: 'chat/:userID', component: MessageListComponent }
 ];
 
 @NgModule({

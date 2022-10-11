@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserHttpService } from '../user-http.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-friend-list',
@@ -10,7 +11,7 @@ export class FriendListComponent implements OnInit {
 
   public friends;
 
-  constructor(public us: UserHttpService) { }
+  constructor(public us: UserHttpService, private router: Router  ) { }
 
   ngOnInit(): void {
     this.get_friends();
@@ -26,6 +27,7 @@ export class FriendListComponent implements OnInit {
 
   open_chat(userID){
     console.log(userID);
+    this.router.navigate(['/chat/', userID]);
   }
 
 }
