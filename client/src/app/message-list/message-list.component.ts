@@ -14,6 +14,7 @@ export class MessageListComponent implements OnInit {
 
   public chat: Chat;
   public message: string;
+  public isUser1: boolean;
   private userID: string;
   private sub: any;
 
@@ -48,6 +49,7 @@ export class MessageListComponent implements OnInit {
             messages: []
           }
         }
+        this.isUser1 = this.chat.user2 == this.userID
       } , (err) => {
         // We need to login again
         this.logout();
