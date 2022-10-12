@@ -271,7 +271,7 @@ app.post('/register', (req,res,next) => {
 app.get('/friends', auth, (req,res,next) =>{
 
   user.getModel().findById(req.user.id).then(currentUser => {
-    user.getModel().find({}, "username").where('_id').in(currentUser.friends).exec((err, records) => {
+    user.getModel().find({}, "username mail").where('_id').in(currentUser.friends).exec((err, records) => {
       return res.status(200).json( records );
     });
   });

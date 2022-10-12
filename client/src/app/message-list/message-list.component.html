@@ -3,7 +3,7 @@
 </div>
 
 <div class="chat-container bg-light">
-  <div *ngFor="let message of chat.messages.slice().reverse()" [ngClass]="(message.isFromUser1 != this.isUser1) ? 'card bg-secondary w-75' : 'card bg-primary w-75 ml-auto'" style="margin: 5px" > 
+  <div *ngFor="let message of chat.messages.slice().reverse()" [ngClass]="(message.isFromUser1 != this.isUser1) ? 'card bg-secondary w-75' : 'card bg-primary w-75 ms-auto'" style="margin: 5px" > 
     <div class="card-body">       
         <h4 class="card-text">{{ message.text }}</h4>
     </div>
