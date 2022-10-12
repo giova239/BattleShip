@@ -88,7 +88,7 @@ export class UserHttpService {
       })
     };
 
-    return this.http.post( this.url + '/users', user, options ).pipe(
+    return this.http.post( this.url + '/register', user, options ).pipe(
       tap( (data) => {
         console.log(JSON.stringify(data) );
       })
@@ -134,6 +134,13 @@ export class UserHttpService {
 
   get_friends(){
     return this.http.get<JSON>( this.url + '/friends',  this.create_options() ).pipe(
+      tap( (data) => console.log(JSON.stringify(data))) ,
+      catchError(this.handleError)
+    );
+  }
+
+  get_friend_requests(){
+    return this.http.get<JSON>( this.url + '/pendingRequests',  this.create_options() ).pipe(
       tap( (data) => console.log(JSON.stringify(data))) ,
       catchError(this.handleError)
     );

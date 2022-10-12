@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
 export class FriendListComponent implements OnInit {
 
   public friends;
+  public friendRequests;
 
-  constructor(public us: UserHttpService, private router: Router  ) { }
+  constructor(public us: UserHttpService, private router: Router) { }
 
   ngOnInit(): void {
     this.get_friends();
@@ -20,6 +21,14 @@ export class FriendListComponent implements OnInit {
   public get_friends(){
     this.us.get_friends().subscribe( friendList => {
       this.friends = friendList;
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  public get_friend_requests(){
+    this.us.get_friend_requests().subscribe( friendRequests => {
+      this.friendRequests = friendRequests;
     }, err => {
       console.log(err);
     });

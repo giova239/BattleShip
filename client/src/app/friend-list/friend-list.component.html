@@ -67,7 +67,17 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        <div *ngFor="let request of friendRequests" class="card bg-primary w-75 friend-card-centered" > 
+          <div class="card-body">       
+              <h4 class="card-title">{{ request.username }}</h4>
+              <p class="card-text">{{ request.mail }}</p>
+          </div>
+          <div class="card-footer text-right font-weight-light">
+              <button type="submit" class="btn btn-secondary" >
+                  ACCEPT <i class="fas fa-paper-plane"></i>
+              </button>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
