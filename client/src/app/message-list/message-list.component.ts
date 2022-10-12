@@ -23,6 +23,11 @@ export class MessageListComponent implements OnInit {
   @Output() posted = new EventEmitter<Chat>();
 
   ngOnInit() {
+    this.chat = {
+      user1 : this.us.get_id(),
+      user2 : this.userID,
+      messages: []
+    }
     this.sub = this.route.params.subscribe(params => {
       this.userID = params['userID'];
    });
@@ -42,12 +47,6 @@ export class MessageListComponent implements OnInit {
       ( chat ) => {
         if(isChat(chat)){
           this.chat = chat;
-        }else{
-          this.chat = {
-            user1 : this.us.get_id(),
-            user2 : this.userID,
-            messages: []
-          }
         }
         this.isUser1 = this.chat.user2 == this.userID
       } , (err) => {
