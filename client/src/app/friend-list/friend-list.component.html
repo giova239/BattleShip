@@ -42,14 +42,20 @@
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label class="col-form-label">Email:</label>
-            <input type="text" class="form-control" id="friend-mail">
+            <label class="col-form-label">Insert Friend ID:</label>
+            <input type="text" #userIDtxt class="form-control" id="friend-mail">
+          </div>
+          <div *ngIf="errmessage" class="alert alert-danger" role="alert">
+            Add Friend error: {{errmessage}}
+          </div>
+          <div *ngIf="vldmessage" class="alert alert-success" role="alert">
+            {{vldmessage}}
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" (click)="add_friend(userIDtxt.value)">
           Add Friend
           <i class="fas fa-user-plus"></i>
         </button>

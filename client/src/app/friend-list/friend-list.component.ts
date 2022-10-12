@@ -11,6 +11,8 @@ export class FriendListComponent implements OnInit {
 
   public friends;
   public friendRequests;
+  public errmessage;
+  public vldmessage;
 
   constructor(public us: UserHttpService, private router: Router) { }
 
@@ -23,6 +25,18 @@ export class FriendListComponent implements OnInit {
       this.friends = friendList;
     }, err => {
       console.log(err);
+    });
+  }
+
+  public add_friend(userID: string){
+    this.us.post_friends(userID).subscribe( resp => {
+      console.log(resp);
+      this.errmessage = null;
+      this.vldmessage = "Friend request sent";
+    }, err => {
+      console.log(err);
+      this.vldmessage = null;
+      this.errmessage = err;
     });
   }
 

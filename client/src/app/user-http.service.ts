@@ -45,12 +45,13 @@ export class UserHttpService {
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       console.error('An error occurred:', error.error.message);
+      return throwError(error.error.message);
     } else {
       console.error(
         `Backend returned code ${error.status}, ` +
         'body was: ' + JSON.stringify(error.error));
+        return throwError(error.error.errormessage);
     }
-    return throwError('Something bad happened; please try again later.');
   }
 
   login( mail: string, password: string, remember: boolean ): Observable<any> {
@@ -134,6 +135,14 @@ export class UserHttpService {
 
   get_friends(){
     return this.http.get<JSON>( this.url + '/friends',  this.create_options() ).pipe(
+      tap( (data) => console.log(JSON.stringify(data))) ,
+      catchError(this.handleError)
+    );
+  }
+
+  post_friends(id : string){
+    console.log(id);
+    return this.http.post<JSON>( this.url + '/friends', {friendID: id},  this.create_options() ).pipe(
       tap( (data) => console.log(JSON.stringify(data))) ,
       catchError(this.handleError)
     );
