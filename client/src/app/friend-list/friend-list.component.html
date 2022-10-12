@@ -78,9 +78,12 @@
               <h4 class="card-title">{{ request.username }}</h4>
               <p class="card-text">{{ request.mail }}</p>
           </div>
-          <div class="card-footer text-right font-weight-light">
-              <button type="submit" class="btn btn-secondary" >
-                  ACCEPT <i class="fas fa-paper-plane"></i>
+          <div class="card-footer text-center">
+              <button type="submit" class="btn btn-success me-2" (click)="add_friend(request._id)" >
+                ACCEPT <i class="fas fa-check"></i>
+              </button>
+              <button type="submit" class="btn btn-danger ms-2" >
+                REJECT <i class="fas fa-check"></i>
               </button>
           </div>
         </div>
