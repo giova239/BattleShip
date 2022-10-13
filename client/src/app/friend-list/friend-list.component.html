@@ -24,7 +24,7 @@
       Add Friend
       <i class="fas fa-user-plus"></i>
     </button>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;" (click)="get_friend_requests()">
       Friend Requests
       <i class="fas fa-users"></i>
     </button>
@@ -52,6 +52,18 @@
             {{vldmessage}}
           </div>
         </form>
+        <div class="row">
+          <div class="col"><hr></div>
+          <div class="col-auto">Or</div>
+          <div class="col"><hr></div>
+        </div>
+        <div class="container mb-2 text-center">
+          <label class="col-form-label">Share your ID: </label>
+          <span class="text-line ms-2 me-2 mb-2 bg-light">{{userID}}</span> 
+          <button type="button" class="btn btn-primary" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Copied!" style="border-radius: 100%;" (click)="copy_to_clipboard_ID()">
+            <i class="fas fa-clipboard"></i>
+          </button>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -94,3 +106,9 @@
     </div>
   </div>
 </div>
+
+<script>
+  console.log("fatto");
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>

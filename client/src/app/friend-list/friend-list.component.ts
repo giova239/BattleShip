@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserHttpService } from '../user-http.service';
 import { Router } from '@angular/router';
+import { Popover } from 'bootstrap';
 
 @Component({
   selector: 'app-friend-list',
@@ -13,12 +14,15 @@ export class FriendListComponent implements OnInit {
   public friendRequests;
   public errmessage;
   public vldmessage;
+  public userID;
 
   constructor(public us: UserHttpService, private router: Router) { }
 
   ngOnInit(): void {
+    this.userID = this.us.get_id();
     this.get_friends();
     this.get_friend_requests();
+    [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(popoverTriggerEl => new Popover(popoverTriggerEl))
   }
 
   public get_friends(){
@@ -72,6 +76,10 @@ export class FriendListComponent implements OnInit {
   open_chat(userID){
     console.log(userID);
     this.router.navigate(['/chat/', userID]);
+  }
+
+  copy_to_clipboard_ID(){
+    navigator.clipboard.writeText(this.userID);
   }
 
   reload_data(){

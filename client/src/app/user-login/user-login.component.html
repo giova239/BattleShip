@@ -1,14 +1,14 @@
 <div class="container" style="width: 400px; margin-top: 20px;" >
   <div class="form-signin text-center loginform ">
-    <i class="fas fa-envelope loginlogo"></i>
+    <i class="fa fa-sign-in-alt loginlogo"></i>
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <h1 class="h3 mb-3 font-weight-normal">Log-in</h1>
 
     <label for="inputEmail" class="sr-only">Email address</label>
     <input type="email" #mailtxt id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
     
     <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" #passwdtxt id="inputPassword" class="form-control" placeholder="Password" required>
+    <input type="password" #passwdtxt id="inputPassword" class="form-control mt-3" placeholder="Password" required>
     
     <div class="checkbox mb-3">
       <label>
@@ -21,8 +21,6 @@
     </div>
     
     <button class="btn btn-lg btn-primary btn-block" (click)="login( mailtxt.value, passwdtxt.value, checkr.checked );" >Sign in</button>
-    <p><a routerLink="/signup">Sign-up new user</a></p>
-    
-    <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+    <p><a routerLink="/signup">You don't have an account? click here to sign-up</a></p>
   </div>
 </div>
