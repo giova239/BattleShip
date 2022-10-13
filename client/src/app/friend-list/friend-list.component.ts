@@ -24,8 +24,9 @@ export class FriendListComponent implements OnInit {
   public get_friends(){
     this.us.get_friends().subscribe( friendList => {
       this.friends = friendList;
-    }, err => {
-      console.log(err);
+    }, (err) => {
+      // We need to login again
+      this.logout();
     });
   }
 
@@ -45,6 +46,25 @@ export class FriendListComponent implements OnInit {
     this.us.get_friend_requests().subscribe( friendRequests => {
       this.friendRequests = friendRequests;
     }, err => {
+      // We need to login again
+      this.logout();
+    });
+  }
+
+  public accept_friend_request(userID: string){
+    this.us.post_friends(userID).subscribe( resp => {
+      console.log(resp);
+      this.reload_data();
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  public reject_friend_request(userID: string){
+    this.us.delete_friend_requests(userID).subscribe( resp => {
+      console.log(resp);
+      this.reload_data();
+    }, err => {
       console.log(err);
     });
   }
@@ -52,6 +72,16 @@ export class FriendListComponent implements OnInit {
   open_chat(userID){
     console.log(userID);
     this.router.navigate(['/chat/', userID]);
+  }
+
+  reload_data(){
+    this.get_friends();
+    this.get_friend_requests();
+  }
+
+  logout() {
+    this.us.logout();
+    this.router.navigate(['/']);
   }
 
 }

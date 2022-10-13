@@ -154,4 +154,11 @@ export class UserHttpService {
       catchError(this.handleError)
     );
   }
+
+  delete_friend_requests(id : string){
+    return this.http.delete<JSON>( this.url + '/pendingRequests/' + id, this.create_options() ).pipe(
+      tap( (data) => console.log(JSON.stringify(data))) ,
+      catchError(this.handleError)
+    );
+  }
 }

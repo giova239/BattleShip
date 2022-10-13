@@ -79,10 +79,10 @@
               <p class="card-text">{{ request.mail }}</p>
           </div>
           <div class="card-footer text-center">
-              <button type="submit" class="btn btn-success me-2" (click)="add_friend(request._id)" >
+              <button type="submit" class="btn btn-success me-2" (click)="accept_friend_request(request._id)" >
                 ACCEPT <i class="fas fa-check"></i>
               </button>
-              <button type="submit" class="btn btn-danger ms-2" >
+              <button type="submit" class="btn btn-danger ms-2" (click)="reject_friend_request(request._id)" >
                 REJECT <i class="fas fa-check"></i>
               </button>
           </div>

@@ -24,6 +24,7 @@
  *                                                       on another user pending friend requests
  *                                                       if the other user already added you add
  *                                                       both ids in the respective friendlist
+ *     /pendingRequests/:userID              DELETE      Reject a friend request
  * -----------------------------------------------------------------------------------------------------
  *     /chat/:userID      -                  GET         Retrive the chat history between the logged
  *                                                       and the user sent as param
@@ -241,6 +242,27 @@ app.post('/friends', auth, (req, res, next) => {
         }).catch(() => {
             return next({ statusCode: 404, error: true, errormessage: "User not found" });
         });
+    });
+});
+app.delete('/pendingRequests/:userID', auth, (req, res, next) => {
+    try {
+        var u = ObjectId(req.params.userID);
+    }
+    catch (error) {
+        return next({ statusCode: 404, error: true, errormessage: "Invalid UserID" });
+    }
+    user.getModel().findById(req.user.id).then(currentUser => {
+        var index = currentUser.pendingRequests.indexOf(u);
+        if (index >= 0) {
+            console.log("rejecting friend request");
+            currentUser.pendingRequests.splice(index, 1);
+            currentUser.save();
+            return res.status(200).json({ error: false, errormessage: "" });
+        }
+        else {
+            console.log("friend request not found");
+            return next({ statusCode: 404, error: true, errormessage: "Friend request not found" });
+        }
     });
 });
 /*----------------------------------------------------------------------------------------------------*/
