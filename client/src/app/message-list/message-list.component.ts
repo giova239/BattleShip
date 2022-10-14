@@ -24,6 +24,7 @@ export class MessageListComponent implements OnInit {
 
   ngOnInit() {
     this.chat = {
+      _id : null,
       user1 : this.us.get_id(),
       user2 : this.userID,
       messages: []
@@ -32,6 +33,7 @@ export class MessageListComponent implements OnInit {
       this.userID = params['userID'];
    });
     this.sio.connect().subscribe( (m) => {
+      if(this.chat._id == m)
       this.get_messages();
     });
     this.get_messages();
@@ -43,6 +45,7 @@ export class MessageListComponent implements OnInit {
   }
 
   public get_messages() {
+    console.log("updating chat");
     this.ms.get_messages(this.userID).subscribe(
       ( chat ) => {
         if(isChat(chat)){

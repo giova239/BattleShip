@@ -19,10 +19,8 @@ export class SocketioService {
       // the first is invoked by our observable when new data is available. The
       // second is invoked if an error occurred
 
-      this.socket.on('broadcast', (m) => {
-        console.log('Socket.io message received: ' + JSON.stringify(m) );
-        observer.next( m );
-
+      this.socket.on('newMessage', (id) => {
+        observer.next( id );
       });
 
       this.socket.on('error', (err) => {

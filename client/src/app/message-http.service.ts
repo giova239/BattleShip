@@ -15,7 +15,7 @@ export class MessageHttpService {
   constructor( private http: HttpClient, private us: UserHttpService ) {
     console.log('Message service instantiated');
     console.log('User service token: ' + us.get_token() );
-   }
+  }
 
 
   private handleError(error: HttpErrorResponse) {
@@ -42,7 +42,6 @@ export class MessageHttpService {
 
   get_messages( userID: string ): Observable<Chat> {
     return this.http.get<Chat>( this.us.url + '/chat/' + userID, this.create_options() ).pipe(
-        tap( (data) => console.log(JSON.stringify(data))) ,
         catchError( this.handleError )
       );
   }
