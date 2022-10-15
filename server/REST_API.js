@@ -326,7 +326,7 @@ app.post('/chat/:userID', auth, (req, res, next) => {
                 messages: [newMessage]
             });
             c.save().then((data) => {
-                ios.emit('broadcast', data);
+                ios.emit('newMessage', data._id);
                 return res.status(200).json({ error: false, errormessage: "" });
             }).catch((reason) => {
                 return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
@@ -374,7 +374,7 @@ mongoose.connect('mongodb://localhost/BattleshipDB')
     let server = http.createServer(app);
     ios = io(server);
     ios.on('connection', function (client) {
-        console.log("Socket.io client connected".green);
+        console.log("Socket.io client connected: ".green + client.id);
     });
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
 }).catch((err) => {
