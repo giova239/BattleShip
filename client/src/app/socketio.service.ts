@@ -9,9 +9,10 @@ export class SocketioService {
   private socket;
   constructor( private us: UserHttpService ) { }
 
-  connect(): Observable< any > {
+  connect(roomID: string): Observable< any > {
 
     this.socket = io(this.us.url);
+    this.socket.emit("join-room", roomID);
 
     return new Observable( (observer) => {
 
@@ -19,8 +20,8 @@ export class SocketioService {
       // the first is invoked by our observable when new data is available. The
       // second is invoked if an error occurred
 
-      this.socket.on('newMessage', (id) => {
-        observer.next( id );
+      this.socket.on('newMessage', message => {
+        observer.next( message );
       });
 
       this.socket.on('error', (err) => {

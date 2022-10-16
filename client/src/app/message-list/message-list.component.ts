@@ -20,8 +20,6 @@ export class MessageListComponent implements OnInit {
 
   constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private router: Router, private route: ActivatedRoute) { }
 
-  @Output() posted = new EventEmitter<Chat>();
-
   ngOnInit() {
     this.chat = {
       _id : null,
@@ -31,11 +29,8 @@ export class MessageListComponent implements OnInit {
     }
     this.sub = this.route.params.subscribe(params => {
       this.userID = params['userID'];
-   });
-    this.sio.connect().subscribe( (m) => {
-      if(this.chat._id == m)
-      this.get_messages();
     });
+
     this.get_messages();
     this.set_empty();
   }
@@ -45,11 +40,17 @@ export class MessageListComponent implements OnInit {
   }
 
   public get_messages() {
-    console.log("updating chat");
     this.ms.get_messages(this.userID).subscribe(
       ( chat ) => {
         if(isChat(chat)){
           this.chat = chat;
+
+          //Socket connection to chat room
+          this.sio.connect(this.chat._id).subscribe( m => {
+            console.log(m);
+            this.chat.messages.push(m);
+          });
+
         }
         this.isUser1 = this.chat.user2 == this.userID
       } , (err) => {
@@ -68,7 +69,6 @@ export class MessageListComponent implements OnInit {
 
       console.log('Message sent');
       this.set_empty();
-      this.posted.emit( m );
 
     }, (error) => {
       console.log('Error occurred while sending the message: ' + error);

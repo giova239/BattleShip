@@ -414,7 +414,10 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
       }
       found.messages.push(newMessage)
       found.save().then( (data) => {
-        ios.emit('newMessage', data._id );
+        
+        //socket emit for new Message to the specific chat room
+        ios.to(data._id.toString()).emit('newMessage', data.messages.slice(-1)[0] );
+
         return res.status(200).json({ error: false, errormessage: ""});
       }).catch( (reason) => {
         return next({ statusCode:404, error: true, errormessage: "DB error: "+reason });
@@ -495,7 +498,16 @@ mongoose.connect('mongodb://localhost/BattleshipDB')
 
     ios = io(server);
     ios.on('connection', function (client) {
+
       console.log("Socket.io client connected: ".green + client.id);
+
+      client.on("join-room", room => {
+        if(room != null)
+          client.join(room);
+
+        console.log(client.id + " joined room: " + room);
+      })
+
     });
 
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
