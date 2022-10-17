@@ -6,7 +6,7 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class SocketioService {
 
-  private socket;
+  private socket: SocketIOClient.Socket;
   constructor( private us: UserHttpService ) { }
 
   connect(roomID: string): Observable< any > {
@@ -30,10 +30,7 @@ export class SocketioService {
       });
 
       // When the consumer unsubscribes, clean up data ready for next subscription.
-      return { unsubscribe() {
-        this.socket.disconnect();
-      } };
-
+      return { unsubscribe: () => this.socket.disconnect()};
     });
 
   }

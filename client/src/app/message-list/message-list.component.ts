@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Chat, isChat } from '../Chat';
 import { MessageHttpService } from '../message-http.service';
 import { UserHttpService } from '../user-http.service';
@@ -10,23 +10,26 @@ import { SocketioService } from '../socketio.service';
   templateUrl: './message-list.component.html',
   styleUrls: ['./message-list.component.css']
 })
-export class MessageListComponent implements OnInit {
+export class MessageListComponent implements OnInit, OnDestroy {
 
   public chat: Chat;
   public message: string;
   public isUser1: boolean;
   private userID: string;
   private sub: any;
+  private chatSocket;
 
   constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.chat = {
+    
+    this.chat ={
       _id : null,
-      user1 : this.us.get_id(),
-      user2 : this.userID,
-      messages: []
+      user1 : null,
+      user2 : null,
+      messages : []
     }
+
     this.sub = this.route.params.subscribe(params => {
       this.userID = params['userID'];
     });
@@ -37,6 +40,7 @@ export class MessageListComponent implements OnInit {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+    this.chatSocket.unsubscribe();
   }
 
   public get_messages() {
@@ -46,7 +50,7 @@ export class MessageListComponent implements OnInit {
           this.chat = chat;
 
           //Socket connection to chat room
-          this.sio.connect(this.chat._id).subscribe( m => {
+          this.chatSocket = this.sio.connect(this.chat._id).subscribe( m => {
             console.log(m);
             this.chat.messages.push(m);
           });
