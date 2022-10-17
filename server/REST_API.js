@@ -276,11 +276,30 @@ app.get('/chat/:userID', auth, (req, res, next) => {
     catch (error) {
         return next({ statusCode: 404, error: true, errormessage: "Invalid UserID" });
     }
+    user.getModel().findById(u1).then(currentUser => {
+        if (!currentUser.friends.includes(u2)) {
+            return next({ statusCode: 404, error: true, errormessage: "You can't chat with a user not in your friendlist" });
+        }
+    });
     chat.getModel().findOne({ $or: [
             { 'user1': u1, 'user2': u2 },
             { 'user1': u2, 'user2': u1 }
-        ] }).then(chat => {
-        return res.status(200).json(chat);
+        ] }).then(found => {
+        if (found) {
+            return res.status(200).json(found);
+        }
+        else {
+            var c = chat.newChat({
+                user1: u1,
+                user2: u2,
+                messages: []
+            });
+            c.save().then((data) => {
+                return res.status(200).json(data);
+            }).catch((reason) => {
+                return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
+            });
+        }
     }).catch(() => {
         return next({ statusCode: 404, error: true, errormessage: "Chat not found: " });
     });
@@ -298,7 +317,7 @@ app.post('/chat/:userID', auth, (req, res, next) => {
     catch (error) {
         return next({ statusCode: 404, error: true, errormessage: "Invalid UserID" });
     }
-    user.getModel().findById(req.user.id).then(currentUser => {
+    user.getModel().findById(u1).then(currentUser => {
         if (!currentUser.friends.includes(u2)) {
             return next({ statusCode: 404, error: true, errormessage: "You can't chat with a user not in your friendlist" });
         }
@@ -322,8 +341,8 @@ app.post('/chat/:userID', auth, (req, res, next) => {
         }
         else {
             var c = chat.newChat({
-                user1: ObjectId(req.user.id),
-                user2: ObjectId(req.params.userID),
+                user1: u1,
+                user2: u2,
                 messages: [newMessage]
             });
             c.save().then((data) => {
