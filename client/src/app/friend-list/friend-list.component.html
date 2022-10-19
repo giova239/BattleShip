@@ -11,8 +11,12 @@
         <p class="card-text">{{ friend.mail }}</p>
     </div>
     <div class="card-footer text-right font-weight-light">
-        <button type="submit" class="btn btn-secondary" (click)="open_chat(friend._id)" >
-            CHAT <i class="fas fa-paper-plane"></i>
+        <button type="submit" class="btn btn-secondary position-relative" (click)="open_chat(friend._id)" >
+            CHAT
+            <i class="fas fa-paper-plane"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              1
+            </span>
         </button>
     </div>
   </div>
@@ -24,9 +28,12 @@
       Add Friend
       <i class="fas fa-user-plus"></i>
     </button>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;" (click)="get_friend_requests()">
+    <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;" (click)="get_friend_requests()">
       Friend Requests
       <i class="fas fa-users"></i>
+      <span *ngIf="friendRequests && friendRequests.length" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        1
+      </span>
     </button>
   </div>
 </div>
