@@ -21,11 +21,17 @@ export class SocketioService {
       // second is invoked if an error occurred
 
       this.socket.on('newMessage', message => {
+        console.log('Socket.io event: newMessage');
+        observer.next( message );
+      });
+
+      this.socket.on('newFriendRequest', message => {
+        console.log('Socket.io event: newFriendRequest');
         observer.next( message );
       });
 
       this.socket.on('error', (err) => {
-        console.log('Socket.io error: ' + err );
+        console.log('Socket.io error: ' + err);
         observer.error( err );
       });
 

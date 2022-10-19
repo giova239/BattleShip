@@ -23,12 +23,19 @@
  *                                                       on another user pending friend requests
  *                                                       if the other user already added you add
  *                                                       both ids in the respective friendlist
+ * 
+ *                        SOCKET: send to room with userID who recived new request event newFriendRequest
+ *                                containing the logged userID
+ * 
  *     /pendingRequests/:userID              DELETE      Reject a friend request
  * -----------------------------------------------------------------------------------------------------
  *     /chat/:userID      -                  GET         Retrive the chat history between the logged
  *                                                       and the user sent as param
  *     /chat/:userID      -                  POST        adds the message from the body to the chat
  *                                                       history between the users
+ * 
+ *                        SOCKET: send to room with chat id event newMessage containing the newMesagge
+ * 
  * ----------------------------------------------------------------------------------------------------- 
  *  To install the required modules:
  *  $ npm install
@@ -320,7 +327,9 @@ app.post('/friends', auth, (req,res,next) => {
       }else{
         console.log("sending friend request");
         friend.pendingRequests.push(currentUser._id);
-        friend.save();
+        friend.save().then( data => {
+          ios.to(data._id).emit('newFriendRequest', currentUser._id );
+        });
       }
 
       return res.status(200).json({ error: false, errormessage: ""});
@@ -449,7 +458,6 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
         messages: [newMessage]
       });
       c.save().then( (data) => {
-        ios.emit('newMessage', data._id );
         return res.status(200).json({ error: false, errormessage: ""});
       }).catch( (reason) => {   
         return next({ statusCode:404, error: true, errormessage: "DB error: "+reason });

@@ -28,11 +28,11 @@
       Add Friend
       <i class="fas fa-user-plus"></i>
     </button>
-    <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;" (click)="get_friend_requests()">
+    <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;">
       Friend Requests
       <i class="fas fa-users"></i>
       <span *ngIf="friendRequests && friendRequests.length" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-        1
+        {{ friendRequests.length }}
       </span>
     </button>
   </div>
@@ -92,6 +92,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <p *ngIf="friendRequests && friendRequests.length < 1"> You don't have any new friend requests</p>
         <div *ngFor="let request of friendRequests" class="card bg-primary w-75 friend-card-centered" > 
           <div class="card-body">       
               <h4 class="card-title">{{ request.username }}</h4>
@@ -113,9 +114,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  console.log("fatto");
-  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-</script>

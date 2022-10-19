@@ -1,28 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserHttpService } from '../user-http.service';
 import { Router } from '@angular/router';
 import { Popover } from 'bootstrap';
+import { SocketioService } from '../socketio.service';
 
 @Component({
   selector: 'app-friend-list',
   templateUrl: './friend-list.component.html',
   styleUrls: ['./friend-list.component.css']
 })
-export class FriendListComponent implements OnInit {
+export class FriendListComponent implements OnInit, OnDestroy {
 
   public friends;
   public friendRequests;
   public errmessage;
   public vldmessage;
   public userID;
+  private friendListSocket;
 
-  constructor(public us: UserHttpService, private router: Router) { }
+  constructor(private sio: SocketioService, public us: UserHttpService, private router: Router) { }
 
   ngOnInit(): void {
     this.userID = this.us.get_id();
+    //Socket connection to chat room
+    this.friendListSocket = this.sio.connect(this.userID).subscribe( m => {
+      console.log(m);
+      this.friendRequests.push(m);
+    });
     this.get_friends();
     this.get_friend_requests();
     [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(popoverTriggerEl => new Popover(popoverTriggerEl))
+  }
+
+  ngOnDestroy() {
+    this.friendListSocket.unsubscribe();
   }
 
   public get_friends(){
