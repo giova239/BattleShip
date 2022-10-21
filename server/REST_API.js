@@ -295,6 +295,12 @@ app.get('/chat/:userID', auth, (req, res, next) => {
             { 'user1': u2, 'user2': u1 }
         ] }).then(found => {
         if (found) {
+            var i = found.messages.length - 1;
+            while (i >= 0 && !found.messages[i].read && ((u1.toString() === found.user2.toString() && found.messages[i].isFromUser1) || (u1.toString() === found.user1.toString() && !found.messages[i].isFromUser1))) {
+                found.messages[i].read = true;
+                i--;
+            }
+            found.save();
             return res.status(200).json(found);
         }
         else {

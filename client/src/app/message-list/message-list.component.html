@@ -8,16 +8,17 @@
         <h4 class="card-text">{{ message.text }}</h4>
     </div>
     <div class="card-footer font-weight-light">
+      
       {{message.date | date}} / {{message.date | date:'shortTime'}}
 
       <div *ngIf="message.read; then thenBlock else elseBlock"></div>
         <ng-template #thenBlock>
-          <i class="fa-solid fa-check-double"></i>
+          <i class="fa-solid fa-lg fa-check-double float-end mt-2"></i>
         </ng-template>
         <ng-template #elseBlock>
-          <i class="fa-solid fa-check"></i>
+          <i class="fa-solid fa-lg fa-check float-end mt-2"></i>
         </ng-template>
-        
+
     </div>
   </div>
 </div>

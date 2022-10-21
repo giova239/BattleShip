@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/cor
 import { Chat, isChat } from '../Chat';
 import { MessageHttpService } from '../message-http.service';
 import { UserHttpService } from '../user-http.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SocketioService } from '../socketio.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
   private sub: any;
   private chatSocket;
 
-  constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private router: Router, private route: ActivatedRoute) { }
+  constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     
@@ -59,7 +59,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
         this.isUser1 = this.chat.user2 == this.userID
       } , (err) => {
         // We need to login again
-        this.logout();
+        this.us.logout();
       }
     );
   }
@@ -77,11 +77,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
     }, (error) => {
       console.log('Error occurred while sending the message: ' + error);
     });
-  }
-
-  logout() {
-    this.us.logout();
-    this.router.navigate(['/']);
   }
 
 }

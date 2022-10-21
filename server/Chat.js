@@ -15,6 +15,10 @@ var chatSchema = new mongoose.Schema({
                 type: mongoose.SchemaTypes.Boolean,
                 required: true
             },
+            read: {
+                type: mongoose.SchemaTypes.Boolean,
+                required: true
+            },
             date: {
                 type: mongoose.SchemaTypes.Date,
                 required: false,

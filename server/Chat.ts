@@ -7,6 +7,7 @@ export interface Chat extends mongoose.Document {
     user2: mongoose.Schema.Types.ObjectId,
     messages: {
         isFromUser1: boolean,
+        read: boolean,
         date: Date
         text: string,
     }[]
@@ -23,6 +24,10 @@ var chatSchema = new mongoose.Schema( {
     },
     messages: [{
         isFromUser1:{
+            type: mongoose.SchemaTypes.Boolean,
+            required: true
+        },
+        read:{
             type: mongoose.SchemaTypes.Boolean,
             required: true
         },

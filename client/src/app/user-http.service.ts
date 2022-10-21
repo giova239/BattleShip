@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 import * as jwtdecode from 'jwt-decode';
 
 
@@ -19,7 +20,7 @@ export class UserHttpService {
   private token = '';
   public url = 'http://localhost:8080';
 
-  constructor( private http: HttpClient ) {
+  constructor( private http: HttpClient, private router: Router ) {
     console.log('User service instantiated');
     
     this.token = localStorage.getItem('postmessages_token');
@@ -79,6 +80,7 @@ export class UserHttpService {
     console.log('Logging out');
     this.token = '';
     localStorage.setItem('postmessages_token', this.token);
+    this.router.navigate(['/']);
   }
 
   register( user ): Observable<any> {
