@@ -412,6 +412,7 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
   
   var newMessage = {
     isFromUser1: true,
+    read: false,
     date: new Date(),
     text: req.body.text
   }
@@ -436,9 +437,9 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
     if(found){
 
       if(found.user2.toString() === u1.toString()){
-
         newMessage.isFromUser1 = false;
       }
+      
       found.messages.push(newMessage)
       found.save().then( (data) => {
         

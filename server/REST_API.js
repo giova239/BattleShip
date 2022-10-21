@@ -316,6 +316,7 @@ app.get('/chat/:userID', auth, (req, res, next) => {
 app.post('/chat/:userID', auth, (req, res, next) => {
     var newMessage = {
         isFromUser1: true,
+        read: false,
         date: new Date(),
         text: req.body.text
     };

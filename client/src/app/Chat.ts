@@ -2,7 +2,7 @@ export interface Chat {
     _id: any,
     user1: string,
     user2: string,
-    messages: string[]
+    messages: Object[]
 }
 
 // User defined type guard
