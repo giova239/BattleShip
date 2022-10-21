@@ -35,6 +35,8 @@
  *                                                       history between the users
  * 
  *                        SOCKET: send to room with chat id event newMessage containing the newMesagge
+ *     /unreadMessages/:chatID               GET         Retrive the ammount of unread messages given
+ *                                                       a chatID
  * 
  * ----------------------------------------------------------------------------------------------------- 
  *  To install the required modules:
@@ -393,6 +395,7 @@ app.get('/chat/:userID', auth, (req,res,next) =>{
       while (i>= 0 && !found.messages[i].read && ((u1.toString() === found.user2.toString() && found.messages[i].isFromUser1) || (u1.toString() === found.user1.toString() && !found.messages[i].isFromUser1))){
         found.messages[i].read = true
         i--;
+        //"emit event MessageRead -> chatRoom with readMessageID"
       }
       found.save()
       return res.status(200).json(found);
@@ -472,8 +475,34 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
 
     }
   }).catch(error => {
-    return res.status(200).json(error);
+    return res.status(404).json(error);
   });
+
+})
+
+app.post('/unreadMessages/:chatID ', auth, (req,res,next) =>{
+
+  try{
+    var chatID = ObjectId(req.params.chatID);
+  }catch(error){
+    return next({ statusCode:404, error: true, errormessage: "Invalid chatID"});
+  }
+
+  chat.getModel().findById(chatID).then(data => {
+
+    var isUser1 = req.user.id == data.user1.toString()
+    var result = 0;
+
+    var i = data.messages.length-1
+    while (i>= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1){
+      result++;
+    }
+
+    return res.status(200).json(result);
+
+  }).catch( (reason) => {
+    return next({ statusCode:404, error: true, errormessage: "DB error: "+reason });
+  })
 
 })
 
