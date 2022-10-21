@@ -482,7 +482,7 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
 
 })
 
-app.get('/unreadMessages/:chatID ', auth, (req,res,next) =>{
+app.get('/unreadMessages/:userID ', auth, (req,res,next) =>{
 
   try{
     var u1 = ObjectId(req.user.id);

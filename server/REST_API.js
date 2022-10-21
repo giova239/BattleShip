@@ -376,7 +376,7 @@ app.post('/chat/:userID', auth, (req, res, next) => {
         return res.status(404).json(error);
     });
 });
-app.get('/unreadMessages/:chatID ', auth, (req, res, next) => {
+app.get('/unreadMessages/:userID ', auth, (req, res, next) => {
     try {
         var u1 = ObjectId(req.user.id);
         var u2 = ObjectId(req.params.userID);

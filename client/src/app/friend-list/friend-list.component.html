@@ -14,8 +14,8 @@
         <button type="submit" class="btn btn-secondary position-relative" (click)="open_chat(friend._id)" >
             CHAT
             <i class="fas fa-paper-plane"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              TODO
+            <span *ngIf="friend.numberOfUnreadMessages" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{numberOfUnreadMessages}}
             </span>
         </button>
     </div>

@@ -41,8 +41,11 @@ export class FriendListComponent implements OnInit, OnDestroy {
 
       this.friends = friendList;
 
-      this.friends.array.forEach(element => {
-        this.us.get_unread_messages(element._id)
+      this.friends.forEach((element, index) => {
+        //TOBE FIXED
+        this.us.get_unread_messages(element._id.toString()).subscribe( numberOfUnreadMessages => {
+            this.friends[index].numberOfUnreadMessages = numberOfUnreadMessages
+        })
       });
 
     }, (err) => {
