@@ -35,8 +35,9 @@
  *                                                       history between the users
  * 
  *                        SOCKET: send to room with chat id event newMessage containing the newMesagge
- *     /unreadMessages/:chatID               GET         Retrive the ammount of unread messages given
- *                                                       a chatID
+ * 
+ *     /unreadMessages/:userID               GET         Retrive the ammount of unread messages given
+ *                                                       a userID
  * 
  * ----------------------------------------------------------------------------------------------------- 
  *  To install the required modules:
@@ -391,8 +392,9 @@ app.get('/chat/:userID', auth, (req,res,next) =>{
     {'user1': u2, 'user2': u1}
   ]}).then(found => {
     if(found){
+      var isUser1 = req.user.id == found.user1.toString()
       var i = found.messages.length-1
-      while (i>= 0 && !found.messages[i].read && ((u1.toString() === found.user2.toString() && found.messages[i].isFromUser1) || (u1.toString() === found.user1.toString() && !found.messages[i].isFromUser1))){
+      while (i>= 0 && !found.messages[i].read && found.messages[i].isFromUser1 != isUser1){
         found.messages[i].read = true
         i--;
         //"emit event MessageRead -> chatRoom with readMessageID"
@@ -480,15 +482,19 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
 
 })
 
-app.post('/unreadMessages/:chatID ', auth, (req,res,next) =>{
+app.get('/unreadMessages/:chatID ', auth, (req,res,next) =>{
 
   try{
-    var chatID = ObjectId(req.params.chatID);
+    var u1 = ObjectId(req.user.id);
+    var u2 = ObjectId(req.params.userID)
   }catch(error){
-    return next({ statusCode:404, error: true, errormessage: "Invalid chatID"});
+    return next({ statusCode:404, error: true, errormessage: "Invalid userID"});
   }
 
-  chat.getModel().findById(chatID).then(data => {
+  chat.getModel().findOne({ $or:[ 
+    {'user1': u1, 'user2': u2},
+    {'user1': u2, 'user2': u1}
+  ]}).then(data => {
 
     var isUser1 = req.user.id == data.user1.toString()
     var result = 0;

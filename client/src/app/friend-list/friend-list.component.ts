@@ -38,7 +38,13 @@ export class FriendListComponent implements OnInit, OnDestroy {
 
   public get_friends(){
     this.us.get_friends().subscribe( friendList => {
+
       this.friends = friendList;
+
+      this.friends.array.forEach(element => {
+        this.us.get_unread_messages(element._id)
+      });
+
     }, (err) => {
       // We need to login again
       this.logout();
