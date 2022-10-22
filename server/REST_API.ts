@@ -482,7 +482,7 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
 
 })
 
-app.get('/unreadMessages/:userID ', auth, (req,res,next) =>{
+app.get('/unreadMessages/:userID', auth, (req,res,next) =>{
 
   try{
     var u1 = ObjectId(req.user.id);
@@ -496,13 +496,19 @@ app.get('/unreadMessages/:userID ', auth, (req,res,next) =>{
     {'user1': u2, 'user2': u1}
   ]}).then(data => {
 
-    var isUser1 = req.user.id == data.user1.toString()
     var result = 0;
 
-    var i = data.messages.length-1
-    while (i>= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1){
-      result++;
+    if(data){
+      var isUser1 = req.user.id == data.user1.toString();
+      var i = data.messages.length-1;
+      while (i>= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1){
+        console.log("stuck");
+        i--;
+        result++;
+      }
     }
+
+    console.log("returning " + result);
 
     return res.status(200).json(result);
 
