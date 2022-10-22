@@ -3,6 +3,7 @@ import { UserHttpService } from '../user-http.service';
 import { Router } from '@angular/router';
 import { Popover } from 'bootstrap';
 import { SocketioService } from '../socketio.service';
+import { Icu } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-friend-list',
@@ -24,8 +25,22 @@ export class FriendListComponent implements OnInit, OnDestroy {
     this.userID = this.us.get_id();
     //Socket connection to chat room
     this.friendListSocket = this.sio.connect(this.userID).subscribe( m => {
+
       console.log(m);
-      this.friendRequests.push(m);
+      
+      if(m && m.event && m.event == "newUnreadMessage"){
+        var index = this.friends.findIndex(elem => elem._id.toString() == m.content)
+        console.log(index);
+        if(index >= 0){
+          if(this.friends[index].numberOfUnreadMessages){
+            this.friends[index].numberOfUnreadMessages++;
+          }else{
+            this.friends[index].numberOfUnreadMessages = 1;
+          }
+        }
+      }else{
+        this.friendRequests.push(m);
+      }
     });
     this.get_friends();
     this.get_friend_requests();
@@ -42,7 +57,6 @@ export class FriendListComponent implements OnInit, OnDestroy {
       this.friends = friendList;
 
       this.friends.forEach((element, index) => {
-        //TOBE FIXED
         this.us.get_unread_messages(element._id.toString()).subscribe( numberOfUnreadMessages => {
             this.friends[index].numberOfUnreadMessages = numberOfUnreadMessages
         })

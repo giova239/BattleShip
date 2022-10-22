@@ -35,6 +35,8 @@
  *                                                       history between the users
  * 
  *                        SOCKET: send to room with chat id event newMessage containing the newMesagge
+ *                                AND also send to room with userID newUnreadMessages containing the
+ *                                current user id
  * 
  *     /unreadMessages/:userID               GET         Retrive the ammount of unread messages given
  *                                                       a userID
@@ -453,9 +455,9 @@ app.post('/chat/:userID', auth, (req,res,next) =>{
 
       found.messages.push(newMessage)
       found.save().then( (data) => {
-        
-        //socket emit for new Message to the specific chat room
+
         ios.to(data._id.toString()).emit('newMessage', data.messages.slice(-1)[0] );
+        ios.to(req.params.userID).emit('newUnreadMessage', req.user.id);
 
         return res.status(200).json({ error: false, errormessage: ""});
       }).catch( (reason) => {
@@ -502,13 +504,10 @@ app.get('/unreadMessages/:userID', auth, (req,res,next) =>{
       var isUser1 = req.user.id == data.user1.toString();
       var i = data.messages.length-1;
       while (i>= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1){
-        console.log("stuck");
         i--;
         result++;
       }
     }
-
-    console.log("returning " + result);
 
     return res.status(200).json(result);
 
