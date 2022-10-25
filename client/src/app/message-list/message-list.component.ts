@@ -48,6 +48,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
       ( chat ) => {
         if(isChat(chat)){
           this.chat = chat;
+          this.isUser1 = this.chat.user2 == this.userID
 
           //Socket connection to chat room
           this.chatSocket = this.sio.connect(this.chat._id).subscribe( m => {
@@ -56,7 +57,9 @@ export class MessageListComponent implements OnInit, OnDestroy {
 
             if(m && m.event && m.event == "newMessage"){
               this.chat.messages.push(m.content);
-              this.ms.read_messages(this.userID).subscribe();
+              if(m.content.isFromUser1 != this.isUser1){
+                this.ms.read_messages(this.userID).subscribe();
+              }
             }else if(m && m.event && m.event == "readMessage"){
               console.log(m.content);
               
@@ -68,7 +71,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
           });
 
         }
-        this.isUser1 = this.chat.user2 == this.userID
       } , (err) => {
         // We need to login again
         this.us.logout();
