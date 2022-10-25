@@ -53,4 +53,10 @@ export class MessageHttpService {
     );
   }
 
+  read_messages( userID: string): Observable<Chat> {
+    return this.http.post<Chat>( this.us.url + '/readMessages/' + userID, {}, this.create_options() ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

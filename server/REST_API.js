@@ -42,6 +42,10 @@
  *     /unreadMessages/:userID               GET         Retrive the ammount of unread messages given
  *                                                       a userID
  *
+ *     /readMessages/:userID                 POST        Mark the new Messages with userID as read
+ *
+ *                        SOCKET: emit MessageRead event containing messageID to chatID room
+ *
  * -----------------------------------------------------------------------------------------------------
  *  To install the required modules:
  *  $ npm install
@@ -302,12 +306,17 @@ app.get('/chat/:userID', auth, (req, res, next) => {
         if (found) {
             var isUser1 = req.user.id == found.user1.toString();
             var i = found.messages.length - 1;
+            var ammount = 0;
             while (i >= 0 && !found.messages[i].read && found.messages[i].isFromUser1 != isUser1) {
                 found.messages[i].read = true;
+                ammount++;
                 i--;
-                //"emit event MessageRead -> chatRoom with readMessageID"
             }
-            found.save();
+            if (ammount > 0) {
+                found.save().then(() => {
+                    ios.to(found._id.toString()).emit('readMessage', ammount);
+                });
+            }
             return res.status(200).json(found);
         }
         else {
@@ -397,6 +406,40 @@ app.get('/unreadMessages/:userID', auth, (req, res, next) => {
             while (i >= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1) {
                 i--;
                 result++;
+            }
+        }
+        return res.status(200).json(result);
+    }).catch((reason) => {
+        return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
+    });
+});
+app.post('/readMessages/:userID', auth, (req, res, next) => {
+    try {
+        var u1 = ObjectId(req.user.id);
+        var u2 = ObjectId(req.params.userID);
+    }
+    catch (error) {
+        return next({ statusCode: 404, error: true, errormessage: "Invalid userID" });
+    }
+    chat.getModel().findOne({ $or: [
+            { 'user1': u1, 'user2': u2 },
+            { 'user1': u2, 'user2': u1 }
+        ] }).then(data => {
+        if (data) {
+            var isUser1 = req.user.id == data.user1.toString();
+            var i = data.messages.length - 1;
+            var ammount = 0;
+            while (i >= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1) {
+                data.messages[i].read = true;
+                ammount++;
+                i--;
+            }
+            if (ammount > 0) {
+                data.save().then(() => {
+                    //emit socket to notify readedmessages to chatID room
+                    ios.to(data._id.toString()).emit('readMessage', ammount);
+                    console.log(ammount + " messages readed");
+                });
             }
         }
         return res.status(200).json(result);

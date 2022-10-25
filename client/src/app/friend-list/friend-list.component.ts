@@ -27,8 +27,10 @@ export class FriendListComponent implements OnInit, OnDestroy {
     this.friendListSocket = this.sio.connect(this.userID).subscribe( m => {
 
       console.log(m);
-      
-      if(m && m.event && m.event == "newUnreadMessage"){
+
+      if(m && m.event && m.event == "newFriendRequest"){
+        this.friendRequests.push(m);
+      }else if(m && m.event && m.event == "newUnreadMessage"){
         var index = this.friends.findIndex(elem => elem._id.toString() == m.content)
         console.log(index);
         if(index >= 0){
@@ -38,9 +40,8 @@ export class FriendListComponent implements OnInit, OnDestroy {
             this.friends[index].numberOfUnreadMessages = 1;
           }
         }
-      }else{
-        this.friendRequests.push(m);
       }
+      
     });
     this.get_friends();
     this.get_friend_requests();

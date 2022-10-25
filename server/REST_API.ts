@@ -400,12 +400,17 @@ app.get('/chat/:userID', auth, (req,res,next) =>{
     if(found){
       var isUser1 = req.user.id == found.user1.toString()
       var i = found.messages.length-1
+      var ammount = 0;
       while (i>= 0 && !found.messages[i].read && found.messages[i].isFromUser1 != isUser1){
         found.messages[i].read = true
+        ammount++;
         i--;
-        //"emit event MessageRead -> chatRoom with readMessageID"
       }
-      found.save()
+      if(ammount > 0){
+        found.save().then(() => {
+          ios.to(found._id.toString()).emit('readMessage', ammount);
+        })
+      }
       return res.status(200).json(found);
     }else{
       var c = chat.newChat({
@@ -539,17 +544,19 @@ app.post('/readMessages/:userID', auth, (req,res,next) =>{
 
       var isUser1 = req.user.id == data.user1.toString();
       var i = data.messages.length-1;
-
-      var readedMessages = []
+      var ammount = 0;
       while (i>= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1){
-        i--;
         data.messages[i].read = true;
-        readedMessages.push(data.messages[i])
+        ammount++;
+        i--;
       }
-      data.save().then(() => {
-        //emit socket to notify readedmessages
-        console.log(readedMessages);
-      })
+      if(ammount > 0){
+        data.save().then(() => {
+          //emit socket to notify readedmessages to chatID room
+          ios.to(data._id.toString()).emit('readMessage', ammount);
+          console.log(ammount + " messages readed");
+        })
+      }
     }
 
     return res.status(200).json(result);

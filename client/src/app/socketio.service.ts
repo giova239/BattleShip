@@ -20,6 +20,8 @@ export class SocketioService {
       // the first is invoked by our observable when new data is available. The
       // second is invoked if an error occurred
 
+      //FRIENDLIST SOCKETS
+
       this.socket.on('newFriendRequest', message => {
         console.log('Socket.io event: newFriendRequest');
         observer.next( {event : "newFriendRequest", content : message} );
@@ -30,10 +32,19 @@ export class SocketioService {
         observer.next( {event : "newUnreadMessage", content : message} );
       });
 
+      //CHAT SOCKETS
+
       this.socket.on('newMessage', message => {
         console.log('Socket.io event: newMessage');
-        observer.next( message );
+        observer.next( {event : "newMessage", content : message} );
       });
+
+      this.socket.on('readMessage', message => {
+        console.log('Socket.io event: readMessage');
+        observer.next( {event : "readMessage", content : message} );
+      });
+
+      //ERROR
 
       this.socket.on('error', (err) => {
         console.log('Socket.io error: ' + err);

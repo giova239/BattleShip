@@ -2,7 +2,15 @@ export interface Chat {
     _id: any,
     user1: string,
     user2: string,
-    messages: Object[]
+    messages: Message[]
+}
+
+interface Message {
+    _id: any,
+    isFromUser1: boolean,
+    read: boolean,
+    date: Date,
+    text: string
 }
 
 // User defined type guard

@@ -51,8 +51,20 @@ export class MessageListComponent implements OnInit, OnDestroy {
 
           //Socket connection to chat room
           this.chatSocket = this.sio.connect(this.chat._id).subscribe( m => {
+
             console.log(m);
-            this.chat.messages.push(m);
+
+            if(m && m.event && m.event == "newMessage"){
+              this.chat.messages.push(m.content);
+              this.ms.read_messages(this.userID).subscribe();
+            }else if(m && m.event && m.event == "readMessage"){
+              console.log(m.content);
+              
+              for (var i = 1; i <= m.content; i++){
+                this.chat.messages[this.chat.messages.length - i].read = true;
+              }
+            }
+
           });
 
         }
