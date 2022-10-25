@@ -41,6 +41,10 @@
  *     /unreadMessages/:userID               GET         Retrive the ammount of unread messages given
  *                                                       a userID
  * 
+ *     /readMessages/:userID                 POST        Mark the new Messages with userID as read
+ * 
+ *                        SOCKET: emit MessageRead event containing messageID to chatID room
+ * 
  * ----------------------------------------------------------------------------------------------------- 
  *  To install the required modules:
  *  $ npm install
@@ -507,6 +511,45 @@ app.get('/unreadMessages/:userID', auth, (req,res,next) =>{
         i--;
         result++;
       }
+    }
+
+    return res.status(200).json(result);
+
+  }).catch( (reason) => {
+    return next({ statusCode:404, error: true, errormessage: "DB error: "+reason });
+  })
+
+})
+
+app.post('/readMessages/:userID', auth, (req,res,next) =>{
+
+  try{
+    var u1 = ObjectId(req.user.id);
+    var u2 = ObjectId(req.params.userID)
+  }catch(error){
+    return next({ statusCode:404, error: true, errormessage: "Invalid userID"});
+  }
+
+  chat.getModel().findOne({ $or:[ 
+    {'user1': u1, 'user2': u2},
+    {'user1': u2, 'user2': u1}
+  ]}).then(data => {
+
+    if(data){
+
+      var isUser1 = req.user.id == data.user1.toString();
+      var i = data.messages.length-1;
+
+      var readedMessages = []
+      while (i>= 0 && !data.messages[i].read && data.messages[i].isFromUser1 != isUser1){
+        i--;
+        data.messages[i].read = true;
+        readedMessages.push(data.messages[i])
+      }
+      data.save().then(() => {
+        //emit socket to notify readedmessages
+        console.log(readedMessages);
+      })
     }
 
     return res.status(200).json(result);
