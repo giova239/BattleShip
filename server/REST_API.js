@@ -47,6 +47,10 @@
  *                        SOCKET: emit MessageRead event containing messageID to chatID room
  *
  * -----------------------------------------------------------------------------------------------------
+ *     /challenge/:userID                    POST        Create a new GameRoom and sends a message with
+ *                                                       the invite link to the other player, returns
+ *                                                       the GameRoomID
+ * -----------------------------------------------------------------------------------------------------
  *  To install the required modules:
  *  $ npm install
  *
@@ -80,6 +84,7 @@ const mongoose = require("mongoose");
 var ObjectId = require('mongodb').ObjectId;
 const user = require("./User");
 const chat = require("./Chat");
+const game = require("./Game");
 const express = require("express");
 const bodyparser = require("body-parser"); // body-parser middleware is used to parse the request body and
 // directly provide a JavaScript object if the "Content-type" is
@@ -443,6 +448,27 @@ app.post('/readMessages/:userID', auth, (req, res, next) => {
             }
         }
         return res.status(200).json(result);
+    }).catch((reason) => {
+        return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
+    });
+});
+/*----------------------------------------------------------------------------------------------------*/
+//GAME
+/*----------------------------------------------------------------------------------------------------*/
+app.post('/challenge/:userID', auth, (req, res, next) => {
+    try {
+        var u1 = ObjectId(req.user.id);
+        var u2 = ObjectId(req.params.userID);
+    }
+    catch (error) {
+        return next({ statusCode: 404, error: true, errormessage: "Invalid UserID" });
+    }
+    var g = game.newGame({
+        user1: u1,
+        user2: u2
+    });
+    g.save().then((data) => {
+        return res.status(200).json(data);
     }).catch((reason) => {
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
     });

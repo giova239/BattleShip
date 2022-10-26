@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { MessageListComponent } from './message-list/message-list.component';
 
 // Services
+import { GameHttpService } from './game-http.service';
 import { MessageHttpService } from './message-http.service';
 import { UserHttpService } from './user-http.service';
 import { UserLoginComponent } from './user-login/user-login.component';
@@ -34,7 +35,8 @@ import { FriendListComponent } from './friend-list/friend-list.component';
   providers: [
     {provide: UserHttpService, useClass: UserHttpService },
     {provide: SocketioService, useClass: SocketioService },
-    {provide: MessageHttpService, useClass: MessageHttpService} 
+    {provide: MessageHttpService, useClass: MessageHttpService},
+    {provide: GameHttpService, useClass: GameHttpService} 
   ],
   bootstrap: [AppComponent]
 })

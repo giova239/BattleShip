@@ -45,6 +45,10 @@
  * 
  *                        SOCKET: emit MessageRead event containing messageID to chatID room
  * 
+ * -----------------------------------------------------------------------------------------------------
+ *     /challenge/:userID                    POST        Create a new GameRoom and sends a message with
+ *                                                       the invite link to the other player, returns
+ *                                                       the GameRoomID
  * ----------------------------------------------------------------------------------------------------- 
  *  To install the required modules:
  *  $ npm install
@@ -87,6 +91,8 @@ import { User } from './User';
 import * as user from './User';
 import { Chat } from './Chat';
 import * as chat from './Chat';
+import { Game } from './Game';
+import * as game from './Game';
 
 import express = require('express');
 import bodyparser = require('body-parser');      // body-parser middleware is used to parse the request body and
@@ -566,6 +572,32 @@ app.post('/readMessages/:userID', auth, (req,res,next) =>{
   })
 
 })
+
+
+/*----------------------------------------------------------------------------------------------------*/
+//GAME
+/*----------------------------------------------------------------------------------------------------*/
+
+app.post('/challenge/:userID', auth, (req,res,next) =>{
+
+  try{
+    var u1 = ObjectId(req.user.id);
+    var u2 = ObjectId(req.params.userID)
+  }catch(error){
+    return next({ statusCode:404, error: true, errormessage: "Invalid UserID"});
+  }
+
+  var g = game.newGame({
+    user1: u1,
+    user2: u2
+  });
+  g.save().then( (data) => {
+    return res.status(200).json(data);
+  }).catch( (reason) => {   
+    return next({ statusCode:404, error: true, errormessage: "DB error: "+ reason });
+  })
+
+});
 
 /*----------------------------------------------------------------------------------------------------*/
 

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserHttpService } from '../user-http.service';
+import { GameHttpService } from '../game-http.service';
 import { Router } from '@angular/router';
 import { Popover } from 'bootstrap';
 import { SocketioService } from '../socketio.service';
@@ -19,7 +20,7 @@ export class FriendListComponent implements OnInit, OnDestroy {
   public userID;
   private friendListSocket;
 
-  constructor(private sio: SocketioService, public us: UserHttpService, private router: Router) { }
+  constructor(private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService, private router: Router) { }
 
   ngOnInit(): void {
     this.userID = this.us.get_id();
@@ -93,7 +94,7 @@ export class FriendListComponent implements OnInit, OnDestroy {
   public accept_friend_request(userID: string){
     this.us.post_friends(userID).subscribe( resp => {
       console.log(resp);
-      this.reload_data();
+      this.get_friend_requests();
     }, err => {
       console.log(err);
     });
@@ -102,24 +103,27 @@ export class FriendListComponent implements OnInit, OnDestroy {
   public reject_friend_request(userID: string){
     this.us.delete_friend_requests(userID).subscribe( resp => {
       console.log(resp);
-      this.reload_data();
+      this.get_friend_requests();
     }, err => {
       console.log(err);
     });
   }
 
   open_chat(userID){
-    console.log(userID);
     this.router.navigate(['/chat/', userID]);
+  }
+
+  challenge(userID){
+    console.log("challenging user: " + userID);
+    this.gs.challenge(userID).subscribe( resp => {
+      console.log(resp);
+    }, err => {
+      console.log(err);
+    });
   }
 
   copy_to_clipboard_ID(){
     navigator.clipboard.writeText(this.userID);
-  }
-
-  reload_data(){
-    this.get_friends();
-    this.get_friend_requests();
   }
 
   logout() {
