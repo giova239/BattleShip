@@ -16,6 +16,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { UserSignupComponent } from './user-signup/user-signup.component';
 import { SocketioService } from './socketio.service';
 import { FriendListComponent } from './friend-list/friend-list.component';
+import { GameComponent } from './game/game.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { FriendListComponent } from './friend-list/friend-list.component';
     MessageListComponent,
     UserLoginComponent,
     UserSignupComponent,
-    FriendListComponent
+    FriendListComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,

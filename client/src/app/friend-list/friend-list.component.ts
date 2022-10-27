@@ -117,6 +117,7 @@ export class FriendListComponent implements OnInit, OnDestroy {
     console.log("challenging user: " + userID);
     this.gs.challenge(userID).subscribe( resp => {
       console.log(resp);
+      this.router.navigate(['/game/', resp]);
     }, err => {
       console.log(err);
     });

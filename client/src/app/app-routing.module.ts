@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { MessageListComponent } from './message-list/message-list.component';
 import { UserSignupComponent } from './user-signup/user-signup.component';
 import { FriendListComponent } from './friend-list/friend-list.component';
+import { GameComponent } from './game/game.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: UserLoginComponent },
   { path: 'signup', component: UserSignupComponent },
   { path: 'friends', component: FriendListComponent},
-  { path: 'chat/:userID', component: MessageListComponent }
+  { path: 'chat/:userID', component: MessageListComponent },
+  { path: 'game/:gameID', component: GameComponent }
 ];
 
 @NgModule({
