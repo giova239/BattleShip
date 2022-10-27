@@ -468,7 +468,7 @@ app.post('/challenge/:userID', auth, (req, res, next) => {
         user2: u2
     });
     g.save().then((data) => {
-        ios.to(u2).emit('challenged', data._id);
+        ios.to(u2).emit('challenged', { user: req.user.username, gameID: data._id });
         return res.status(200).json(data._id);
     }).catch((reason) => {
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });

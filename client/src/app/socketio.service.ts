@@ -44,6 +44,13 @@ export class SocketioService {
         observer.next( {event : "readMessage", content : message} );
       });
 
+      //GAME SOCKETS
+
+      this.socket.on('challenged', message => {
+        console.log('Socket.io event: challenged');
+        observer.next( {event : "challenged", content : message} );
+      });
+
       //ERROR
 
       this.socket.on('error', (err) => {

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 import { Router } from '@angular/router';
-import { Popover } from 'bootstrap';
+import { Popover, Toast } from 'bootstrap';
 import { SocketioService } from '../socketio.service';
 import { Icu } from '@angular/compiler/src/i18n/i18n_ast';
 
@@ -18,12 +18,15 @@ export class FriendListComponent implements OnInit, OnDestroy {
   public errmessage;
   public vldmessage;
   public userID;
+  public incomingChallenge;
   private friendListSocket;
 
   constructor(private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService, private router: Router) { }
 
   ngOnInit(): void {
     this.userID = this.us.get_id();
+    let toast = new Toast(document.querySelector('.toast'), {});
+    [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(popoverTriggerEl => new Popover(popoverTriggerEl));
     //Socket connection to chat room
     this.friendListSocket = this.sio.connect(this.userID).subscribe( m => {
 
@@ -41,12 +44,14 @@ export class FriendListComponent implements OnInit, OnDestroy {
             this.friends[index].numberOfUnreadMessages = 1;
           }
         }
+      }else if(m && m.event && m.event == "challenged"){
+        this.incomingChallenge = m.content;
+        toast.show();
       }
       
     });
     this.get_friends();
     this.get_friend_requests();
-    [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(popoverTriggerEl => new Popover(popoverTriggerEl))
   }
 
   ngOnDestroy() {
