@@ -25,7 +25,7 @@ export class FriendListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userID = this.us.get_id();
-    let toast = new Toast(document.querySelector('.toast'), {});
+    let toast = new Toast(document.querySelector('.toast'), {autohide: false});
     [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(popoverTriggerEl => new Popover(popoverTriggerEl));
     //Socket connection to chat room
     this.friendListSocket = this.sio.connect(this.userID).subscribe( m => {
@@ -126,6 +126,10 @@ export class FriendListComponent implements OnInit, OnDestroy {
     }, err => {
       console.log(err);
     });
+  }
+
+  accept_challenge(){
+    this.router.navigate(['/game/', this.incomingChallenge.gameID]);
   }
 
   copy_to_clipboard_ID(){
