@@ -49,6 +49,7 @@
  *     /challenge/:userID                    POST        Create a new GameRoom and sends a message with
  *                                                       the invite link to the other player, returns
  *                                                       the GameRoomID
+ *     /game/:gameID                         GET         Retrive game given a GameID
  * ----------------------------------------------------------------------------------------------------- 
  *  To install the required modules:
  *  $ npm install
@@ -596,6 +597,27 @@ app.post('/challenge/:userID', auth, (req,res,next) =>{
     return res.status(200).json(data._id);
   }).catch( (reason) => {   
     return next({ statusCode:404, error: true, errormessage: "DB error: "+ reason });
+  })
+
+});
+
+app.get('/game/:gameID', auth, (req,res,next) =>{
+
+  game.getModel().findById(req.params.gameID).then(data => {
+    
+    if(req.user.id == data.user1.toString()){
+      data.isUser1Connected = true;
+    }else if(req.user.id == data.user2.toString()){
+      data.isUser2Connected = true;
+    }
+
+    data.save().then(() => {
+      ios.to(req.params.gameID).emit('userConnected', req.user.id);
+    })
+
+    return res.status(200).json(data);
+  }).catch(error => {
+    return next({ statusCode:404, error: true, errormessage: "DB error: "+ error });
   })
 
 });

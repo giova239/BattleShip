@@ -18,7 +18,15 @@ var gameSchema = new mongoose.Schema({
             }]],
     moves: [{
             type: mongoose.SchemaTypes.String
-        }]
+        }],
+    isUser1Connected: {
+        type: mongoose.SchemaTypes.Boolean,
+        default: false
+    },
+    isUser2Connected: {
+        type: mongoose.SchemaTypes.Boolean,
+        default: false
+    },
 });
 // Here we add some methods to the chat Schema
 //TODO

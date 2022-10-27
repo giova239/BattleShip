@@ -44,4 +44,10 @@ export class GameHttpService {
     );
   }
 
+  get_game(gameID: string): Observable<Game> {
+    return this.http.get<Game>( this.us.url + '/game/' + gameID, this.create_options() ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

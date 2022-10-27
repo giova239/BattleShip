@@ -7,7 +7,9 @@ export interface Game extends mongoose.Document {
     user2: mongoose.Schema.Types.ObjectId,
     board1: boolean[][],
     board2: boolean[][],
-    moves: string[]
+    moves: string[],
+    isUser1Connected: boolean,
+    isUser2Connected: boolean
 }
 
 var gameSchema = new mongoose.Schema( {
@@ -27,7 +29,15 @@ var gameSchema = new mongoose.Schema( {
     }]],
     moves: [{
         type: mongoose.SchemaTypes.String
-    }]
+    }],
+    isUser1Connected: {
+        type: mongoose.SchemaTypes.Boolean,
+        default: false
+    },
+    isUser2Connected: {
+        type: mongoose.SchemaTypes.Boolean,
+        default: false
+    },
 })
 
 // Here we add some methods to the chat Schema

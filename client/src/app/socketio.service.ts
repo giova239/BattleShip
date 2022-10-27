@@ -51,6 +51,11 @@ export class SocketioService {
         observer.next( {event : "challenged", content : message} );
       });
 
+      this.socket.on('userConnected', message => {
+        console.log('Socket.io event: userConnected');
+        observer.next( {event : "userConnected", content : message} );
+      });
+
       //ERROR
 
       this.socket.on('error', (err) => {

@@ -4,7 +4,9 @@ export interface Game {
     user2: string,
     board1: boolean[][],
     board2: boolean[][],
-    moves: string[]
+    moves: string[],
+    isUser1Connected: boolean,
+    isUser2Connected: boolean
 }
 
 // User defined type guard
