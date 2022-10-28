@@ -468,7 +468,9 @@ app.post('/challenge/:userID', auth, (req, res, next) => {
     }
     var g = game.newGame({
         user1: u1,
-        user2: u2
+        user2: u2,
+        board1: new Array(10).fill(new Array(10).fill(false)),
+        board2: new Array(10).fill(new Array(10).fill(false)),
     });
     g.save().then((data) => {
         ios.to(u2).emit('challenged', { user: req.user.username, gameID: data._id });

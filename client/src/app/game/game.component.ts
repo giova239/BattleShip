@@ -13,6 +13,7 @@ import { GameHttpService } from '../game-http.service';
 })
 export class GameComponent implements OnInit {
 
+  public stringRef: StringConstructor = String;
   public gameID: string;
   public game: Game;
   private sub: Subscription;

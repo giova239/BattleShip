@@ -1,3 +1,13 @@
 <p>Welcome to gameID: {{gameID}}</p>
 <p>(PLAYER 1) {{this.game && this.game.isUser1Connected ? "CONNECTED" : "DISCONNECTED"}}</p>
 <p>(PLAYER 2) {{this.game && this.game.isUser2Connected ? "CONNECTED" : "DISCONNECTED"}}</p>
+
+<div class="positioningGrid">
+
+    <ng-container *ngFor="let row of game.board1; let i = index;">
+        <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+1">
+            {{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}{{j+1}}
+        </span>
+    </ng-container>
+
+</div>
