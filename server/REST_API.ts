@@ -50,6 +50,8 @@
  *                                                       the invite link to the other player, returns
  *                                                       the GameRoomID
  *     /game/:gameID                         GET         Retrive game given a GameID
+ *     /game/:gameID                         PUT         Updates game given a GameID, body contains
+ *                                                       game options to be updated
  * ----------------------------------------------------------------------------------------------------- 
  *  To install the required modules:
  *  $ npm install
@@ -604,16 +606,34 @@ app.post('/challenge/:userID', auth, (req,res,next) =>{
 app.get('/game/:gameID', auth, (req,res,next) =>{
 
   game.getModel().findById(req.params.gameID).then(data => {
-    
-    if(req.user.id == data.user1.toString()){
-      data.isUser1Connected = true;
-    }else if(req.user.id == data.user2.toString()){
-      data.isUser2Connected = true;
-    }
+    return res.status(200).json(data);
+  }).catch(error => {
+    return next({ statusCode:404, error: true, errormessage: "DB error: "+ error });
+  })
 
-    data.save().then(() => {
-      ios.to(req.params.gameID).emit('userConnected', req.user.id);
-    })
+});
+
+app.put('/game/:gameID', auth, (req,res,next) =>{
+
+  game.getModel().findById(req.params.gameID).then(data => {
+    
+    if(data && req.body && (req.user.id == data.user1.toString() || req.user.id == data.user2.toString())){
+
+      for(var prop in req.body){
+        if(data[prop] != null){
+          console.log(prop);
+          data[prop] = req.body[prop]
+          if(prop == "isUser1Connected"){
+            ios.to(req.params.gameID).emit('user1ConnenctionUpdate', req.body[prop]);
+          }else if(prop == "isUser2Connected"){
+            ios.to(req.params.gameID).emit('user2ConnenctionUpdate', req.body[prop]);
+          }
+        }
+      }
+
+      data.save()
+
+    }
 
     return res.status(200).json(data);
   }).catch(error => {

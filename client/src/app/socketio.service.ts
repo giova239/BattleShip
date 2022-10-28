@@ -51,9 +51,14 @@ export class SocketioService {
         observer.next( {event : "challenged", content : message} );
       });
 
-      this.socket.on('userConnected', message => {
-        console.log('Socket.io event: userConnected');
-        observer.next( {event : "userConnected", content : message} );
+      this.socket.on('user1ConnenctionUpdate', message => {
+        console.log('Socket.io event: user1ConnenctionUpdate');
+        observer.next( {event : "user1ConnenctionUpdate", content : message} );
+      });
+
+      this.socket.on('user2ConnenctionUpdate', message => {
+        console.log('Socket.io event: user2ConnenctionUpdate');
+        observer.next( {event : "user2ConnenctionUpdate", content : message} );
       });
 
       //ERROR

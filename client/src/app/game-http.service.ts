@@ -50,4 +50,10 @@ export class GameHttpService {
     );
   }
 
+  put_game(gameID: string, body: Object): Observable<Game> {
+    return this.http.put<Game>( this.us.url + '/game/' + gameID, body, this.create_options() ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

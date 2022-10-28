@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Game } from '../Game';
 import { SocketioService } from '../socketio.service';
+import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
 @Component({
@@ -17,9 +18,10 @@ export class GameComponent implements OnInit {
   private sub: Subscription;
   private gameSocket: Subscription;
 
-  constructor(private route: ActivatedRoute, private sio: SocketioService, public gs: GameHttpService) { }
+  constructor(private route: ActivatedRoute, private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService) { }
 
   ngOnInit(): void {
+
 
     this.sub = this.route.params.subscribe(params => {
 
@@ -35,21 +37,23 @@ export class GameComponent implements OnInit {
     
           if(m && m.event && m.event == "move"){
     
-          }else if(m && m.event && m.event == "userConnected"){
+          }else if(m && m.event && m.event == "user1ConnenctionUpdate"){
     
-            if(m.content){
-              if(m.content == this.game.user1){
-                this.game.isUser1Connected = true;
-              }else if(m.content == this.game.user2){
-                this.game.isUser2Connected = true;
-              }
+            if(m.content != null && typeof m.content == "boolean"){
+                this.game.isUser1Connected = m.content;
             }
             
-          }else if(m && m.event && m.event == "userDisconnected"){
+          }else if(m && m.event && m.event == "user2ConnenctionUpdate"){
     
+            if(m.content != null && typeof m.content == "boolean"){
+              this.game.isUser2Connected = m.content;
+          }
+
           }
           
         });
+
+        this.updateUserConnection(true);
 
       });
 
@@ -57,9 +61,21 @@ export class GameComponent implements OnInit {
 
   }
 
+  ngOn
+
   ngOnDestroy() {
     this.sub.unsubscribe();
     this.gameSocket.unsubscribe();
+    this.updateUserConnection(false);
+  }
+
+  private updateUserConnection(status: boolean){
+    var currentUserID = this.us.get_id();
+    if(currentUserID == this.game.user1){
+      this.gs.put_game(this.gameID, {isUser1Connected: status}).subscribe()
+    }else if(currentUserID == this.game.user2){
+      this.gs.put_game(this.gameID, {isUser2Connected: status}).subscribe()
+    }
   }
 
 }
