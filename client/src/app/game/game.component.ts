@@ -23,6 +23,16 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.game = {
+      _id : "",
+      user1 : "",
+      user2 : "",
+      board1 : [],
+      board2 : [],
+      moves : [],
+      isUser1Connected : false,
+      isUser2Connected : false
+    }
 
     this.sub = this.route.params.subscribe(params => {
 
@@ -54,15 +64,13 @@ export class GameComponent implements OnInit {
           
         });
 
-        this.updateUserConnection(true);
+        setTimeout(()=>this.updateUserConnection(true), 500); 
 
       });
 
     });
 
   }
-
-  ngOn
 
   ngOnDestroy() {
     this.sub.unsubscribe();
