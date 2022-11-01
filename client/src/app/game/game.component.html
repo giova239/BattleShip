@@ -23,7 +23,7 @@
     
     <span class="positioningGrid">
         <ng-container *ngFor="let row of game.board1; let i = index;">
-            <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" (dragover)="onDragOver($event)">
+            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+2" (dragenter)="onDragEnter($event)">
                 {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
             </span>
             <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>

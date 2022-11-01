@@ -20,6 +20,7 @@ export class GameComponent implements OnInit {
   private gameSocket: Subscription;
   private draggingElem;
   private dragSize;
+  private dragCoordinates;
 
   constructor(private route: ActivatedRoute, private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService) { }
 
@@ -81,24 +82,29 @@ export class GameComponent implements OnInit {
   }
 
   onDragStart(e, size){
-    console.log(e);
     this.draggingElem = e.target;
     this.dragSize = {x: size, y: 1};
   }
 
   onDragEnd(e){
-    console.log(e);
+    if(this.dragCoordinates && this.dragSize && this.dragCoordinates.x+this.dragSize.x<12 && this.dragCoordinates.y+this.dragSize.y<12){
+      for(let i = 0; i < this.dragSize.y; i++){
+        for(let j = 0; j < this.dragSize.x; j++){
+          this.game.board1[this.dragCoordinates.y+i-1][this.dragCoordinates.x+j-1] = true;
+        }
+      }
+    }
     this.draggingElem = null;
     this.dragSize = null;
   }
 
-  onDragOver(e){
-    var rowCord = Number(e.target.style.gridRow.split(" ", 2)[0])
-    var colCord = Number(e.target.style.gridColumn.split(" ", 2)[0])
-    if(this.draggingElem && this.dragSize && colCord+this.dragSize.x<13 && rowCord+this.dragSize.y<12){
+  onDragEnter(e){
+    var rowCord = Number(e.target.style.gridRow.split(" ", 2)[0]);
+    var colCord = Number(e.target.style.gridColumn.split(" ", 2)[0])-1;
+    if(this.draggingElem && this.dragSize && colCord+this.dragSize.x<12 && rowCord+this.dragSize.y<12){
+      this.dragCoordinates = {x: colCord, y: rowCord};
       var rec = e.target.getBoundingClientRect();
       var offset = document.getElementById("hotbar").getBoundingClientRect();
-      console.log(rec);
       this.draggingElem.style="position:absolute; left:"+ (rec.left - offset.left) +"px; top:"+ (rec.top - offset.top) +"px; width:";
     }
   }

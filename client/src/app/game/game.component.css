@@ -23,8 +23,8 @@
     font-size: xx-small;
 }
 
-.positioningGrid > span.hovered{
-    background-color: rgba(255, 0, 0, 0.6);
+.positioningGrid > span.occupied{
+    background-image: radial-gradient(circle at center, transparent 50%, #cddc39 100%);
 }
 
 .positioningGrid > label{
