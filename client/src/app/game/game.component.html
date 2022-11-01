@@ -2,28 +2,28 @@
 
 <div class="positioningGridContainer">
 
-    <span class="hotbar">
+    <span id="hotbar" class="hotbar">
         <span>
             <label>DESTROYER (2x1)</label>
-            <div class="destroyer" draggable="true"></div>
+            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2)" (dragend)="onDragEnd($event)"></div>
         </span>
         <span>
             <label>CRUISER (3x1)</label>
-            <div class="cruiser" draggable="true"></div>
+            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3)" (dragend)="onDragEnd($event)"></div>
         </span>
         <span>
             <label>BATTLESHIP (4x1)</label>
-            <div class="battleship" draggable="true"></div>
+            <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4)" (dragend)="onDragEnd($event)"></div>
         </span>
         <span>
             <label>CARRIER (5x1)</label>
-            <div class="carrier" draggable="true"></div>
+            <div class="carrier" draggable="true" (dragstart)="onDragStart($event, 5)" (dragend)="onDragEnd($event)"></div>
         </span>
     </span>
     
     <span class="positioningGrid">
         <ng-container *ngFor="let row of game.board1; let i = index;">
-            <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2">
+            <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" (dragover)="onDragOver($event)">
                 {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
             </span>
             <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
