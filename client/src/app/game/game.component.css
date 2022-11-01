@@ -1,6 +1,13 @@
+.positioningGridContainer{
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .positioningGrid{
-    width: 65vmin;
-    height: 65vmin;
+    float: left;
+    width: 65%;
+    aspect-ratio: 1;
+    max-width: 90vmin;
     display: grid;
     grid-template-columns: 11;
     grid-template-rows: 11;
@@ -23,16 +30,54 @@
 }
 
 .hotbar {
-    background-color: rgba(65, 180, 40, 0.2);
-    width: 65vmin;
-    height: 15vmin;
-    margin-top: 2vmin;
+    float: left;
+    width: 30%;
+    max-height: 90vmin;
+    max-width: calc(90vmin * 30/65);
+    aspect-ratio: calc(30/65);
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
 .hotbar > span {
     flex: 1;
-    border: 1px solid black;
     text-align: center;
+    justify-content: center;
+}
+
+.hotbar > span > *{
+    margin: auto;
+}
+
+.hotbar > span > label{
+    margin-bottom: 10%;
+}
+
+.destroyer {
+    width: calc(100% * 2/11 * 65/30);
+    aspect-ratio: 2;
+    background-color: red;
+    cursor: grab;
+}
+
+.cruiser {
+    width: calc(100% * 3/11 * 65/30);
+    aspect-ratio: 3;
+    background-color: red;
+    cursor: grab;
+}
+
+.battleship {
+    width: calc(100% * 4/11 * 65/30);
+    aspect-ratio: 4;
+    background-color: red;
+    cursor: grab;
+}
+
+.carrier {
+    width: calc(100% * 5/11 * 65/30);
+    aspect-ratio: 5;
+    background-color: red;
+    cursor: grab;
 }

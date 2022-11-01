@@ -263,7 +263,7 @@ app.get("/login", passport.authenticate('basic', { session: false }), (req,res,n
   };
 
   console.log("Login granted. Generating token" );
-  var token_signed = jsonwebtoken.sign(tokendata, process.env.JWT_SECRET, { expiresIn: '1h' } );
+  var token_signed = jsonwebtoken.sign(tokendata, process.env.JWT_SECRET, { expiresIn: '24h' } );
 
   return res.status(200).json({ error: false, errormessage: "", token: token_signed });
 
