@@ -16,6 +16,32 @@ export class GameComponent implements OnInit {
   public stringRef: StringConstructor = String;
   public gameID: string;
   public game: Game;
+  public ships = {
+    destroyers :
+    {
+      size: 2,
+      ammount: 5,
+      cells: [[],[],[],[],[]]
+    },
+    cruisers :
+    {
+      size: 3,
+      ammount: 3,
+      cells: [[],[],[]]
+    },
+    battleships :
+    {
+      size: 4,
+      ammount: 2,
+      cells: [[],[]]
+    },
+    carrier :
+    {
+      size: 5,
+      ammount: 1,
+      cells: [[]]
+    }
+  }
   private sub: Subscription;
   private gameSocket: Subscription;
   private draggingElem;
@@ -84,18 +110,52 @@ export class GameComponent implements OnInit {
   onDragStart(e, size){
     this.draggingElem = e.target;
     this.dragSize = {x: size, y: 1};
+    if(size == 2){
+      this.ships.destroyers.cells[0].forEach(c => {
+        this.game.board1[c.y][c.x] = false;
+      });
+      this.ships.destroyers.cells[0] = [];
+    }else if (size == 3){
+      this.ships.cruisers.cells[0].forEach(c => {
+        this.game.board1[c.y][c.x] = false;
+      });
+      this.ships.cruisers.cells[0] = [];
+    }else if(size == 4){
+      this.ships.battleships.cells[0].forEach(c => {
+        this.game.board1[c.y][c.x] = false;
+      });
+      this.ships.battleships.cells[0] = [];
+    }else if(size == 5){
+      this.ships.carrier.cells[0].forEach(c => {
+        this.game.board1[c.y][c.x] = false;
+      });
+      this.ships.carrier.cells[0] = [];
+    }
+    //TODO: set cells to false when repositioning
   }
 
   onDragEnd(e){
     if(this.dragCoordinates && this.dragSize && this.dragCoordinates.x+this.dragSize.x<12 && this.dragCoordinates.y+this.dragSize.y<12){
+      let occupiedCells = [];
       for(let i = 0; i < this.dragSize.y; i++){
         for(let j = 0; j < this.dragSize.x; j++){
           this.game.board1[this.dragCoordinates.y+i-1][this.dragCoordinates.x+j-1] = true;
+          occupiedCells.push({x : this.dragCoordinates.x+j-1 ,y : this.dragCoordinates.y+i-1})
         }
+      }
+      if(this.dragSize.x == "2"){
+        this.ships.destroyers.cells[0] = occupiedCells;
+      }else if (this.dragSize.x == "3"){
+        this.ships.cruisers.cells[0] = occupiedCells;
+      }else if(this.dragSize.x == "4"){
+        this.ships.battleships.cells[0] = occupiedCells;
+      }else if(this.dragSize.x == "5"){
+        this.ships.carrier.cells[0] = occupiedCells;
       }
     }
     this.draggingElem = null;
     this.dragSize = null;
+    
   }
 
   onDragEnter(e){
