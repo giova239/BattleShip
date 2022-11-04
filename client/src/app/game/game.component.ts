@@ -16,6 +16,7 @@ export class GameComponent implements OnInit {
   public stringRef: StringConstructor = String;
   public gameID: string;
   public game: Game;
+  public isGameStarted: boolean = false;
   public ships = {
     destroyers :
     {
@@ -176,6 +177,7 @@ export class GameComponent implements OnInit {
     }else if(currentUserID == this.game.user2){
       this.gs.put_game(this.gameID, {board2 : this.game.board1}).subscribe(g => this.game = g)
     }
+    this.isGameStarted = true;
   }
 
   private updateUserConnection(status: boolean){

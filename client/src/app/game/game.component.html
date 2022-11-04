@@ -1,6 +1,6 @@
 <p>Welcome to gameID: {{gameID}} (PLAYER 1) {{this.game && this.game.isUser1Connected ? "CONNECTED" : "DISCONNECTED"}} (PLAYER 2) {{this.game && this.game.isUser2Connected ? "CONNECTED" : "DISCONNECTED"}}</p>
 
-<div class="positioningGridContainer">
+<div class="positioningGridContainer" *ngIf="!isGameStarted">
 
     <span id="hotbar" class="hotbar">
         <span>
@@ -39,4 +39,8 @@
         </ng-container>
     </span>
 
+</div>
+
+<div class="gameContainer" *ngIf="isGameStarted">
+    ciao
 </div>
