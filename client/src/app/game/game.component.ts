@@ -169,6 +169,15 @@ export class GameComponent implements OnInit {
     }
   }
 
+  submitPosition(){
+    var currentUserID = this.us.get_id();
+    if(currentUserID == this.game.user1){
+      this.gs.put_game(this.gameID, {board1 : this.game.board1}).subscribe(g => this.game = g)
+    }else if(currentUserID == this.game.user2){
+      this.gs.put_game(this.gameID, {board2 : this.game.board1}).subscribe(g => this.game = g)
+    }
+  }
+
   private updateUserConnection(status: boolean){
     var currentUserID = this.us.get_id();
     if(currentUserID == this.game.user1){
