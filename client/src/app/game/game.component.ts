@@ -5,6 +5,7 @@ import { Game } from '../Game';
 import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-game',
@@ -132,6 +133,7 @@ export class GameComponent implements OnInit {
   }
 
   onDragEnd(e, index){
+    
     if(this.dragCoordinates && this.dragSize && this.dragCoordinates.x+this.dragSize.x<12 && this.dragCoordinates.y+this.dragSize.y<12){
       let occupiedCells = [];
       for(let i = 0; i < this.dragSize.y; i++){
@@ -141,24 +143,26 @@ export class GameComponent implements OnInit {
       }
 
       console.log(this.checkPlacement(occupiedCells));
-
-      occupiedCells.forEach(e => {
-        this.positioningBoard[e.y][e.x] = true;
-      })
-      
-      if(this.dragSize.x == "2"){
-        this.ships.destroyers.cells[index] = occupiedCells;
-      }else if (this.dragSize.x == "3"){
-        this.ships.cruisers.cells[index] = occupiedCells;
-      }else if(this.dragSize.x == "4"){
-        this.ships.battleships.cells[index] = occupiedCells;
-      }else if(this.dragSize.x == "5"){
-        this.ships.carrier.cells[index] = occupiedCells;
+      if(this.checkPlacement(occupiedCells)){
+        occupiedCells.forEach(e => {
+          this.positioningBoard[e.y][e.x] = true;
+        })
+        if(this.dragSize.x == "2"){
+          this.ships.destroyers.cells[index] = occupiedCells;
+        }else if (this.dragSize.x == "3"){
+          this.ships.cruisers.cells[index] = occupiedCells;
+        }else if(this.dragSize.x == "4"){
+          this.ships.battleships.cells[index] = occupiedCells;
+        }else if(this.dragSize.x == "5"){
+          this.ships.carrier.cells[index] = occupiedCells;
+        }
+      }else{
+        this.draggingElem.style="";
       }
+
     }
     this.draggingElem = null;
     this.dragSize = null;
-    
   }
 
   onDragEnter(e){
@@ -193,22 +197,21 @@ export class GameComponent implements OnInit {
 
   checkPlacement(cells){
 
-    for(let i = 0; i < cells.length; i++){
-      if(this.positioningBoard[cells[i].y][cells[i].x] ||
-        this.positioningBoard[cells[i].y-1][cells[i].x] ||
-        this.positioningBoard[cells[i].y+1][cells[i].x] ||
-        this.positioningBoard[cells[i].y][cells[i].x-1] ||
-        this.positioningBoard[cells[i].y][cells[i].x+1] ||
-        this.positioningBoard[cells[i].y-1][cells[i].x-1] ||
-        this.positioningBoard[cells[i].y+1][cells[i].x-1] ||
-        this.positioningBoard[cells[i].y-1][cells[i].x+1] ||
-        this.positioningBoard[cells[i].y+1][cells[i].x+1]
-       ){
-         return false
-       }
+    var from = {x: (cells[0].x)-1, y: (cells[0].y)-1};
+    var to = {x: (cells[cells.length-1].x)+1, y: (cells[cells.length-1].y)+1};
+    if(from.x < 0) from.x = 0
+    if(from.y < 0) from.y = 0
+    if(to.x > this.positioningBoard.length-1) to.x = this.positioningBoard.length-1
+    if(to.y > this.positioningBoard.length-1) to.y = this.positioningBoard.length-1
+    for(let i = from.y; i <= to.y; i++){
+      for(let j = from.x; j <= to.x; j++){
+        if(this.positioningBoard[i][j]){
+          return false
+        }
+      }
     }
-  
     return true;
+    
   }
 
 }
