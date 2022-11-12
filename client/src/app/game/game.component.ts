@@ -39,6 +39,7 @@ export class GameComponent implements OnInit {
       cells: [[]]
     }
   }
+  public positioningBoard: Boolean[][] = new Array(10).fill(false).map(() => new Array(10).fill(false));
   private sub: Subscription;
   private gameSocket: Subscription;
   private draggingElem;
@@ -109,22 +110,22 @@ export class GameComponent implements OnInit {
     this.dragSize = {x: size, y: 1};
     if(size == 2){
       this.ships.destroyers.cells[index].forEach(c => {
-        this.game.board1[c.y][c.x] = false;
+        this.positioningBoard[c.y][c.x] = false;
       });
       this.ships.destroyers.cells[index] = [];
     }else if (size == 3){
       this.ships.cruisers.cells[index].forEach(c => {
-        this.game.board1[c.y][c.x] = false;
+        this.positioningBoard[c.y][c.x] = false;
       });
       this.ships.cruisers.cells[index] = [];
     }else if(size == 4){
       this.ships.battleships.cells[index].forEach(c => {
-        this.game.board1[c.y][c.x] = false;
+        this.positioningBoard[c.y][c.x] = false;
       });
       this.ships.battleships.cells[index] = [];
     }else if(size == 5){
       this.ships.carrier.cells[index].forEach(c => {
-        this.game.board1[c.y][c.x] = false;
+        this.positioningBoard[c.y][c.x] = false;
       });
       this.ships.carrier.cells[index] = [];
     }
@@ -135,10 +136,14 @@ export class GameComponent implements OnInit {
       let occupiedCells = [];
       for(let i = 0; i < this.dragSize.y; i++){
         for(let j = 0; j < this.dragSize.x; j++){
-          this.game.board1[this.dragCoordinates.y+i-1][this.dragCoordinates.x+j-1] = true;
+          this.positioningBoard[this.dragCoordinates.y+i-1][this.dragCoordinates.x+j-1] = true;
           occupiedCells.push({x : this.dragCoordinates.x+j-1 ,y : this.dragCoordinates.y+i-1})
         }
       }
+      console.log(occupiedCells);
+      console.log(this.positioningBoard);
+      
+      
       if(this.dragSize.x == "2"){
         this.ships.destroyers.cells[index] = occupiedCells;
       }else if (this.dragSize.x == "3"){
@@ -168,9 +173,9 @@ export class GameComponent implements OnInit {
   submitPosition(){
     var currentUserID = this.us.get_id();
     if(currentUserID == this.game.user1){
-      this.gs.put_game(this.gameID, {board1 : this.game.board1}).subscribe(g => this.game = g)
+      this.gs.put_game(this.gameID, {board1 : this.positioningBoard}).subscribe(g => this.game = g)
     }else if(currentUserID == this.game.user2){
-      this.gs.put_game(this.gameID, {board2 : this.game.board1}).subscribe(g => this.game = g)
+      this.gs.put_game(this.gameID, {board2 : this.positioningBoard}).subscribe(g => this.game = g)
     }
     this.isGameStarted = true;
   }
@@ -182,6 +187,10 @@ export class GameComponent implements OnInit {
     }else if(currentUserID == this.game.user2){
       this.gs.put_game(this.gameID, {isUser2Connected: status}).subscribe()
     }
+  }
+
+  checkPlacement(){
+
   }
 
 }
