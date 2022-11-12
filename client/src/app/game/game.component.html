@@ -5,19 +5,26 @@
     <span id="hotbar" class="hotbar">
         <span>
             <label>DESTROYER (2x1)</label>
-            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2)" (dragend)="onDragEnd($event)"></div>
+            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 0)" (dragend)="onDragEnd($event, 0)"></div>
+            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 1)" (dragend)="onDragEnd($event, 1)"></div>
+            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 2)" (dragend)="onDragEnd($event, 2)"></div>
+            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 3)" (dragend)="onDragEnd($event, 3)"></div>
+            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 4)" (dragend)="onDragEnd($event, 4)"></div>
         </span>
         <span>
             <label>CRUISER (3x1)</label>
-            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3)" (dragend)="onDragEnd($event)"></div>
+            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 0)" (dragend)="onDragEnd($event, 0)"></div>
+            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 1)" (dragend)="onDragEnd($event, 1)"></div>
+            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 2)" (dragend)="onDragEnd($event, 2)"></div>
         </span>
         <span>
             <label>BATTLESHIP (4x1)</label>
-            <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4)" (dragend)="onDragEnd($event)"></div>
+            <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 0)" (dragend)="onDragEnd($event, 0)"></div>
+            <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 1)" (dragend)="onDragEnd($event, 1)"></div>
         </span>
         <span>
             <label>CARRIER (5x1)</label>
-            <div class="carrier" draggable="true" (dragstart)="onDragStart($event, 5)" (dragend)="onDragEnd($event)"></div>
+            <div class="carrier" draggable="true" (dragstart)="onDragStart($event, 5, 0)" (dragend)="onDragEnd($event, 0)"></div>
         </span>
         <button type="submit" class="btn btn-danger mb-2" >
             Randomize Position
@@ -42,5 +49,25 @@
 </div>
 
 <div class="gameContainer" *ngIf="isGameStarted">
-    ciao
+
+    <div class="board1">
+        <ng-container *ngFor="let row of game.board1; let i = index;">
+            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+2">
+                {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+            </span>
+            <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
+            <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
+        </ng-container>
+    </div>
+
+    <div class="board2">
+        <ng-container *ngFor="let row of game.board2; let i = index;">
+            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+2">
+                {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+            </span>
+            <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
+            <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
+        </ng-container>
+    </div>
+    
 </div>

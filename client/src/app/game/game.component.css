@@ -6,6 +6,7 @@
 .positioningGrid{
     float: left;
     width: 65%;
+    height: 65%;
     aspect-ratio: 1;
     max-width: 90vmin;
     display: grid;
@@ -53,10 +54,7 @@
 
 .hotbar > span > *{
     margin: auto;
-}
-
-.hotbar > span > label{
-    margin-bottom: 10%;
+    margin-bottom: 5px;
 }
 
 .hotbar > span > div{
@@ -89,4 +87,47 @@
     aspect-ratio: 5;
     background-color: red;
     cursor: grab;
+}
+
+.board1{
+    float: left;
+    width: 45%;
+    aspect-ratio: 1;
+    max-width: 90vmin;
+    display: grid;
+    grid-template-columns: 11;
+    grid-template-rows: 11;
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+    border: 1px solid black;
+}
+
+.board2{
+    float: right;
+    width: 45%;
+    aspect-ratio: 1;
+    max-width: 90vmin;
+    display: grid;
+    grid-template-columns: 11;
+    grid-template-rows: 11;
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+    border: 1px solid black;
+}
+
+.board1 > span, .board2 > span{
+    border-left: 1px black outset;
+    border-bottom: 1px black outset;
+    background-color: rgba(128, 128, 128, 0.15);
+    font-size: xx-small;
+}
+
+.board1 > span.occupied, .board2 > span.occupied{
+    background-color: red;
+}
+
+.board1 > label, .board2 > label{
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
 }

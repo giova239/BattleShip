@@ -21,25 +21,21 @@ export class GameComponent implements OnInit {
     destroyers :
     {
       size: 2,
-      ammount: 5,
       cells: [[],[],[],[],[]]
     },
     cruisers :
     {
       size: 3,
-      ammount: 3,
       cells: [[],[],[]]
     },
     battleships :
     {
       size: 4,
-      ammount: 2,
       cells: [[],[]]
     },
     carrier :
     {
       size: 5,
-      ammount: 1,
       cells: [[]]
     }
   }
@@ -108,34 +104,33 @@ export class GameComponent implements OnInit {
     this.updateUserConnection(false);
   }
 
-  onDragStart(e, size){
+  onDragStart(e, size, index){
     this.draggingElem = e.target;
     this.dragSize = {x: size, y: 1};
     if(size == 2){
-      this.ships.destroyers.cells[0].forEach(c => {
+      this.ships.destroyers.cells[index].forEach(c => {
         this.game.board1[c.y][c.x] = false;
       });
-      this.ships.destroyers.cells[0] = [];
+      this.ships.destroyers.cells[index] = [];
     }else if (size == 3){
-      this.ships.cruisers.cells[0].forEach(c => {
+      this.ships.cruisers.cells[index].forEach(c => {
         this.game.board1[c.y][c.x] = false;
       });
-      this.ships.cruisers.cells[0] = [];
+      this.ships.cruisers.cells[index] = [];
     }else if(size == 4){
-      this.ships.battleships.cells[0].forEach(c => {
+      this.ships.battleships.cells[index].forEach(c => {
         this.game.board1[c.y][c.x] = false;
       });
-      this.ships.battleships.cells[0] = [];
+      this.ships.battleships.cells[index] = [];
     }else if(size == 5){
-      this.ships.carrier.cells[0].forEach(c => {
+      this.ships.carrier.cells[index].forEach(c => {
         this.game.board1[c.y][c.x] = false;
       });
-      this.ships.carrier.cells[0] = [];
+      this.ships.carrier.cells[index] = [];
     }
-    //TODO: set cells to false when repositioning
   }
 
-  onDragEnd(e){
+  onDragEnd(e, index){
     if(this.dragCoordinates && this.dragSize && this.dragCoordinates.x+this.dragSize.x<12 && this.dragCoordinates.y+this.dragSize.y<12){
       let occupiedCells = [];
       for(let i = 0; i < this.dragSize.y; i++){
@@ -145,13 +140,13 @@ export class GameComponent implements OnInit {
         }
       }
       if(this.dragSize.x == "2"){
-        this.ships.destroyers.cells[0] = occupiedCells;
+        this.ships.destroyers.cells[index] = occupiedCells;
       }else if (this.dragSize.x == "3"){
-        this.ships.cruisers.cells[0] = occupiedCells;
+        this.ships.cruisers.cells[index] = occupiedCells;
       }else if(this.dragSize.x == "4"){
-        this.ships.battleships.cells[0] = occupiedCells;
+        this.ships.battleships.cells[index] = occupiedCells;
       }else if(this.dragSize.x == "5"){
-        this.ships.carrier.cells[0] = occupiedCells;
+        this.ships.carrier.cells[index] = occupiedCells;
       }
     }
     this.draggingElem = null;
