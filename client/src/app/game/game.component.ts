@@ -136,13 +136,15 @@ export class GameComponent implements OnInit {
       let occupiedCells = [];
       for(let i = 0; i < this.dragSize.y; i++){
         for(let j = 0; j < this.dragSize.x; j++){
-          this.positioningBoard[this.dragCoordinates.y+i-1][this.dragCoordinates.x+j-1] = true;
           occupiedCells.push({x : this.dragCoordinates.x+j-1 ,y : this.dragCoordinates.y+i-1})
         }
       }
-      console.log(occupiedCells);
-      console.log(this.positioningBoard);
-      
+
+      console.log(this.checkPlacement(occupiedCells));
+
+      occupiedCells.forEach(e => {
+        this.positioningBoard[e.y][e.x] = true;
+      })
       
       if(this.dragSize.x == "2"){
         this.ships.destroyers.cells[index] = occupiedCells;
@@ -189,8 +191,24 @@ export class GameComponent implements OnInit {
     }
   }
 
-  checkPlacement(){
+  checkPlacement(cells){
 
+    for(let i = 0; i < cells.length; i++){
+      if(this.positioningBoard[cells[i].y][cells[i].x] ||
+        this.positioningBoard[cells[i].y-1][cells[i].x] ||
+        this.positioningBoard[cells[i].y+1][cells[i].x] ||
+        this.positioningBoard[cells[i].y][cells[i].x-1] ||
+        this.positioningBoard[cells[i].y][cells[i].x+1] ||
+        this.positioningBoard[cells[i].y-1][cells[i].x-1] ||
+        this.positioningBoard[cells[i].y+1][cells[i].x-1] ||
+        this.positioningBoard[cells[i].y-1][cells[i].x+1] ||
+        this.positioningBoard[cells[i].y+1][cells[i].x+1]
+       ){
+         return false
+       }
+    }
+  
+    return true;
   }
 
 }

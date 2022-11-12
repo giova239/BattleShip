@@ -38,7 +38,6 @@
     position: relative;
     float: left;
     width: 30%;
-    max-height: 90vmin;
     max-width: calc(90vmin * 30/65);
     aspect-ratio: calc(30/65);
     display: flex;
