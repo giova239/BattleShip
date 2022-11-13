@@ -46,10 +46,14 @@ export class GameComponent implements OnInit {
   private draggingElem;
   private dragSize;
   private dragCoordinates;
+  private dragImage;
 
   constructor(private route: ActivatedRoute, private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService) { }
 
   ngOnInit(): void {
+
+    this.dragImage = document.createElement("img");   
+    this.dragImage.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
     this.game = {
       _id : "",
@@ -107,6 +111,7 @@ export class GameComponent implements OnInit {
   }
 
   onDragStart(e, size, index){
+    e.dataTransfer.setDragImage(this.dragImage, 0, 0);
     this.draggingElem = e.target;
     if(this.draggingElem.classList.contains("rotated")){
       this.dragSize = {x: 1, y: size};
