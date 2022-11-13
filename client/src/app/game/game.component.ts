@@ -108,7 +108,11 @@ export class GameComponent implements OnInit {
 
   onDragStart(e, size, index){
     this.draggingElem = e.target;
-    this.dragSize = {x: size, y: 1};
+    if(this.draggingElem.classList.contains("rotated")){
+      this.dragSize = {x: 1, y: size};
+    }else{
+      this.dragSize = {x: size, y: 1};
+    }
     if(size == 2){
       this.ships.destroyers.cells[index].forEach(c => {
         this.positioningBoard[c.y][c.x] = false;
@@ -132,7 +136,7 @@ export class GameComponent implements OnInit {
     }
   }
 
-  onDragEnd(e, index){
+  onDragEnd(e, size, index){
     
     if(this.dragCoordinates && this.dragSize && this.dragCoordinates.x+this.dragSize.x<12 && this.dragCoordinates.y+this.dragSize.y<12){
       let occupiedCells = [];
@@ -142,21 +146,21 @@ export class GameComponent implements OnInit {
         }
       }
 
-      console.log(this.checkPlacement(occupiedCells));
       if(this.checkPlacement(occupiedCells)){
         occupiedCells.forEach(e => {
           this.positioningBoard[e.y][e.x] = true;
         })
-        if(this.dragSize.x == "2"){
+        if(size == 2){
           this.ships.destroyers.cells[index] = occupiedCells;
-        }else if (this.dragSize.x == "3"){
+        }else if (size == 3){
           this.ships.cruisers.cells[index] = occupiedCells;
-        }else if(this.dragSize.x == "4"){
+        }else if(size == 4){
           this.ships.battleships.cells[index] = occupiedCells;
-        }else if(this.dragSize.x == "5"){
+        }else if(size == 5){
           this.ships.carrier.cells[index] = occupiedCells;
         }
       }else{
+        this.draggingElem.classList.remove("rotated")
         this.draggingElem.style="";
       }
 
@@ -211,7 +215,78 @@ export class GameComponent implements OnInit {
       }
     }
     return true;
+
+  }
+
+  rotateShip(e, size, index){
+
+    var rotatedCells = [];
+    var guard = true;
+    var offset = 0;
+    if(e.target.classList.contains("rotated")){
+      offset = +1
+    }else{
+      offset = -1
+    }
     
+    if(size == 2 && this.ships.destroyers.cells[index].length>0){
+      this.ships.destroyers.cells[index].forEach((c, i) => {
+        if(c.x+(i*offset)>9 || c.y-(i*offset)>9) guard = false;
+        rotatedCells.push({x: c.x+(i*offset), y: c.y-(i*offset)})
+        this.positioningBoard[c.y][c.x] = false;
+      });
+    }else if (size == 3 && this.ships.cruisers.cells[index].length>0){
+      this.ships.cruisers.cells[index].forEach((c, i) => {
+        if(c.x+(i*offset)>9 || c.y-(i*offset)>9) guard = false;
+        rotatedCells.push({x: c.x+(i*offset), y: c.y-(i*offset)})
+        this.positioningBoard[c.y][c.x] = false;
+      });
+    }else if(size == 4 && this.ships.battleships.cells[index].length>0){
+      this.ships.battleships.cells[index].forEach((c, i) => {
+        if(c.x+(i*offset)>9 || c.y-(i*offset)>9) guard = false;
+        rotatedCells.push({x: c.x+(i*offset), y: c.y-(i*offset)})
+        this.positioningBoard[c.y][c.x] = false;
+      });
+    }else if(size == 5 && this.ships.carrier.cells[index].length>0){
+      this.ships.carrier.cells[index].forEach((c, i) => {
+        if(c.x+(i*offset)>9 || c.y-(i*offset)>9) guard = false;
+        rotatedCells.push({x: c.x+(i*offset), y: c.y-(i*offset)})
+        this.positioningBoard[c.y][c.x] = false;
+      });
+    }
+    
+
+    if(guard && rotatedCells.length>0 && this.checkPlacement(rotatedCells)){
+      e.target.classList.toggle("rotated");
+      if(size == 2){
+        this.ships.destroyers.cells[index] = rotatedCells;
+      }else if (size == 3){
+        this.ships.cruisers.cells[index] = rotatedCells;
+      }else if(size == 4){
+        this.ships.battleships.cells[index] = rotatedCells;
+      }else if(size == 5){
+        this.ships.carrier.cells[index] = rotatedCells;
+      }
+    }
+
+    if(size == 2){
+      this.ships.destroyers.cells[index].forEach(c => {
+        this.positioningBoard[c.y][c.x] = true;
+      })
+    }else if (size == 3){
+      this.ships.cruisers.cells[index].forEach(c => {
+        this.positioningBoard[c.y][c.x] = true;
+      })
+    }else if(size == 4){
+      this.ships.battleships.cells[index].forEach(c => {
+        this.positioningBoard[c.y][c.x] = true;
+      })
+    }else if(size == 5){
+      this.ships.carrier.cells[index].forEach(c => {
+        this.positioningBoard[c.y][c.x] = true;
+      })
+    }
+
   }
 
 }
