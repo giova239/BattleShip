@@ -1,9 +1,12 @@
 .positioningGridContainer{
     display: flex;
     justify-content: space-evenly;
+    user-select: none;
 }
 
 .positioningGrid{
+    background-image: url("/assets/sea.png");
+    background-size: cover;
     float: left;
     width: 65%;
     height: 65%;
@@ -25,7 +28,7 @@
 }
 
 .positioningGrid > span.occupied{
-    background-image: radial-gradient(circle at center, transparent 50%, #cddc39 100%);
+    background-image: radial-gradient(circle at center, transparent 50%, #dc3545 100%);
 }
 
 .positioningGrid > label{
@@ -57,7 +60,7 @@
 }
 
 .hotbar > span > div{
-    outline: 2px solid black;
+    background-size: contain;
     transform-origin: bottom left;
     transition-property: transform;
     transition-duration: 0.5s;
@@ -67,7 +70,7 @@
 .destroyer {
     width: calc(100% * 2/11 * 65/30);
     aspect-ratio: 2;
-    background-color: red;
+    background-image: url("/assets/Destroyer.png");
     cursor: grab;
 }
 
@@ -78,7 +81,7 @@
 .cruiser {
     width: calc(100% * 3/11 * 65/30);
     aspect-ratio: 3;
-    background-color: red;
+    background-image: url("/assets/Cruiser.png");
     cursor: grab;
 }
 
@@ -89,7 +92,7 @@
 .battleship {
     width: calc(100% * 4/11 * 65/30);
     aspect-ratio: 4;
-    background-color: red;
+    background-image: url("/assets/Battleship.png");
     cursor: grab;
 }
 
@@ -100,7 +103,7 @@
 .carrier {
     width: calc(100% * 5/11 * 65/30);
     aspect-ratio: 5;
-    background-color: red;
+    background-image: url("/assets/Carrier.png");
     cursor: grab;
 }
 
