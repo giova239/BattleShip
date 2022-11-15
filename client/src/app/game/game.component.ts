@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Game } from '../Game';
 import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
-import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-game',
@@ -14,6 +13,10 @@ import { TouchSequence } from 'selenium-webdriver';
 })
 export class GameComponent implements OnInit {
 
+  @ViewChild("ships")
+  private shipsRef: ElementRef<HTMLElement>;
+  @ViewChild("board")
+  private boardRef: ElementRef<HTMLElement>;
   public stringRef: StringConstructor = String;
   public gameID: string;
   public game: Game;
@@ -181,7 +184,7 @@ export class GameComponent implements OnInit {
       this.dragCoordinates = {x: colCord, y: rowCord};
       var rec = e.target.getBoundingClientRect();
       var offset = document.getElementById("hotbar").getBoundingClientRect();
-      this.draggingElem.style="position:absolute; left:"+ (rec.left - offset.left) +"px; top:"+ (rec.top - offset.top) +"px; width:";
+      this.draggingElem.style="position:absolute; left:"+ (rec.left - offset.left) +"px; top:"+ (rec.top - offset.top) +"px;";
     }
   }
 
@@ -292,6 +295,59 @@ export class GameComponent implements OnInit {
       })
     }
 
+  }
+
+  randomizePosition(){
+
+    let openCells = new Set<String>();
+
+    for(let i = 0; i < 10; i++){
+      for(let j = 0; j < 10; j++){
+        openCells.add(i.toString() + j.toString())
+      }
+    }
+
+    let ships = Array.from(this.shipsRef.nativeElement.children[3].children as HTMLCollectionOf<HTMLElement>).concat(
+      Array.from(this.shipsRef.nativeElement.children[2].children as HTMLCollectionOf<HTMLElement>),
+      Array.from(this.shipsRef.nativeElement.children[1].children as HTMLCollectionOf<HTMLElement>),
+      Array.from(this.shipsRef.nativeElement.children[0].children as HTMLCollectionOf<HTMLElement>)
+    );
+
+    ships.forEach(element => {
+      let rotation = Math.floor(Math.random() * 2);
+      console.log("rotation: " + rotation);
+      let randomMapEntry = (Array.from(openCells.keys()))[Math.floor(Math.random() * openCells.size)];
+      console.log("randomEntry(" + openCells.size + "): " + randomMapEntry[0] + " / " + randomMapEntry[1]);
+      let randomCell = document.getElementById(""+randomMapEntry);
+      console.log(randomCell);
+      let shipType = element.classList[0];
+      let size = 0;
+      if(shipType == "destroyer"){
+        size = 2;
+      }else if(shipType == "cruiser"){
+        size = 3;
+      }else if(shipType == "battleship"){
+        size = 4;
+      }else if(shipType == "carrier"){
+        size = 5;
+      }
+      console.log("size: " + size);
+      //TODO: calculate occupied cells
+      let occupiedCells = [];
+      //TODO: check if position was valid
+      let rec = randomCell.getBoundingClientRect();
+      let offset = document.getElementById("hotbar").getBoundingClientRect();
+      element.style.position="absolute"
+      element.style.left=(rec.left - offset.left)+"px";
+      element.style.top=(rec.top - offset.top)+"px";
+      if(rotation){
+        element.classList.add("rotated")
+      }else{
+        element.classList.remove("rotated")
+      }
+      //TODO: remove occupiedcells from openCells and set true in positioningBoard
+    });
+    
   }
 
 }

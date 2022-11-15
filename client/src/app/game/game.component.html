@@ -2,9 +2,8 @@
 
 <div class="positioningGridContainer" *ngIf="!isGameStarted">
 
-    <span id="hotbar" class="hotbar">
+    <span #ships id="hotbar" class="hotbar">
         <span>
-            <label>DESTROYER (2x1)</label>
             <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 0)" (dragend)="onDragEnd($event, 2, 0)" (dblclick)="rotateShip($event, 2, 0)"></div>
             <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 1)" (dragend)="onDragEnd($event, 2, 1)" (dblclick)="rotateShip($event, 2, 1)"></div>
             <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 2)" (dragend)="onDragEnd($event, 2, 2)" (dblclick)="rotateShip($event, 2, 2)"></div>
@@ -12,21 +11,18 @@
             <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 4)" (dragend)="onDragEnd($event, 2, 4)" (dblclick)="rotateShip($event, 2, 4)"></div>
         </span>
         <span>
-            <label>CRUISER (3x1)</label>
             <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 0)" (dragend)="onDragEnd($event, 3, 0)" (dblclick)="rotateShip($event, 3, 0)"></div>
             <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 1)" (dragend)="onDragEnd($event, 3, 1)" (dblclick)="rotateShip($event, 3, 1)"></div>
             <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 2)" (dragend)="onDragEnd($event, 3, 2)" (dblclick)="rotateShip($event, 3, 2)"></div>
         </span>
         <span>
-            <label>BATTLESHIP (4x1)</label>
             <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 0)" (dragend)="onDragEnd($event, 4, 0)" (dblclick)="rotateShip($event, 4, 0)"></div>
             <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 1)" (dragend)="onDragEnd($event, 4, 1)" (dblclick)="rotateShip($event, 4, 1)"></div>
         </span>
         <span>
-            <label>CARRIER (5x1)</label>
             <div class="carrier" draggable="true" (dragstart)="onDragStart($event, 5, 0)" (dragend)="onDragEnd($event, 5, 0)" (dblclick)="rotateShip($event, 5, 0)"></div>
         </span>
-        <button type="submit" class="btn btn-danger mb-2" >
+        <button type="submit" class="btn btn-danger mb-2" (click)="randomizePosition()">
             Randomize Position
             <i class="fas fa-shuffle"></i>
         </button>
@@ -36,9 +32,9 @@
         </button>
     </span>
     
-    <span class="positioningGrid">
+    <span #board class="positioningGrid">
         <ng-container *ngFor="let row of positioningBoard; let i = index;">
-            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+2" (dragenter)="onDragEnter($event)">
+            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" id="{{i}}{{j}}" [style.grid-row]="i+1" [style.grid-column]="j+2" (dragenter)="onDragEnter($event)">
                 {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
             </span>
             <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
