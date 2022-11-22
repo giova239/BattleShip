@@ -60,10 +60,12 @@
 }
 
 .hotbar > span > div{
+    top: 0px;
+    left: 0px;
     background-size: contain;
     transform-origin: bottom left;
-    transition-property: transform;
-    transition-duration: 0.5s;
+    transition-property: transform, position, left, top;
+    transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
 }
 
