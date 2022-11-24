@@ -77,6 +77,22 @@ export class GameComponent implements OnInit {
 
         this.game = game
 
+        if(this.us.get_id() == this.game.user1){
+          this.game.board1.forEach(r => {
+            r.forEach(c => {
+              if(c) this.isGameStarted = true;
+            })
+          })
+        }else if(this.us.get_id() == this.game.user2){
+          this.game.board2.forEach(r => {
+            r.forEach(c => {
+              if(c) this.isGameStarted = true;
+            })
+          })
+        }else{
+          this.isGameStarted = true;
+        }
+
         this.gameSocket = this.sio.connect(this.gameID).subscribe( m => {
 
           console.log(m);

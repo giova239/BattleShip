@@ -28,7 +28,7 @@
 }
 
 .positioningGrid > span.occupied{
-    background-image: radial-gradient(circle at center, transparent 50%, #dc3545 100%);
+    background-image: radial-gradient(circle at center, transparent 50%, #198754 100%);
 }
 
 .positioningGrid > label{
@@ -124,6 +124,8 @@
     grid-auto-rows: 1fr;
     grid-auto-columns: 1fr;
     border: 1px solid black;
+    background-image: url("/assets/sea.png");
+    background-size: cover;
 }
 
 .board2{
@@ -137,6 +139,8 @@
     grid-auto-rows: 1fr;
     grid-auto-columns: 1fr;
     border: 1px solid black;
+    background-image: url("/assets/sea.png");
+    background-size: cover;
 }
 
 .board1 > span, .board2 > span{
@@ -147,7 +151,17 @@
 }
 
 .board1 > span.occupied, .board2 > span.occupied{
-    background-color: red;
+    background-color: #198754;
+}
+
+.board1 > span.hitted, .board2 > span.hitted{
+    background-image: url("/assets/hit.png");
+    background-size: cover;
+}
+
+.board1 > span.missed, .board2 > span.missed{
+    background-image: url("/assets/miss.png");
+    background-size: cover;
 }
 
 .board1 > label, .board2 > label{

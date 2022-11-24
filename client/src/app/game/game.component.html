@@ -1,4 +1,4 @@
-<p>Welcome to gameID: {{gameID}} (PLAYER 1) {{this.game && this.game.isUser1Connected ? "CONNECTED" : "DISCONNECTED"}} (PLAYER 2) {{this.game && this.game.isUser2Connected ? "CONNECTED" : "DISCONNECTED"}}</p>
+<p>(PLAYER 1) {{this.game && this.game.isUser1Connected ? "CONNECTED" : "DISCONNECTED"}} (PLAYER 2) {{this.game && this.game.isUser2Connected ? "CONNECTED" : "DISCONNECTED"}}</p>
 
 <div class="positioningGridContainer" *ngIf="!isGameStarted">
 
@@ -47,7 +47,7 @@
 <div class="gameContainer" *ngIf="isGameStarted">
 
     <div class="board1">
-        <ng-container *ngFor="let row of game.board1; let i = index;">
+        <ng-container *ngFor="let row of (this.us.get_id() == this.game.user1 ? game.board1 : (this.us.get_id() == this.game.user2 ? game.board2 : positioningBoard)); let i = index;">
             <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+2">
                 {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
             </span>
@@ -58,7 +58,7 @@
 
     <div class="board2">
         <ng-container *ngFor="let row of game.board2; let i = index;">
-            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+2">
+            <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2">
                 {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
             </span>
             <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
