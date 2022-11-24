@@ -332,11 +332,8 @@ export class GameComponent implements OnInit {
 
       while(!guard && counter<100 && openCells.size > 1){
         rotation = Math.floor(Math.random() * 2);
-        console.log("rotation: " + rotation);
         let randomMapEntry = (Array.from(openCells.keys()))[Math.floor(Math.random() * openCells.size)];
-        console.log("randomEntry(" + openCells.size + "): " + randomMapEntry[0] + " / " + randomMapEntry[1]);
         randomCell = document.getElementById(""+randomMapEntry);
-        console.log(randomCell);
         let shipType = element.classList[0];
         size = 0;
         if(shipType == "destroyer"){
@@ -348,7 +345,6 @@ export class GameComponent implements OnInit {
         }else if(shipType == "carrier"){
           size = 5;
         }
-        console.log("size: " + size);
         occupiedCells = [];
         if(rotation == 1){
           for(let i = 0; i < size; i++){
@@ -359,11 +355,8 @@ export class GameComponent implements OnInit {
             occupiedCells.push({x: Number(randomMapEntry[1])+i, y: Number(randomMapEntry[0])})
           }
         }
-        console.log(occupiedCells);
         guard = this.checkPlacement(occupiedCells);
-        console.log(guard);
         counter++;
-        console.log(counter);
       }
 
       if(guard){
@@ -390,7 +383,6 @@ export class GameComponent implements OnInit {
             openCells.delete(i.toString()+j.toString())
           }
         }
-        console.log(openCells);
         let rec = randomCell.getBoundingClientRect();
         let offset = document.getElementById("hotbar").getBoundingClientRect();
         element.style.position="absolute";
@@ -402,19 +394,7 @@ export class GameComponent implements OnInit {
           element.classList.remove("rotated")
         }
       }else{
-        if(size == 2){
-          this.ships.destroyers.cells[index-this.ships.cruisers.cells.length-this.ships.battleships.cells.length-this.ships.carrier.cells.length] = occupiedCells;
-        }else if (size == 3){
-          this.ships.cruisers.cells[index-this.ships.battleships.cells.length-this.ships.carrier.cells.length] = occupiedCells;
-        }else if(size == 4){
-          this.ships.battleships.cells[index-this.ships.carrier.cells.length] = occupiedCells;
-        }else if(size == 5){
-          this.ships.carrier.cells[index] = occupiedCells;
-        }
-        element.classList.remove("rotated")
-        element.style.left= "0px";
-        element.style.top = "0px";
-        element.style.position="static";
+        this.randomizePosition();
       }
     });
   }
