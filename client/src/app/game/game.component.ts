@@ -44,6 +44,7 @@ export class GameComponent implements OnInit {
     }
   }
   public positioningBoard: Boolean[][] = new Array(10).fill(false).map(() => new Array(10).fill(false));
+  public targeted;
   private sub: Subscription;
   private gameSocket: Subscription;
   private draggingElem;
@@ -413,5 +414,33 @@ export class GameComponent implements OnInit {
         this.randomizePosition();
       }
     });
+  }
+
+  targetCell(event){
+    if(event.target.classList.contains("targeted")){
+      event.target.classList.remove("targeted");
+      this.targeted = null;
+    }else if(!event.target.classList.contains("hitted") && !event.target.classList.contains("missed")){
+      if(this.targeted) this.targeted.classList.remove("targeted")
+      event.target.classList.add("targeted")
+      this.targeted = event.target;
+    }
+  }
+
+  fire(){
+    if(this.targeted){
+      var move = this.targeted.innerText
+      console.log("firing at " + move);
+      this.game.moves.push(move);
+      this.gs.fire(this.gameID, move).subscribe(hitted => {
+        this.targeted.classList.remove("targeted")
+        if(hitted){
+          this.targeted.classList.add("hitted")
+        }else{
+          this.targeted.classList.add("missed")
+        }
+        this.targeted = null;
+      })
+    }
   }
 }

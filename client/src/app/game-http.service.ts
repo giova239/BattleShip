@@ -56,4 +56,10 @@ export class GameHttpService {
     );
   }
 
+  fire(gameID: string, move: string): Observable<Game> {
+    return this.http.post<Game>( this.us.url + '/fire/' + gameID + '/' + move, {}, this.create_options() ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

@@ -46,24 +46,25 @@
 
 <div class="gameContainer" *ngIf="isGameStarted">
 
-    <div class="board1">
+    <span class="board1">
         <ng-container *ngFor="let row of (this.us.get_id() == this.game.user1 ? game.board1 : (this.us.get_id() == this.game.user2 ? game.board2 : positioningBoard)); let i = index;">
-            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+2">
-                {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+1">
             </span>
-            <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
-            <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
         </ng-container>
-    </div>
-
-    <div class="board2">
+    </span>
+    <span class="board2">
         <ng-container *ngFor="let row of game.board2; let i = index;">
-            <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2">
+            <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" (click)="targetCell($event)">
                 {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
             </span>
             <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
             <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
         </ng-container>
-    </div>
-    
+    </span>
+    <button type="submit" class="fireButton" [disabled]="!targeted" (click)="fire()">
+        <p>
+            Fire
+            <i class="fas fa-crosshairs"></i>
+        </p>
+    </button>
 </div>

@@ -508,6 +508,24 @@ app.put('/game/:gameID', auth, (req, res, next) => {
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + error });
     });
 });
+app.post('/fire/:gameID/:move', auth, (req, res, next) => {
+    game.getModel().findById(req.params.gameID).then(data => {
+        var hitted;
+        if (data && (req.user.id == data.user1.toString() || req.user.id == data.user2.toString())) {
+            data.moves.push(req.params.move);
+            data.save();
+            if (req.user.id == data.user1.toString()) {
+                hitted = data.board2[Number(req.params.move.substring(1)) - 1][req.params.move.charCodeAt(0) - 65];
+            }
+            else {
+                hitted = data.board1[Number(req.params.move.substring(1)) - 1][req.params.move.charCodeAt(0) - 65];
+            }
+        }
+        return res.status(200).json(hitted);
+    }).catch(error => {
+        return next({ statusCode: 404, error: true, errormessage: "DB error: " + error });
+    });
+});
 /*----------------------------------------------------------------------------------------------------*/
 // Add error handling middleware
 app.use(function (err, req, res, next) {
