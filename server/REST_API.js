@@ -471,6 +471,7 @@ app.post('/challenge/:userID', auth, (req, res, next) => {
         user2: u2,
         board1: new Array(10).fill(new Array(10).fill(false)),
         board2: new Array(10).fill(new Array(10).fill(false)),
+        isUser1Turn: Math.random() < 0.5
     });
     g.save().then((data) => {
         ios.to(u2).emit('challenged', { user: req.user.username, gameID: data._id });
@@ -510,18 +511,23 @@ app.put('/game/:gameID', auth, (req, res, next) => {
 });
 app.post('/fire/:gameID/:move', auth, (req, res, next) => {
     game.getModel().findById(req.params.gameID).then(data => {
-        var hitted;
-        if (data && (req.user.id == data.user1.toString() || req.user.id == data.user2.toString())) {
+        if (data && ((req.user.id == data.user1.toString() && data.isUser1Turn) || (req.user.id == data.user2.toString() && !data.isUser1Turn))) {
             data.moves.push(req.params.move);
+            data.isUser1Turn = !data.isUser1Turn;
             data.save();
+            var hitted;
             if (req.user.id == data.user1.toString()) {
                 hitted = data.board2[Number(req.params.move.substring(1)) - 1][req.params.move.charCodeAt(0) - 65];
             }
             else {
                 hitted = data.board1[Number(req.params.move.substring(1)) - 1][req.params.move.charCodeAt(0) - 65];
             }
+            ios.to(req.params.gameID).emit('move', req.params.move);
+            return res.status(200).json(hitted);
         }
-        return res.status(200).json(hitted);
+        else {
+            return next({ statusCode: 404, error: true, errormessage: "You are not allowed to make a move" });
+        }
     }).catch(error => {
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + error });
     });

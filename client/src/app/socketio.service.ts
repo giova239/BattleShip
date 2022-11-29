@@ -61,6 +61,11 @@ export class SocketioService {
         observer.next( {event : "user2ConnenctionUpdate", content : message} );
       });
 
+      this.socket.on('move', message => {
+        console.log('Socket.io event: move');
+        observer.next( {event : "move", content : message} );
+      });
+
       //ERROR
 
       this.socket.on('error', (err) => {

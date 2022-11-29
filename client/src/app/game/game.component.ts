@@ -17,6 +17,8 @@ export class GameComponent implements OnInit {
   private shipsRef: ElementRef<HTMLElement>;
   @ViewChild("board")
   private boardRef: ElementRef<HTMLElement>;
+  @ViewChild("board1")
+  private board1Ref: ElementRef<HTMLElement>;
   public stringRef: StringConstructor = String;
   public gameID: string;
   public game: Game;
@@ -67,7 +69,8 @@ export class GameComponent implements OnInit {
       board2 : [],
       moves : [],
       isUser1Connected : false,
-      isUser2Connected : false
+      isUser2Connected : false,
+      isUser1Turn : false
     }
 
     this.sub = this.route.params.subscribe(params => {
@@ -77,6 +80,8 @@ export class GameComponent implements OnInit {
       this.gs.get_game(this.gameID).subscribe(game => {
 
         this.game = game
+
+        console.log(game);
 
         if(this.us.get_id() == this.game.user1){
           this.game.board1.forEach(r => {
@@ -99,21 +104,31 @@ export class GameComponent implements OnInit {
           console.log(m);
     
           if(m && m.event && m.event == "move"){
-    
+            
+            this.game.moves.push(m.content);
+            if((this.us.get_id() == this.game.user1 && !this.game.isUser1Turn) || (this.us.get_id() == this.game.user2 && this.game.isUser1Turn)){
+              var cell = this.board1Ref.nativeElement.children[((Number(m.content.substring(1))-1)*10) + m.content.charCodeAt(0)-65];
+              if(cell.classList.contains("occupied")){
+                cell.classList.add("hitted")
+              }else{
+                cell.classList.add("missed")
+              }
+            }
+            this.game.isUser1Turn = !this.game.isUser1Turn;
+
           }else if(m && m.event && m.event == "user1ConnenctionUpdate"){
     
             if(m.content != null && typeof m.content == "boolean"){
-                this.game.isUser1Connected = m.content;
+              this.game.isUser1Connected = m.content;
             }
             
           }else if(m && m.event && m.event == "user2ConnenctionUpdate"){
     
             if(m.content != null && typeof m.content == "boolean"){
               this.game.isUser2Connected = m.content;
-          }
+            }
 
           }
-          
         });
 
         setTimeout(()=>this.updateUserConnection(true), 500); 
@@ -417,13 +432,15 @@ export class GameComponent implements OnInit {
   }
 
   targetCell(event){
-    if(event.target.classList.contains("targeted")){
-      event.target.classList.remove("targeted");
-      this.targeted = null;
-    }else if(!event.target.classList.contains("hitted") && !event.target.classList.contains("missed")){
-      if(this.targeted) this.targeted.classList.remove("targeted")
-      event.target.classList.add("targeted")
-      this.targeted = event.target;
+    if((this.us.get_id() == this.game.user1 && this.game.isUser1Turn) || (this.us.get_id() == this.game.user2 && !this.game.isUser1Turn)){
+      if(event.target.classList.contains("targeted")){
+        event.target.classList.remove("targeted");
+        this.targeted = null;
+      }else if(!event.target.classList.contains("hitted") && !event.target.classList.contains("missed")){
+        if(this.targeted) this.targeted.classList.remove("targeted")
+        event.target.classList.add("targeted")
+        this.targeted = event.target;
+      }
     }
   }
 

@@ -27,6 +27,10 @@ var gameSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.Boolean,
         default: false
     },
+    isUser1Turn: {
+        type: mongoose.SchemaTypes.Boolean,
+        required: true
+    }
 });
 // Here we add some methods to the chat Schema
 //TODO
