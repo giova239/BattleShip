@@ -52,7 +52,7 @@
             </span>
         </ng-container>
     </span>
-    <span class="board2">
+    <span #board2 class="board2">
         <ng-container *ngFor="let row of game.board2; let i = index;">
             <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" (click)="targetCell($event)">
                 {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}

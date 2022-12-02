@@ -19,6 +19,8 @@ export class GameComponent implements OnInit {
   private boardRef: ElementRef<HTMLElement>;
   @ViewChild("board1")
   private board1Ref: ElementRef<HTMLElement>;
+  @ViewChild("board2")
+  private board2Ref: ElementRef<HTMLElement>;
   public stringRef: StringConstructor = String;
   public gameID: string;
   public game: Game;
@@ -81,8 +83,6 @@ export class GameComponent implements OnInit {
 
         this.game = game
 
-        console.log(game);
-
         if(this.us.get_id() == this.game.user1){
           this.game.board1.forEach(r => {
             r.forEach(c => {
@@ -131,7 +131,8 @@ export class GameComponent implements OnInit {
           }
         });
 
-        setTimeout(()=>this.updateUserConnection(true), 500); 
+        setTimeout(()=>this.updateUserConnection(true), 500);
+        setTimeout(()=>this.loadMoves(), 500);
 
       });
 
@@ -458,6 +459,55 @@ export class GameComponent implements OnInit {
         }
         this.targeted = null;
       })
+    }
+  }
+
+  private loadMoves(){
+    if(this.game.moves.length>0){
+          
+      var alternate;
+      var invert;
+
+      if(this.us.get_id() == this.game.user1){
+        alternate = this.game.isUser1Turn
+        invert = true
+      }else if(this.us.get_id() == this.game.user2){
+        alternate = !this.game.isUser1Turn
+        invert = false;
+      }
+
+      console.log(alternate);
+      
+
+      if(alternate != null){
+        this.game.moves.forEach(m => {
+          var cell;
+          var hitted;
+          var x = m.charCodeAt(0)-65;
+          var y = Number(m.substring(1))-1;
+          if(alternate){
+            cell = this.board1Ref.nativeElement.children[(y*10) + x];
+            if(invert){
+              hitted = this.game.board1[y][x];
+            }else{
+              hitted = this.game.board2[y][x];
+            }
+          }else{
+            cell = this.board2Ref.nativeElement.children[(y*12) + x];
+            if(invert){
+              hitted = this.game.board2[y][x];
+            }else{
+              hitted = this.game.board1[y][x];
+            }
+          }
+          if(hitted){
+            cell.classList.add("hitted")
+          }else{
+            cell.classList.add("missed")
+          }
+          alternate = !alternate;
+        })
+      }
     }
   }
 }
