@@ -454,6 +454,7 @@ export class GameComponent implements OnInit {
         this.targeted.classList.remove("targeted")
         if(hitted){
           this.targeted.classList.add("hitted")
+          this.isSunk(move)
         }else{
           this.targeted.classList.add("missed")
         }
@@ -499,6 +500,9 @@ export class GameComponent implements OnInit {
             }else{
               hitted = this.game.board1[y][x];
             }
+            if(hitted){
+              this.isSunk(m)
+            }
           }
           if(hitted){
             cell.classList.add("hitted")
@@ -509,5 +513,58 @@ export class GameComponent implements OnInit {
         })
       }
     }
+  }
+
+  private isSunk(move){
+    var sunk = true
+    var x = move.charCodeAt(0)-65;
+    var y = Number(move.substring(1))-1;
+    var b = this.us.get_id() == this.game.user1 ? this.game.board2 : this.game.board1
+    var allCells = [move];
+    while(b[y+1] && b[y+1][x] && sunk){
+      allCells.push(move[0] + (y+2).toString());
+      if(this.game.moves.includes(move[0] + (y+2).toString())){
+        y++;
+      }else{
+        sunk = false;
+      }
+    }
+    y = Number(move.substring(1))-1;
+    while(b[y-1] && b[y-1][x] && sunk){
+      allCells.push(move[0] + (y).toString());
+      if(this.game.moves.includes(move[0] + (y).toString())){
+        y--;
+      }else{
+        sunk = false;
+      }
+    }
+    y = Number(move.substring(1))-1;
+    while(b[y] && b[y][x+1] && sunk){
+      allCells.push(String.fromCharCode(66+x) + move.substring(1));
+      if(this.game.moves.includes(String.fromCharCode(66+x) + move.substring(1))){
+        x++;
+      }else{
+        sunk = false;
+      }
+    }
+    x = move.charCodeAt(0)-65;
+    while(b[y] && b[y][x-1] && sunk){
+      allCells.push(String.fromCharCode(64+x) + move.substring(1));
+      if(this.game.moves.includes(String.fromCharCode(64+x) + move.substring(1))){
+        x--;
+      }else{
+        sunk = false;
+      }
+    }
+    x = move.charCodeAt(0)-65;
+    if(sunk){
+      allCells.forEach(m => {
+        var col = m.charCodeAt(0)-65;
+        var row = Number(m.substring(1))-1;
+        var cell = this.board2Ref.nativeElement.children[(row*12) + col];
+        cell.classList.add("occupied")
+      })
+    }
+    return sunk
   }
 }

@@ -158,8 +158,12 @@
     font-size: xx-small;
 }
 
-.board1 > span.occupied, .board2 > span.occupied{
+.board1 > span.occupied{
     background-color: #198754;
+}
+
+.board2 > span.occupied{
+    background-color: #dc3545;
 }
 
 .board1 > span.hitted, .board2 > span.hitted{
