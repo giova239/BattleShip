@@ -17,6 +17,7 @@ import { UserSignupComponent } from './user-signup/user-signup.component';
 import { SocketioService } from './socketio.service';
 import { FriendListComponent } from './friend-list/friend-list.component';
 import { GameComponent } from './game/game.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { GameComponent } from './game/game.component';
     UserLoginComponent,
     UserSignupComponent,
     FriendListComponent,
-    GameComponent
+    GameComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,

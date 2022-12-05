@@ -1,9 +1,3 @@
-<div class="title-container">
-    <h4 class="text-center font-weight-bold ">
-      Friends
-    </h4>
-</div>
-
 <div class="friends-container bg-light">
   <div *ngFor="let friend of friends" class="card bg-primary w-75 friend-card-centered" > 
     <div class="card-body">       
@@ -19,14 +13,14 @@
             </span>
         </button>
         <button type="submit" class="btn btn-success ms-3" (click)="challenge(friend._id)" >
-          CHALLENGE
+          PLAY
           <i class="fas fa-gamepad"></i>
       </button>
     </div>
   </div>
 </div>
 
-<div class="card text-center bg-secondary border-primary">
+<div class="card text-center bg-transparent border-0">
   <div class="card-body">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFriendModal" style="margin-right: 10px;">
       Add Friend
@@ -43,7 +37,7 @@
 </div>
 
 <!-- Add friend Modal -->
-<div class="modal fade" id="addFriendModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="Add Friend" aria-hidden="true">
+<div class="modal fade text-dark" id="addFriendModal" data-bs-keyboard="false" data-bs-backdrop="false" tabindex="-1" aria-labelledby="Add Friend" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -88,7 +82,7 @@
 </div>
 
 <!-- Friend requests Modal -->
-<div class="modal fade" id="friendRequestsModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="Friend Requests" aria-hidden="true">
+<div class="modal fade text-dark" id="friendRequestsModal" data-bs-keyboard="false" data-bs-backdrop="false" tabindex="-1" aria-labelledby="Friend Requests" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">

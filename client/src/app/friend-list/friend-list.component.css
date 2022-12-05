@@ -1,16 +1,10 @@
 .friends-container{
-    height: 78vh;
-    max-height: 78vh;
+    height: 75vh;
+    max-height: 75vh;
     margin-top: 2vh;
     margin-bottom: 2vh;
     border-radius: 1%;
     overflow: scroll;
-}
-
-.title-container{
-    height: 6vh;
-    max-height: 6vh;
-    padding-top: 2vh;
 }
 
 .friend-card-centered{
