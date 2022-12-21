@@ -11,13 +11,14 @@ export class HomePageComponent implements OnInit {
 
   constructor( private router: Router, public us: UserHttpService ) { }
 
+  public isMatchmakingActive = false;
+
   ngOnInit(): void {
     
   }
 
-  public logout() {
-    this.us.logout();
-    this.router.navigate(['/login']);
+  public toggleMatchmaking(){
+    this.isMatchmakingActive = ! this.isMatchmakingActive;
   }
 
 }

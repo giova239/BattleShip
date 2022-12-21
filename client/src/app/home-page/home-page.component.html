@@ -1,31 +1,8 @@
-<nav class="navbar navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand text-white" style="user-select: none;">Battleship</a>
-        <div class="dropleft ms-auto mr-3">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{us.get_username()}}
-            </button>
-            <div class="dropdown-menu">
-                <div class="dropdown-item" href="#">{{us.get_mail()}}</div>
-                <div *ngIf="us.is_admin()" class="dropdown-item" href="#"><i class="fas fa-check"></i> Admin role</div>
-                <div *ngIf="us.is_moderator()" class="dropdown-item" href="#"><i class="fas fa-check"></i> Moderator role</div>
-                <div class="dropdown-divider"></div>
-                <button type="submit" class="btn btn-danger" (click)="logout()" style="width:100%">
-                    LOGOUT <i class="fas fa-check"></i>
-                </button>
-            </div>
-        </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Friends</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <app-friend-list></app-friend-list>
-        </div>
-        </div>
-    </div>
-</nav>
+<app-navbar></app-navbar>
+
+<div class="homeContainer">
+    <button (click)="toggleMatchmaking()" class="btn btn-lg" [ngClass]="{'btn-success': !isMatchmakingActive, 'btn-danger': isMatchmakingActive}" type="button">
+        <span *ngIf="isMatchmakingActive" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        {{isMatchmakingActive ? "STOP MATCHMAKING" : "START MATCHMAKING"}}
+    </button>
+</div>
