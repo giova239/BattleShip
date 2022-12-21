@@ -30,13 +30,10 @@ export class FriendListComponent implements OnInit, OnDestroy {
     //Socket connection to chat room
     this.friendListSocket = this.sio.connect(this.userID).subscribe( m => {
 
-      console.log(m);
-
       if(m && m.event && m.event == "newFriendRequest"){
         this.friendRequests.push(m);
       }else if(m && m.event && m.event == "newUnreadMessage"){
         var index = this.friends.findIndex(elem => elem._id.toString() == m.content)
-        console.log(index);
         if(index >= 0){
           if(this.friends[index].numberOfUnreadMessages){
             this.friends[index].numberOfUnreadMessages++;

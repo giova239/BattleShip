@@ -23,53 +23,48 @@ export class SocketioService {
       //FRIENDLIST SOCKETS
 
       this.socket.on('newFriendRequest', message => {
-        console.log('Socket.io event: newFriendRequest');
         observer.next( {event : "newFriendRequest", content : message} );
       });
 
       this.socket.on('newUnreadMessage', message => {
-        console.log('Socket.io event: newUnreadMessage');
         observer.next( {event : "newUnreadMessage", content : message} );
       });
 
       //CHAT SOCKETS
 
       this.socket.on('newMessage', message => {
-        console.log('Socket.io event: newMessage');
         observer.next( {event : "newMessage", content : message} );
       });
 
       this.socket.on('readMessage', message => {
-        console.log('Socket.io event: readMessage');
         observer.next( {event : "readMessage", content : message} );
       });
 
       //GAME SOCKETS
 
+      this.socket.on('matchFound', message => {
+        observer.next( {event : "matchFound", content : message} );
+      });
+
       this.socket.on('challenged', message => {
-        console.log('Socket.io event: challenged');
         observer.next( {event : "challenged", content : message} );
       });
 
       this.socket.on('user1ConnenctionUpdate', message => {
-        console.log('Socket.io event: user1ConnenctionUpdate');
         observer.next( {event : "user1ConnenctionUpdate", content : message} );
       });
 
       this.socket.on('user2ConnenctionUpdate', message => {
-        console.log('Socket.io event: user2ConnenctionUpdate');
         observer.next( {event : "user2ConnenctionUpdate", content : message} );
       });
 
       this.socket.on('move', message => {
-        console.log('Socket.io event: move');
         observer.next( {event : "move", content : message} );
       });
 
       //ERROR
 
       this.socket.on('error', (err) => {
-        console.log('Socket.io error: ' + err);
         observer.error( err );
       });
 

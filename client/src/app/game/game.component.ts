@@ -100,8 +100,6 @@ export class GameComponent implements OnInit {
         }
 
         this.gameSocket = this.sio.connect(this.gameID).subscribe( m => {
-
-          console.log(m);
     
           if(m && m.event && m.event == "move"){
             
@@ -448,7 +446,6 @@ export class GameComponent implements OnInit {
   fire(){
     if(this.targeted){
       var move = this.targeted.innerText
-      console.log("firing at " + move);
       this.game.moves.push(move);
       this.gs.fire(this.gameID, move).subscribe(hitted => {
         this.targeted.classList.remove("targeted")
@@ -476,8 +473,6 @@ export class GameComponent implements OnInit {
         alternate = !this.game.isUser1Turn
         invert = false;
       }
-
-      console.log(alternate);
       
 
       if(alternate != null){

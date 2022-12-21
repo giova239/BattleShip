@@ -100,6 +100,7 @@ const cors = require("cors"); // Enable CORS middleware
 const io = require("socket.io"); // Socket.io websocket library
 var ios = undefined;
 var app = express();
+var matchmakingQueue = [];
 // We create the JWT authentication middleware
 // provided by the express-jwt library.  
 // 
@@ -458,6 +459,42 @@ app.post('/readMessages/:userID', auth, (req, res, next) => {
 /*----------------------------------------------------------------------------------------------------*/
 //GAME
 /*----------------------------------------------------------------------------------------------------*/
+app.post('/matchmaking', auth, (req, res, next) => {
+    try {
+        var u1 = req.user.id;
+    }
+    catch (error) {
+        return next({ statusCode: 404, error: true, errormessage: "Invalid UserID" });
+    }
+    if (matchmakingQueue.length > 0) {
+        const index = matchmakingQueue.indexOf(u1);
+        if (index > -1) {
+            matchmakingQueue.splice(index, 1);
+        }
+        else {
+            const u2 = matchmakingQueue.shift();
+            console.log("matched " + u1 + " and " + u2);
+            var g = game.newGame({
+                user1: u1,
+                user2: u2,
+                board1: new Array(10).fill(new Array(10).fill(false)),
+                board2: new Array(10).fill(new Array(10).fill(false)),
+                isUser1Turn: Math.random() < 0.5
+            });
+            g.save().then(data => {
+                ios.to(u1).emit('matchFound', data);
+                ios.to(u2).emit('matchFound', data);
+            }).catch((reason) => {
+                return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
+            });
+        }
+    }
+    else {
+        matchmakingQueue.push(u1);
+    }
+    console.log(matchmakingQueue);
+    return res.status(200).json({});
+});
 app.post('/challenge/:userID', auth, (req, res, next) => {
     try {
         var u1 = ObjectId(req.user.id);

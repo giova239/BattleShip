@@ -62,4 +62,10 @@ export class GameHttpService {
     );
   }
 
+  matchmaking(): Observable<Game> {
+    return this.http.post<Game>( this.us.url + '/matchmaking', {}, this.create_options() ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }
