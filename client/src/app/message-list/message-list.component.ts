@@ -15,11 +15,12 @@ export class MessageListComponent implements OnInit, OnDestroy {
   public chat: Chat;
   public message: string;
   public isUser1: boolean;
-  private userID: string;
+  public userID: string;
+  public otherUser: JSON;
   private sub: any;
   private chatSocket;
 
-  constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService, private route: ActivatedRoute) { }
+  constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService) { }
 
   ngOnInit() {
     
@@ -30,10 +31,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
       messages : []
     }
 
-    this.sub = this.route.params.subscribe(params => {
-      this.userID = params['userID'];
-    });
-
     this.get_messages();
     this.set_empty();
   }
@@ -43,12 +40,21 @@ export class MessageListComponent implements OnInit, OnDestroy {
     this.chatSocket.unsubscribe();
   }
 
+  private get_otherUser(){
+    if(this.isUser1){
+      this.us.get_user_by_id(this.chat.user2).subscribe(u => this.otherUser = u);
+    }else{
+      this.us.get_user_by_id(this.chat.user1).subscribe(u => this.otherUser = u);
+    }
+  }
+
   public get_messages() {
     this.ms.get_messages(this.userID).subscribe(
       ( chat ) => {
         if(isChat(chat)){
           this.chat = chat;
           this.isUser1 = this.chat.user2 == this.userID
+          this.get_otherUser();
 
           //Socket connection to chat room
           this.chatSocket = this.sio.connect(this.chat._id).subscribe( m => {

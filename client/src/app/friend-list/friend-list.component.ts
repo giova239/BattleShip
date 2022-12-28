@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 import { Router } from '@angular/router';
 import { Popover, Toast } from 'bootstrap';
 import { SocketioService } from '../socketio.service';
 import { Icu } from '@angular/compiler/src/i18n/i18n_ast';
+import { MessageListComponent } from '../message-list/message-list.component';
 
 @Component({
   selector: 'app-friend-list',
@@ -13,15 +14,18 @@ import { Icu } from '@angular/compiler/src/i18n/i18n_ast';
 })
 export class FriendListComponent implements OnInit, OnDestroy {
 
+  @ViewChild('slot', {read: ViewContainerRef}) chatSlot : ViewContainerRef;
+
   public friends;
   public friendRequests;
   public errmessage;
   public vldmessage;
   public userID;
   public incomingChallenge;
+  public showChat = false;
   private friendListSocket;
 
-  constructor(private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService, private router: Router) { }
+  constructor(private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService, private router: Router, private cfr: ComponentFactoryResolver) { }
 
   ngOnInit(): void {
     this.userID = this.us.get_id();
@@ -112,7 +116,20 @@ export class FriendListComponent implements OnInit, OnDestroy {
   }
 
   open_chat(userID){
-    this.router.navigate(['/chat/', userID]);
+    this.showChat = true;
+    this.clear()
+    const factory = this.cfr.resolveComponentFactory(MessageListComponent);
+    const component = this.chatSlot.createComponent(factory);
+    component.instance.userID = userID;
+  }
+
+  close_chat(){
+    this.showChat = false;
+    this.clear()
+  }
+
+  async clear(){
+    return await this.chatSlot.clear();
   }
 
   challenge(userID){

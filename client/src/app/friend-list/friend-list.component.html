@@ -1,3 +1,8 @@
+<div [hidden]="!showChat" class="chatSlot">
+  <button type="button" class="btn-close btn-close-white topRightButton" aria-label="Close" (click)="close_chat()"></button>
+  <ng-template #slot></ng-template>
+</div>
+
 <div class="friends-container bg-light">
   <div *ngFor="let friend of friends" class="card bg-primary w-75 friend-card-centered" > 
     <div class="card-body">       
@@ -122,7 +127,7 @@
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body bg-light">
-      <p>{{incomingChallenge ? incomingChallenge.user : null}} has challenged you to a game of battleship!</p>
+      <p class="text-dark">{{incomingChallenge ? incomingChallenge.user : null}} has challenged you to a game of battleship!</p>
       <div class="row">
         <div class="col-6 ms-auto">
           <button type="submit" class="btn btn-success" (click)="accept_challenge()" >
@@ -131,6 +136,5 @@
         </div>
       </div>
     </div>
-    
   </div>
 </div>

@@ -170,4 +170,11 @@ export class UserHttpService {
       catchError(this.handleError)
     );
   }
+
+  get_user_by_id(id: string){
+    return this.http.get<JSON>( this.url + '/users/' + id,  this.create_options() ).pipe(
+      tap( (data) => console.log(JSON.stringify(data))) ,
+      catchError(this.handleError)
+    );
+  }
 }

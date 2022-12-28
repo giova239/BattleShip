@@ -203,15 +203,15 @@ app.post('/users', auth, (req,res,next) => {
 
 });
 
-app.get('/users/:mail', auth, (req,res,next) => {
+app.get('/users/:id', auth, (req,res,next) => {
 
-  user.getModel().findOne( {mail: req.params.mail }, {digest: 0, salt:0 }).then( (user)=> {
+  user.getModel().findOne( {_id: req.params.id }, {digest: 0, salt:0 }).then( (user)=> {
     return res.status(200).json( user );
   }).catch( (reason) => {
     return next({ statusCode:404, error: true, errormessage: "DB error: "+reason });
   })
 
-});
+}); 
 
 app.delete('/users/:mail', auth, (req,res,next) => {
   

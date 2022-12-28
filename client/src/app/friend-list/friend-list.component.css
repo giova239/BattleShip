@@ -13,3 +13,20 @@
     margin-left: auto;
     margin-right: auto
 }
+
+.chatSlot{
+    background-color: #212529;
+    border-radius: 10px;
+    position:fixed;
+    display: block;
+    top: 5%;
+    right: 55%;
+    width: 40%;
+    height: 90%;
+}
+
+.topRightButton{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
