@@ -1,4 +1,5 @@
 .positioningGridContainer{
+    margin-top: 8vh;
     display: flex;
     justify-content: space-evenly;
     user-select: none;
@@ -38,6 +39,8 @@
 }
 
 .hotbar {
+    background-color: #212529;
+    border-radius: 10px;
     position: relative;
     float: left;
     width: 30%;
@@ -114,6 +117,7 @@
 }
 
 .gameContainer{
+    margin-top: 5%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

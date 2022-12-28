@@ -16,7 +16,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
   public message: string;
   public isUser1: boolean;
   public userID: string;
-  public otherUser: JSON;
+  public otherUser: any;
   private sub: any;
   private chatSocket;
 

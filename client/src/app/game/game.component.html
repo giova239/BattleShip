@@ -1,4 +1,7 @@
-<p>(PLAYER 1) {{this.game && this.game.isUser1Connected ? "CONNECTED" : "DISCONNECTED"}} (PLAYER 2) {{this.game && this.game.isUser2Connected ? "CONNECTED" : "DISCONNECTED"}}</p>
+<app-navbar></app-navbar>
+
+
+<!-- <p>(PLAYER 1) {{this.game && this.game.isUser1Connected ? "CONNECTED" : "DISCONNECTED"}} (PLAYER 2) {{this.game && this.game.isUser2Connected ? "CONNECTED" : "DISCONNECTED"}}</p> -->
 
 <div class="positioningGridContainer" *ngIf="!isGameStarted">
 
@@ -22,11 +25,11 @@
         <span>
             <div class="carrier" draggable="true" (dragstart)="onDragStart($event, 5, 0)" (dragend)="onDragEnd($event, 5, 0)" (dblclick)="rotateShip($event, 5, 0)"></div>
         </span>
-        <button type="submit" class="btn btn-danger mb-2" (click)="randomizePosition()">
+        <button type="submit" class="btn btn-danger mb-2 ms-2 me-2" (click)="randomizePosition()">
             Randomize Position
             <i class="fas fa-shuffle"></i>
         </button>
-        <button type="submit" class="btn btn-success" (click)="submitPosition()">
+        <button type="submit" class="btn btn-success mb-2 ms-2 me-2" (click)="submitPosition()">
             Confirm Position
             <i class="fas fa-check"></i>
         </button>
