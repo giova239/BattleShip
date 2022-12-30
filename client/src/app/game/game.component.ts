@@ -511,6 +511,7 @@ export class GameComponent implements OnInit {
   }
 
   private isSunk(move){
+    //BUGGED
     var sunk = true
     var x = move.charCodeAt(0)-65;
     var y = Number(move.substring(1))-1;

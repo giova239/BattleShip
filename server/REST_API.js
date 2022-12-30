@@ -560,6 +560,56 @@ app.post('/fire/:gameID/:move', auth, (req, res, next) => {
                 hitted = data.board1[Number(req.params.move.substring(1)) - 1][req.params.move.charCodeAt(0) - 65];
             }
             ios.to(req.params.gameID).emit('move', req.params.move);
+            if (hitted) {
+                let win = true;
+                if (req.user.id == data.user1.toString()) {
+                    data.board2.forEach((row, i) => {
+                        row.forEach((col, j) => {
+                            if (win && col) {
+                                let found = false;
+                                let cellName = String.fromCharCode('A'.charCodeAt(0) + j) + (i + 1).toString();
+                                console.log(cellName);
+                                data.moves.forEach((move, index) => {
+                                    if (!found && (((data.moves.length - (index + 1)) % 2) == 0)) {
+                                        console.log(move + " == " + cellName);
+                                        if (move == cellName) {
+                                            found = true;
+                                            console.log("found");
+                                        }
+                                    }
+                                });
+                                if (!found) {
+                                    win = false;
+                                }
+                            }
+                        });
+                    });
+                }
+                else {
+                    data.board1.forEach((row, i) => {
+                        row.forEach((col, j) => {
+                            if (win && col) {
+                                let found = false;
+                                let cellName = String.fromCharCode('A'.charCodeAt(0) + j) + (i + 1).toString();
+                                console.log(cellName);
+                                data.moves.forEach((move, index) => {
+                                    if (!found && (((data.moves.length - (index + 1)) % 2) == 0)) {
+                                        console.log(move + " == " + cellName);
+                                        if (move == cellName) {
+                                            found = true;
+                                            console.log("found");
+                                        }
+                                    }
+                                });
+                                if (!found) {
+                                    win = false;
+                                }
+                            }
+                        });
+                    });
+                }
+                console.log("WIN: " + win);
+            }
             return res.status(200).json(hitted);
         }
         else {
