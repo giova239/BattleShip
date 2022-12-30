@@ -1,8 +1,8 @@
 <app-navbar></app-navbar>
 
 <div class="homeContainer">
-    <button (click)="toggleMatchmaking()" class="btn btn-lg" [ngClass]="{'btn-success': !isMatchmakingActive, 'btn-danger': isMatchmakingActive}" type="button">
-        <span *ngIf="isMatchmakingActive" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+    <button (click)="toggleMatchmaking()" class="btn btn-lg" [ngClass]="{'btn-success': !isMatchmakingActive, 'btn-secondary': isMatchmakingActive}" type="button">
+        <img *ngIf="isMatchmakingActive" src="/assets/waiting.gif" alt="" class="waitingMatchmaking"/>
         {{isMatchmakingActive ? "STOP MATCHMAKING" : "START MATCHMAKING"}}
     </button>
 </div>

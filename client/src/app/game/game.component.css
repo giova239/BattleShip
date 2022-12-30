@@ -1,3 +1,30 @@
+.waitingOverlay{
+    z-index: 1;
+    position: fixed;
+    width: 100vw;
+    left:0;
+    height: 100vh;
+    top: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.waitingAnimation{
+    width: 30vmin;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.waitingText{
+    color: white;
+    text-align: center;
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .positioningGridContainer{
     margin-top: 8vh;
     display: flex;
@@ -117,7 +144,7 @@
 }
 
 .gameContainer{
-    margin-top: 5%;
+    margin-top: 8vh;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
