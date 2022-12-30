@@ -17,7 +17,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
   public isUser1: boolean;
   public userID: string;
   public otherUser: any;
-  private sub: any;
   private chatSocket;
 
   constructor( private sio: SocketioService , public ms: MessageHttpService, public us: UserHttpService) { }
@@ -36,7 +35,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
     this.chatSocket.unsubscribe();
   }
 

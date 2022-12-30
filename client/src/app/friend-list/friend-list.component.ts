@@ -78,11 +78,9 @@ export class FriendListComponent implements OnInit, OnDestroy {
 
   public add_friend(userID: string){
     this.us.post_friends(userID).subscribe( resp => {
-      console.log(resp);
       this.errmessage = null;
       this.vldmessage = "Friend request sent";
     }, err => {
-      console.log(err);
       this.vldmessage = null;
       this.errmessage = err;
     });
@@ -99,7 +97,6 @@ export class FriendListComponent implements OnInit, OnDestroy {
 
   public accept_friend_request(userID: string){
     this.us.post_friends(userID).subscribe( resp => {
-      console.log(resp);
       this.get_friend_requests();
     }, err => {
       console.log(err);
@@ -108,7 +105,6 @@ export class FriendListComponent implements OnInit, OnDestroy {
 
   public reject_friend_request(userID: string){
     this.us.delete_friend_requests(userID).subscribe( resp => {
-      console.log(resp);
       this.get_friend_requests();
     }, err => {
       console.log(err);
@@ -133,9 +129,7 @@ export class FriendListComponent implements OnInit, OnDestroy {
   }
 
   challenge(userID){
-    console.log("challenging user: " + userID);
     this.gs.challenge(userID).subscribe( resp => {
-      console.log(resp);
       this.router.navigate(['/game/', resp]);
     }, err => {
       console.log(err);
