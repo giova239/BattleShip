@@ -2,9 +2,7 @@ import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewContainerRe
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 import { Router } from '@angular/router';
-import { Popover, Toast } from 'bootstrap';
 import { SocketioService } from '../socketio.service';
-import { Icu } from '@angular/compiler/src/i18n/i18n_ast';
 import { MessageListComponent } from '../message-list/message-list.component';
 
 @Component({
@@ -21,7 +19,6 @@ export class FriendListComponent implements OnInit, OnDestroy {
   public errmessage;
   public vldmessage;
   public userID;
-  public incomingChallenge;
   public showChat = false;
   private friendListSocket;
 
@@ -29,9 +26,6 @@ export class FriendListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userID = this.us.get_id();
-    let toast = new Toast(document.querySelector('.toast'), {autohide: false});
-    [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(popoverTriggerEl => new Popover(popoverTriggerEl));
-    //Socket connection to chat room
     this.friendListSocket = this.sio.connect(this.userID).subscribe( m => {
 
       if(m && m.event && m.event == "newFriendRequest"){
@@ -45,9 +39,6 @@ export class FriendListComponent implements OnInit, OnDestroy {
             this.friends[index].numberOfUnreadMessages = 1;
           }
         }
-      }else if(m && m.event && m.event == "challenged"){
-        this.incomingChallenge = m.content;
-        toast.show();
       }
       
     });
@@ -134,10 +125,6 @@ export class FriendListComponent implements OnInit, OnDestroy {
     }, err => {
       console.log(err);
     });
-  }
-
-  accept_challenge(){
-    this.router.navigate(['/game/', this.incomingChallenge.gameID]);
   }
 
   copy_to_clipboard_ID(){

@@ -117,24 +117,3 @@
     </div>
   </div>
 </div>
-
-<!-- challenge toast -->
-<div class="toast-container position-fixed bottom-0 start-0 p-3">
-  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header bg-primary text-dark">
-      <i class="fas fa-gamepad"></i>
-      <strong class="me-auto">You have been challenged!</strong>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body bg-light">
-      <p class="text-dark">{{incomingChallenge ? incomingChallenge.user : null}} has challenged you to a game of battleship!</p>
-      <div class="row">
-        <div class="col-6 ms-auto">
-          <button type="submit" class="btn btn-success" (click)="accept_challenge()" >
-            JOIN GAME <i class="fas fa-ship"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
