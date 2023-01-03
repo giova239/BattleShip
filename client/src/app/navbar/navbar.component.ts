@@ -40,6 +40,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  public navigate_profile(id: string){
+    this.router.navigate(['/profile/' + id]);
+  }
+
   accept_challenge(){
     this.router.navigate(['/game/', this.incomingChallenge.gameID]);
   }

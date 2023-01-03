@@ -10,6 +10,8 @@
                 <div *ngIf="us.is_admin()" class="dropdown-item" href="#"><i class="fas fa-check"></i> Admin role</div>
                 <div *ngIf="us.is_moderator()" class="dropdown-item" href="#"><i class="fas fa-check"></i> Moderator role</div>
                 <div class="dropdown-divider"></div>
+                <div class="dropdown-item" href="#" (click)="navigate_profile(this.us.get_id())">My profile</div>
+                <div class="dropdown-divider"></div>
                 <button type="submit" class="btn btn-danger" (click)="logout()" style="width:100%">
                     LOGOUT <i class="fas fa-check"></i>
                 </button>

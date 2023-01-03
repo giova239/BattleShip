@@ -10,16 +10,20 @@
         <p class="card-text">{{ friend.mail }}</p>
     </div>
     <div class="card-footer text-right font-weight-light">
-        <button type="submit" class="btn btn-secondary position-relative" (click)="open_chat(friend._id)" >
-            CHAT
-            <i class="fas fa-paper-plane"></i>
-            <span *ngIf="friend.numberOfUnreadMessages" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              {{friend.numberOfUnreadMessages}}
-            </span>
-        </button>
-        <button type="submit" class="btn btn-success ms-3" (click)="challenge(friend._id)" >
-          PLAY
-          <i class="fas fa-gamepad"></i>
+      <button type="submit" class="btn btn-dark ms-3 mb-1" (click)="navigate_profile(friend._id)" >
+        PROFILE
+        <i class="fas fa-user"></i>
+      </button>
+      <button type="submit" class="btn btn-dark position-relative mb-1" (click)="open_chat(friend._id)" >
+          CHAT
+          <i class="fas fa-paper-plane"></i>
+          <span *ngIf="friend.numberOfUnreadMessages" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{friend.numberOfUnreadMessages}}
+          </span>
+      </button>
+      <button type="submit" class="btn btn-success ms-3 mb-1" (click)="challenge(friend._id)" >
+        PLAY
+        <i class="fas fa-gamepad"></i>
       </button>
     </div>
   </div>
@@ -27,11 +31,11 @@
 
 <div class="card text-center bg-transparent border-0">
   <div class="card-body">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFriendModal" style="margin-right: 10px;">
+    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addFriendModal" style="margin-right: 10px;">
       Add Friend
       <i class="fas fa-user-plus"></i>
     </button>
-    <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;">
+    <button type="button" class="btn btn-primary position-relative mb-1" data-bs-toggle="modal" data-bs-target="#friendRequestsModal" style="margin-left: 10px;">
       Friend Requests
       <i class="fas fa-users"></i>
       <span *ngIf="friendRequests && friendRequests.length" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

@@ -19,6 +19,7 @@ import { FriendListComponent } from './friend-list/friend-list.component';
 import { GameComponent } from './game/game.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     FriendListComponent,
     GameComponent,
     HomePageComponent,
-    NavbarComponent
+    NavbarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

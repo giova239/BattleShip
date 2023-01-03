@@ -136,4 +136,8 @@ export class FriendListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
+  public navigate_profile(id: string){
+    this.router.navigate(['/profile/' + id]);
+  }
+
 }
