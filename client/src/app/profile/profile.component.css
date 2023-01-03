@@ -4,5 +4,8 @@
     height: 80%;
     top: 10%;
     left: 10%;
-    background-color: red;
+}
+
+.gradient-custom {
+    background: linear-gradient(to right bottom, #0d6efd, #6c757d)
 }
