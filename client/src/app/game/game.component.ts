@@ -49,6 +49,7 @@ export class GameComponent implements OnInit {
   }
   public positioningBoard: Boolean[][] = new Array(10).fill(false).map(() => new Array(10).fill(false));
   public targeted;
+  public gameWinner;
   private sub: Subscription;
   private gameSocket: Subscription;
   private draggingElem;
@@ -124,6 +125,18 @@ export class GameComponent implements OnInit {
     
             if(m.content != null && typeof m.content == "boolean"){
               this.game.isUser2Connected = m.content;
+            }
+
+          }else if(m && m.event && m.event == "win"){
+    
+            if(this.game.isUser1Turn){
+              this.us.get_user_by_id(this.game.user2).subscribe(u => {
+                this.gameWinner = u;
+              })
+            }else{
+              this.us.get_user_by_id(this.game.user1).subscribe(u => {
+                this.gameWinner = u;
+              })
             }
 
           }

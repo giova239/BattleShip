@@ -16,11 +16,30 @@
     transform: translate(-50%, -50%);
 }
 
+.winningAnimation{
+    width: 30vmin;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .waitingText{
     color: white;
     text-align: center;
     position: fixed;
     top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.winningText{
+    background-color: white;
+    color: #212529;
+    text-align: center;
+    position: fixed;
+    font-size: xx-large;
+    top: 65%;
     left: 50%;
     transform: translateX(-50%);
 }

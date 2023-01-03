@@ -62,6 +62,10 @@ export class SocketioService {
         observer.next( {event : "move", content : message} );
       });
 
+      this.socket.on('win', message => {
+        observer.next( {event : "win", content : message} );
+      });
+
       //ERROR
 
       this.socket.on('error', (err) => {

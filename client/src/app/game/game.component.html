@@ -7,6 +7,11 @@
     <h4 class="waitingText">Waiting for opponent to connect...</h4>
 </div>
 
+<div [hidden]="!this.gameWinner" class="waitingOverlay">
+    <img class="winningAnimation" src="/assets/winning.gif" alt="" />
+    <h4 class="winningText">{{this.gameWinner ? this.gameWinner.username : ""}} WON the game</h4>
+</div>
+
 <div class="positioningGridContainer" *ngIf="!isGameStarted">
 
     <span #ships id="hotbar" class="hotbar">

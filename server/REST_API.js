@@ -602,7 +602,8 @@ app.post('/fire/:gameID/:move', auth, (req, res, next) => {
                         });
                     });
                 }
-                console.log("WIN: " + win);
+                if (win)
+                    ios.to(req.params.gameID).emit('win', {});
             }
             return res.status(200).json(hitted);
         }
