@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Game } from '../Game';
 import { SocketioService } from '../socketio.service';
@@ -57,7 +57,7 @@ export class GameComponent implements OnInit {
   private dragCoordinates;
   private dragImage;
 
-  constructor(private route: ActivatedRoute, private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private sio: SocketioService, public us: UserHttpService, public gs: GameHttpService) { }
 
   ngOnInit(): void {
 
@@ -83,6 +83,8 @@ export class GameComponent implements OnInit {
       this.gs.get_game(this.gameID).subscribe(game => {
 
         this.game = game
+
+        this.us.get_user_by_id(this.game.user1).subscribe(u => this.gameWinner = u)
 
         if(this.us.get_id() == this.game.user1){
           this.game.board1.forEach(r => {
@@ -613,5 +615,9 @@ export class GameComponent implements OnInit {
       })
     }
     return sunk
+  }
+
+  navigateHome(){
+    this.router.navigate(["/home/"])
   }
 }
