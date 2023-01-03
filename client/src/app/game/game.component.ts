@@ -84,8 +84,6 @@ export class GameComponent implements OnInit {
 
         this.game = game
 
-        this.us.get_user_by_id(this.game.user1).subscribe(u => this.gameWinner = u)
-
         if(this.us.get_id() == this.game.user1){
           this.game.board1.forEach(r => {
             r.forEach(c => {

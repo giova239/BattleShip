@@ -699,6 +699,25 @@ app.post('/fire/:gameID/:move', auth, (req,res,next) =>{
         hitted = data.board1[Number(req.params.move.substring(1))-1][req.params.move.charCodeAt(0)-65];
       }
       ios.to(req.params.gameID).emit('move', req.params.move);
+      if(data.isUser1Turn){
+        user.getModel().findById(data.user2).then( (u2)=> {
+          if(hitted){
+            u2.hits++;
+          }else{
+            u2.misses++;
+          }
+          u2.save()
+        });
+      }else{
+        user.getModel().findById(data.user1).then( (u1)=> {
+          if(hitted){
+            u1.hits++;
+          }else{
+            u1.misses++;
+          }
+          u1.save()
+        });
+      }
       if(hitted){
         let win = true;
         if(req.user.id == data.user1.toString()){
@@ -740,7 +759,28 @@ app.post('/fire/:gameID/:move', auth, (req,res,next) =>{
             })
           })
         }
-        if(win) ios.to(req.params.gameID).emit('win', {});
+        if(win){
+          ios.to(req.params.gameID).emit('win', {});
+          if(data.isUser1Turn){
+            user.getModel().findById(data.user2).then( (u2)=> {
+              u2.wins++;
+              u2.save()
+            });
+            user.getModel().findById(data.user1).then( (u1)=> {
+              u1.losses++;
+              u1.save()
+            });
+          }else{
+            user.getModel().findById(data.user2).then( (u1)=> {
+              u1.wins++;
+              u1.save()
+            });
+            user.getModel().findById(data.user1).then( (u2)=> {
+              u2.losses++;
+              u2.save()
+            });
+          }
+        }
       }
       return res.status(200).json(hitted);
     }else{

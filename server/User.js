@@ -31,6 +31,26 @@ var userSchema = new mongoose.Schema({
     pendingRequests: {
         type: [mongoose.SchemaTypes.ObjectId],
         required: true
+    },
+    wins: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
+    },
+    losses: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
+    },
+    hits: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
+    },
+    misses: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
     }
 });
 // Here we add some methods to the user Schema

@@ -12,6 +12,10 @@ export interface User extends mongoose.Document {
     digest: string,  // this is the hashed password (digest of the password)
     friends: mongoose.Schema.Types.ObjectId[],
     pendingRequests: mongoose.Schema.Types.ObjectId[];
+    wins: number,
+    losses: number,
+    hits: number,
+    misses: number,
     setPassword: (pwd:string)=>void,
     validatePassword: (pwd:string)=>boolean,
     hasAdminRole: ()=>boolean,
@@ -49,6 +53,26 @@ var userSchema = new mongoose.Schema( {
     pendingRequests:  {
         type: [mongoose.SchemaTypes.ObjectId],
         required: true
+    },
+    wins: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
+    },
+    losses: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
+    },
+    hits: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
+    },
+    misses: {
+        type: mongoose.SchemaTypes.Number,
+        required: false,
+        default: 0
     }
 })
 
