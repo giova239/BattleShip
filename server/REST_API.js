@@ -568,13 +568,10 @@ app.post('/fire/:gameID/:move', auth, (req, res, next) => {
                             if (win && col) {
                                 let found = false;
                                 let cellName = String.fromCharCode('A'.charCodeAt(0) + j) + (i + 1).toString();
-                                console.log(cellName);
                                 data.moves.forEach((move, index) => {
                                     if (!found && (((data.moves.length - (index + 1)) % 2) == 0)) {
-                                        console.log(move + " == " + cellName);
                                         if (move == cellName) {
                                             found = true;
-                                            console.log("found");
                                         }
                                     }
                                 });
@@ -591,13 +588,10 @@ app.post('/fire/:gameID/:move', auth, (req, res, next) => {
                             if (win && col) {
                                 let found = false;
                                 let cellName = String.fromCharCode('A'.charCodeAt(0) + j) + (i + 1).toString();
-                                console.log(cellName);
                                 data.moves.forEach((move, index) => {
                                     if (!found && (((data.moves.length - (index + 1)) % 2) == 0)) {
-                                        console.log(move + " == " + cellName);
                                         if (move == cellName) {
                                             found = true;
-                                            console.log("found");
                                         }
                                     }
                                 });

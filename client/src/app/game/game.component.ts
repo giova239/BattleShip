@@ -461,36 +461,33 @@ export class GameComponent implements OnInit {
   }
 
   private loadMoves(){
+
     if(this.game.moves.length>0){
           
       var alternate;
-      var invert;
 
       if(this.us.get_id() == this.game.user1){
-        alternate = this.game.isUser1Turn
-        invert = true
+        alternate = this.game.isUser1Turn;
       }else if(this.us.get_id() == this.game.user2){
-        alternate = !this.game.isUser1Turn
-        invert = false;
+        alternate = !this.game.isUser1Turn;
       }
       
-
       if(alternate != null){
-        this.game.moves.forEach(m => {
+        this.game.moves.slice().reverse().forEach(m => {
           var cell;
           var hitted;
           var x = m.charCodeAt(0)-65;
           var y = Number(m.substring(1))-1;
           if(alternate){
             cell = this.board1Ref.nativeElement.children[(y*10) + x];
-            if(invert){
+            if(this.us.get_id() == this.game.user1){
               hitted = this.game.board1[y][x];
             }else{
               hitted = this.game.board2[y][x];
             }
           }else{
             cell = this.board2Ref.nativeElement.children[(y*12) + x];
-            if(invert){
+            if(this.us.get_id() == this.game.user1){
               hitted = this.game.board2[y][x];
             }else{
               hitted = this.game.board1[y][x];
@@ -511,15 +508,29 @@ export class GameComponent implements OnInit {
   }
 
   private isSunk(move){
-    //BUGGED
+    var playerRest;
+    if((this.game.isUser1Turn && this.us.get_id() == this.game.user1) || (!this.game.isUser1Turn && this.us.get_id() == this.game.user2)){
+      playerRest = 1;
+    }else{
+      playerRest = 0;
+    }
     var sunk = true
     var x = move.charCodeAt(0)-65;
     var y = Number(move.substring(1))-1;
     var b = this.us.get_id() == this.game.user1 ? this.game.board2 : this.game.board1
     var allCells = [move];
     while(b[y+1] && b[y+1][x] && sunk){
-      allCells.push(move[0] + (y+2).toString());
-      if(this.game.moves.includes(move[0] + (y+2).toString())){
+      let found = false;
+      let cellName = move[0] + (y+2).toString();
+      this.game.moves.forEach((m, index) => {
+        if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
+          if(m == cellName){
+            found = true;
+          }
+        }
+      })
+      if(found){
+        allCells.push(cellName);
         y++;
       }else{
         sunk = false;
@@ -527,8 +538,17 @@ export class GameComponent implements OnInit {
     }
     y = Number(move.substring(1))-1;
     while(b[y-1] && b[y-1][x] && sunk){
-      allCells.push(move[0] + (y).toString());
-      if(this.game.moves.includes(move[0] + (y).toString())){
+      let found = false;
+      let cellName = move[0] + (y).toString();
+      this.game.moves.forEach((m, index) => {
+        if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
+          if(m == cellName){
+            found = true;
+          }
+        }
+      })
+      if(found){
+        allCells.push(cellName);
         y--;
       }else{
         sunk = false;
@@ -536,8 +556,17 @@ export class GameComponent implements OnInit {
     }
     y = Number(move.substring(1))-1;
     while(b[y] && b[y][x+1] && sunk){
-      allCells.push(String.fromCharCode(66+x) + move.substring(1));
-      if(this.game.moves.includes(String.fromCharCode(66+x) + move.substring(1))){
+      let found = false;
+      let cellName = String.fromCharCode(66+x) + move.substring(1);
+      this.game.moves.forEach((m, index) => {
+        if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
+          if(m == cellName){
+            found = true;
+          }
+        }
+      })
+      if(found){
+        allCells.push(cellName);
         x++;
       }else{
         sunk = false;
@@ -545,8 +574,17 @@ export class GameComponent implements OnInit {
     }
     x = move.charCodeAt(0)-65;
     while(b[y] && b[y][x-1] && sunk){
-      allCells.push(String.fromCharCode(64+x) + move.substring(1));
-      if(this.game.moves.includes(String.fromCharCode(64+x) + move.substring(1))){
+      let found = false;
+      let cellName = String.fromCharCode(64+x) + move.substring(1);
+      this.game.moves.forEach((m, index) => {
+        if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
+          if(m == cellName){
+            found = true;
+          }
+        }
+      })
+      if(found){
+        allCells.push(cellName);
         x--;
       }else{
         sunk = false;
