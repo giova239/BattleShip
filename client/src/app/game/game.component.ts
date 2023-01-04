@@ -6,7 +6,7 @@ import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
-//TODO: check placement before confirm position, fix bug on sink, surrender button, chat, expire game or leave surrender
+//TODO: check placement before confirm position, surrender button, chat, expire game or leave surrender
 
 @Component({
   selector: 'app-game',
@@ -239,13 +239,17 @@ export class GameComponent implements OnInit {
   }
 
   submitPosition(){
-    var currentUserID = this.us.get_id();
-    if(currentUserID == this.game.user1){
-      this.gs.put_game(this.gameID, {board1 : this.positioningBoard}).subscribe(g => this.game = g)
-    }else if(currentUserID == this.game.user2){
-      this.gs.put_game(this.gameID, {board2 : this.positioningBoard}).subscribe(g => this.game = g)
+    let ammount = 0;
+    this.positioningBoard.forEach(row => row.forEach(col => {if(col) ammount++}))
+    if(ammount == 32){
+      var currentUserID = this.us.get_id();
+      if(currentUserID == this.game.user1){
+        this.gs.put_game(this.gameID, {board1 : this.positioningBoard}).subscribe(g => this.game = g)
+      }else if(currentUserID == this.game.user2){
+        this.gs.put_game(this.gameID, {board2 : this.positioningBoard}).subscribe(g => this.game = g)
+      }
+      this.isGameStarted = true;
     }
-    this.isGameStarted = true;
   }
 
   private updateUserConnection(status: boolean){
@@ -522,8 +526,6 @@ export class GameComponent implements OnInit {
   }
 
   private isSunk(move){
-    console.log(this.game.moves);
-    
     var playerRest;
     if((this.game.isUser1Turn && this.us.get_id() == this.game.user1) || (!this.game.isUser1Turn && this.us.get_id() == this.game.user2)){
       playerRest = 1;
@@ -540,7 +542,6 @@ export class GameComponent implements OnInit {
       let cellName = move[0] + (y+2).toString();
       this.game.moves.forEach((m, index) => {
         if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
-          console.log("checking cell " + cellName + " == " + m);
           if(m == cellName){
             found = true;
           }
@@ -559,7 +560,6 @@ export class GameComponent implements OnInit {
       let cellName = move[0] + (y).toString();
       this.game.moves.forEach((m, index) => {
         if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
-          console.log("checking cell " + cellName + " == " + m);
           if(m == cellName){
             found = true;
           }
@@ -578,7 +578,6 @@ export class GameComponent implements OnInit {
       let cellName = String.fromCharCode(66+x) + move.substring(1);
       this.game.moves.forEach((m, index) => {
         if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
-          console.log("checking cell " + cellName + " == " + m);
           if(m == cellName){
             found = true;
           }
@@ -597,7 +596,6 @@ export class GameComponent implements OnInit {
       let cellName = String.fromCharCode(64+x) + move.substring(1);
       this.game.moves.forEach((m, index) => {
         if(!found && (((this.game.moves.length-(index+1))%2) == playerRest)){
-          console.log("checking cell " + cellName + " == " + m);
           if(m == cellName){
             found = true;
           }
@@ -612,7 +610,6 @@ export class GameComponent implements OnInit {
     }
     x = move.charCodeAt(0)-65;
     if(sunk){
-      console.log("SUNK!");
       allCells.forEach(m => {
         var col = m.charCodeAt(0)-65;
         var row = Number(m.substring(1))-1;
