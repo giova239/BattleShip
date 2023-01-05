@@ -1,10 +1,13 @@
 <app-navbar></app-navbar>
 
-
-<!-- <p>(PLAYER 1) {{this.game && this.game.isUser1Connected ? "CONNECTED" : "DISCONNECTED"}} (PLAYER 2) {{this.game && this.game.isUser2Connected ? "CONNECTED" : "DISCONNECTED"}}</p> -->
 <div [hidden]="this.game && this.game.isUser1Connected && this.game.isUser2Connected" class="waitingOverlay">
     <img class="waitingAnimation" src="/assets/waiting.gif" alt="" />
     <h4 class="waitingText">Waiting for opponent to connect...</h4>
+</div>
+
+<div [hidden]="this.game && this.game.isUser1Connected && this.game.isUser2Connected" class="waitingOverlay">
+    <img class="waitingAnimation" src="/assets/waiting.gif" alt="" />
+    <h4 class="waitingText">Waiting for opponent to complete the positioning phase...</h4>
 </div>
 
 <div [hidden]="!this.gameWinner" class="waitingOverlay">
