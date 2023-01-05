@@ -9,7 +9,7 @@
                 <div class="row g-0">
                   <div class="col-md-4 gradient-custom text-center text-white"
                     style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                    <img src="assets/profile.png"
                       alt="Avatar" class="img-fluid my-3" style="width: 80px;" />
                     <h5 class="mb-4">{{this.user ? this.user.username : "..."}}</h5>
                     <button type="button" [hidden]="this.friendState == 3" [ngClass]="{'btn-success': this.friendState==0, 'btn-light': this.friendState==1, 'btn-danger': this.friendState==2}" class="btn mb-4" data-bs-toggle="modal" data-bs-target="#addFriendModal" style="margin-right: 10px;" (click)="friendButtonClicked()">

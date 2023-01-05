@@ -5,11 +5,6 @@
     <h4 class="waitingText">Waiting for opponent to connect...</h4>
 </div>
 
-<div [hidden]="this.game && this.game.isUser1Connected && this.game.isUser2Connected" class="waitingOverlay">
-    <img class="waitingAnimation" src="/assets/waiting.gif" alt="" />
-    <h4 class="waitingText">Waiting for opponent to complete the positioning phase...</h4>
-</div>
-
 <div [hidden]="!this.gameWinner" class="waitingOverlay">
     <img class="winningAnimation" src="/assets/winning.gif" alt="" />
     <h4 class="winningText">
