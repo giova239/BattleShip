@@ -6,7 +6,7 @@ import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
-//TODO: waiting opponent positioning, surrender button, chat, expire game or leave surrender
+//TODO: surrender button, chat, expire game or leave surrender, time management, show player turn
 
 @Component({
   selector: 'app-game',
@@ -52,6 +52,7 @@ export class GameComponent implements OnInit {
   public positioningBoard: Boolean[][] = new Array(10).fill(false).map(() => new Array(10).fill(false));
   public targeted;
   public gameWinner;
+  public isPositioningPhaseConcluded = false;
   private sub: Subscription;
   private gameSocket: Subscription;
   private draggingElem;
@@ -92,14 +93,25 @@ export class GameComponent implements OnInit {
               if(c) this.isGameStarted = true;
             })
           })
+          this.game.board2.forEach(r => {
+            r.forEach(c => {
+              if(c) this.isPositioningPhaseConcluded = true;
+            })
+          })
         }else if(this.us.get_id() == this.game.user2){
           this.game.board2.forEach(r => {
             r.forEach(c => {
               if(c) this.isGameStarted = true;
             })
           })
+          this.game.board1.forEach(r => {
+            r.forEach(c => {
+              if(c) this.isPositioningPhaseConcluded = true;
+            })
+          })
         }else{
           this.isGameStarted = true;
+          this.isPositioningPhaseConcluded = true;
         }
 
         this.gameSocket = this.sio.connect(this.gameID).subscribe( m => {
@@ -133,12 +145,18 @@ export class GameComponent implements OnInit {
 
             if(m.content != null){
               this.game.board1 = m.content;
+              if(this.us.get_id() == this.game.user2){
+                this.isPositioningPhaseConcluded = true;
+              }
             }
 
           }else if(m && m.event && m.event == "board2Update"){
 
             if(m.content != null){
               this.game.board2 = m.content;
+              if(this.us.get_id() == this.game.user1){
+                this.isPositioningPhaseConcluded = true;
+              }
             }
 
           }else if(m && m.event && m.event == "win"){
