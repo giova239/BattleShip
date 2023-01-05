@@ -58,6 +58,14 @@ export class SocketioService {
         observer.next( {event : "user2ConnenctionUpdate", content : message} );
       });
 
+      this.socket.on('board1Update', message => {
+        observer.next( {event : "board1Update", content : message} );
+      });
+
+      this.socket.on('board2Update', message => {
+        observer.next( {event : "board2Update", content : message} );
+      });
+
       this.socket.on('move', message => {
         observer.next( {event : "move", content : message} );
       });

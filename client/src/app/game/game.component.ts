@@ -6,7 +6,7 @@ import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
-//TODO: check placement before confirm position, surrender button, chat, expire game or leave surrender
+//TODO: waiting opponent positioning, surrender button, chat, expire game or leave surrender
 
 @Component({
   selector: 'app-game',
@@ -127,6 +127,18 @@ export class GameComponent implements OnInit {
     
             if(m.content != null && typeof m.content == "boolean"){
               this.game.isUser2Connected = m.content;
+            }
+
+          }else if(m && m.event && m.event == "board1Update"){
+
+            if(m.content != null){
+              this.game.board1 = m.content;
+            }
+
+          }else if(m && m.event && m.event == "board2Update"){
+
+            if(m.content != null){
+              this.game.board2 = m.content;
             }
 
           }else if(m && m.event && m.event == "win"){
@@ -250,6 +262,8 @@ export class GameComponent implements OnInit {
       }
       this.isGameStarted = true;
     }
+    console.log(this.game.board1);
+    console.log(this.game.board2);
   }
 
   private updateUserConnection(status: boolean){

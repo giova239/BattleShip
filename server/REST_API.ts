@@ -670,6 +670,10 @@ app.put('/game/:gameID', auth, (req,res,next) =>{
             ios.to(req.params.gameID).emit('user1ConnenctionUpdate', req.body[prop]);
           }else if(prop == "isUser2Connected"){
             ios.to(req.params.gameID).emit('user2ConnenctionUpdate', req.body[prop]);
+          }else if(prop == "board1"){
+            ios.to(req.params.gameID).emit('board1Update', req.body[prop]);
+          }else if(prop == "board2"){
+            ios.to(req.params.gameID).emit('board2Update', req.body[prop]);
           }
         }
       }

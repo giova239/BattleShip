@@ -537,6 +537,14 @@ app.put('/game/:gameID', auth, (req, res, next) => {
                     else if (prop == "isUser2Connected") {
                         ios.to(req.params.gameID).emit('user2ConnenctionUpdate', req.body[prop]);
                     }
+                    else if (prop == "board1") {
+                        console.log("board1update");
+                        ios.to(req.params.gameID).emit('board1Update', req.body[prop]);
+                    }
+                    else if (prop == "board2") {
+                        console.log("board1update");
+                        ios.to(req.params.gameID).emit('board2Update', req.body[prop]);
+                    }
                 }
             }
             data.save();
