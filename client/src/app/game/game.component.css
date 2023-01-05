@@ -241,7 +241,7 @@
 .fireButton {
     background-color: #dc3545;
     border: 1px solid black;
-    margin-left: 10px;
+    margin-left: 2vmin;
     border-radius: 10px;
 }
 
@@ -251,6 +251,31 @@
 
 .fireButton > p {
     writing-mode: vertical-rl;
+}
+
+.gameChatContainer{
+    background-color: #212529;
+    border-radius: 10px;
+    margin: 5%;
+    width: 90%;
+}
+
+.send-container{
+    height: 6vh;
+    max-height: 6vh;
+    padding-top: 2vh;
+    margin: 2vh;
+    margin-top: 0;
+}
+
+.chat-container{
+    background-color: #f8f9fa;
+    height: 20vh;
+    margin: 1vh;
+    border-radius: 1%;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: scroll;
 }
 
 @media (max-aspect-ratio: 7/9) {

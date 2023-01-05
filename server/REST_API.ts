@@ -796,6 +796,19 @@ app.post('/fire/:gameID/:move', auth, (req,res,next) =>{
 
 });
 
+app.post('/gameChat/:gameID', auth, (req,res,next) =>{
+
+  game.getModel().findById(req.params.gameID).then(data => {
+    if(req.body.text != null && req.body.text != ""){
+      ios.to(req.params.gameID).emit('gameMessage', {username: req.user.username, text: req.body.text});
+    }
+    return res.status(200).json({});
+  }).catch(error => {
+    return next({ statusCode:404, error: true, errormessage: "DB error: "+ error });
+  })
+
+});
+
 /*----------------------------------------------------------------------------------------------------*/
 
 // Add error handling middleware

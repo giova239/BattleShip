@@ -6,7 +6,7 @@ import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
-//TODO: surrender button, chat, expire game or leave surrender, time management, show player turn
+//TODO: surrender button, show player turn, expire game or leave surrender, time management
 
 @Component({
   selector: 'app-game',
@@ -53,6 +53,8 @@ export class GameComponent implements OnInit {
   public targeted;
   public gameWinner;
   public isPositioningPhaseConcluded = false;
+  public message = "";
+  public messages = [];
   private sub: Subscription;
   private gameSocket: Subscription;
   private draggingElem;
@@ -171,7 +173,15 @@ export class GameComponent implements OnInit {
               })
             }
 
+          }else if(m && m.event && m.event == "gameMessage"){
+            
+            if(m.content != null){
+              this.messages.push(m.content)
+            }
+
+            console.log(this.messages);
           }
+
         });
 
         setTimeout(()=>this.updateUserConnection(true), 500);
@@ -650,6 +660,23 @@ export class GameComponent implements OnInit {
       })
     }
     return sunk
+  }
+
+  send_message(){
+    console.log("called");
+    
+    this.gs.sendGameMessage( this.gameID, this.message ).subscribe( (m) => {
+
+      console.log('Message sent');
+      this.set_empty();
+
+    }, (error) => {
+      console.log('Error occurred while sending the message: ' + error);
+    });
+  }
+
+  set_empty() {
+    this.message = "";
   }
 
   navigateHome(){

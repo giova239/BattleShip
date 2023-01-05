@@ -67,7 +67,6 @@
 </div>
 
 <div class="gameContainer" *ngIf="isGameStarted">
-
     <span #board1 class="board1">
         <ng-container *ngFor="let row of (this.us.get_id() == this.game.user1 ? game.board1 : (this.us.get_id() == this.game.user2 ? game.board2 : positioningBoard)); let i = index;">
             <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+1">
@@ -89,4 +88,26 @@
             <i class="fas fa-crosshairs"></i>
         </p>
     </button>
+    <div class="gameChatContainer"> 
+        <div class="chat-container bg-light">
+            <div *ngFor="let message of this.messages.slice().reverse()" style="margin: 5px" > 
+                <div class="messageStyle">       
+                    <p class="card-text"><b>{{ message.username }}</b> : {{message.text}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="send-container">
+            <div class="row">
+              <div class="form-group col">
+                <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
+                rows="1" (keyup.enter)="send_message()" placeholder="Enter your message here"></textarea>
+              </div>
+              <div class="col-auto">
+                <button type="submit" class="btn btn-primary" (click)="send_message()" >
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+    </div>
 </div>

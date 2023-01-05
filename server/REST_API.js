@@ -538,11 +538,9 @@ app.put('/game/:gameID', auth, (req, res, next) => {
                         ios.to(req.params.gameID).emit('user2ConnenctionUpdate', req.body[prop]);
                     }
                     else if (prop == "board1") {
-                        console.log("board1update");
                         ios.to(req.params.gameID).emit('board1Update', req.body[prop]);
                     }
                     else if (prop == "board2") {
-                        console.log("board1update");
                         ios.to(req.params.gameID).emit('board2Update', req.body[prop]);
                     }
                 }
@@ -661,6 +659,16 @@ app.post('/fire/:gameID/:move', auth, (req, res, next) => {
         else {
             return next({ statusCode: 404, error: true, errormessage: "You are not allowed to make a move" });
         }
+    }).catch(error => {
+        return next({ statusCode: 404, error: true, errormessage: "DB error: " + error });
+    });
+});
+app.post('/gameChat/:gameID', auth, (req, res, next) => {
+    game.getModel().findById(req.params.gameID).then(data => {
+        if (req.body.text != null && req.body.text != "") {
+            ios.to(req.params.gameID).emit('gameMessage', { username: req.user.username, text: req.body.text });
+        }
+        return res.status(200).json({});
     }).catch(error => {
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + error });
     });

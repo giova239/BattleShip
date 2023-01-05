@@ -74,6 +74,10 @@ export class SocketioService {
         observer.next( {event : "win", content : message} );
       });
 
+      this.socket.on('gameMessage', message => {
+        observer.next( {event : "gameMessage", content : message} );
+      });
+
       //ERROR
 
       this.socket.on('error', (err) => {

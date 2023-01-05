@@ -68,4 +68,10 @@ export class GameHttpService {
     );
   }
 
+  sendGameMessage(gameID: string, message: string): Observable<Game> {
+    return this.http.post<Game>( this.us.url + '/gameChat/' + gameID, {text: message}, this.create_options() ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }
