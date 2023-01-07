@@ -239,13 +239,20 @@
 }
 
 .fireButton {
-    background-color: #dc3545;
     border: 1px solid black;
     margin-left: 2vmin;
     border-radius: 10px;
 }
 
+.fireButton.red {
+    background-color: #dc3545;
+}
+
 .fireButton[disabled]{
+    background-color: #e9ecef;
+}
+
+.fireButton.red[disabled]{
     background-color: #dc35468b;
 }
 

@@ -82,7 +82,7 @@
             <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
         </ng-container>
     </span>
-    <button type="submit" class="fireButton" [disabled]="!targeted || ((us.get_id() == game.user1 && !game.isUser1Turn) || (us.get_id() == game.user2 && game.isUser1Turn))" (click)="fire()">
+    <button type="submit" class="fireButton" [ngClass]="{'red' : ((us.get_id() == game.user1 && game.isUser1Turn) || (us.get_id() == game.user2 && !game.isUser1Turn))}" [disabled]="!targeted || ((us.get_id() == game.user1 && !game.isUser1Turn) || (us.get_id() == game.user2 && game.isUser1Turn))" (click)="fire()">
         <p>
             Fire
             <i class="fas fa-crosshairs"></i>

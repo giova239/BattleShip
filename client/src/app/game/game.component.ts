@@ -6,7 +6,7 @@ import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
-//TODO: surrender button, show player turn, expire game or leave surrender, time management
+//TODO: spectator mode, surrender button, expire game or leave surrender, time management
 
 @Component({
   selector: 'app-game',
