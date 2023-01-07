@@ -285,6 +285,10 @@
     overflow: scroll;
 }
 
+b.red {
+    color: #dc3545;
+}
+
 @media (max-aspect-ratio: 7/9) {
     .gameContainer {
         flex-direction: column;

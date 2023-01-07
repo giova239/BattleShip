@@ -800,7 +800,7 @@ app.post('/gameChat/:gameID', auth, (req,res,next) =>{
 
   game.getModel().findById(req.params.gameID).then(data => {
     if(req.body.text != null && req.body.text != ""){
-      ios.to(req.params.gameID).emit('gameMessage', {username: req.user.username, text: req.body.text});
+      ios.to(req.params.gameID).emit('gameMessage', {id: req.user.id, username: req.user.username, text: req.body.text});
     }
     return res.status(200).json({});
   }).catch(error => {

@@ -128,6 +128,23 @@ export class GameComponent implements OnInit {
               }else{
                 cell.classList.add("missed")
               }
+            }else if(this.us.get_id() != this.game.user1 && this.us.get_id() != this.game.user2){
+              var c;
+              var hitted;
+              var x = m.content.charCodeAt(0)-65;
+              var y = Number(m.content.substring(1))-1;
+              if(this.game.isUser1Turn){
+                c = this.board2Ref.nativeElement.children[(y*12) + x];
+                hitted = this.game.board2[y][x];
+              }else{
+                c = this.board1Ref.nativeElement.children[(y*12) + x];
+                hitted = this.game.board1[y][x];
+              }
+              if(hitted){
+                c.classList.add("hitted")
+              }else{
+                c.classList.add("missed")
+              }
             }
             this.game.isUser1Turn = !this.game.isUser1Turn;
 
@@ -563,6 +580,27 @@ export class GameComponent implements OnInit {
           }
           alternate = !alternate;
         })
+      }else{
+        alternate = this.game.isUser1Turn;
+        this.game.moves.slice().reverse().forEach(m => {
+          var cell;
+          var hitted;
+          var x = m.charCodeAt(0)-65;
+          var y = Number(m.substring(1))-1;
+          if(alternate){
+            cell = this.board1Ref.nativeElement.children[(y*12) + x];
+            hitted = this.game.board1[y][x];
+          }else{
+            cell = this.board2Ref.nativeElement.children[(y*12) + x];
+            hitted = this.game.board2[y][x];
+          }
+          if(hitted){
+            cell.classList.add("hitted")
+          }else{
+            cell.classList.add("missed")
+          }
+          alternate = !alternate;
+        });
       }
     }
   }

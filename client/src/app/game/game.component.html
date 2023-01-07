@@ -1,113 +1,173 @@
 <app-navbar></app-navbar>
 
-<div [hidden]="this.game && this.game.isUser1Connected && this.game.isUser2Connected" class="waitingOverlay">
-    <img class="waitingAnimation" src="/assets/waiting.gif" alt="" />
-    <h4 class="waitingText">Waiting for opponent to connect...</h4>
-</div>
+<div *ngIf="(us.get_id() == game.user1 || us.get_id() == game.user2); else spectatorMode">
 
-<div [hidden]="!this.isGameStarted || this.isPositioningPhaseConcluded" class="waitingOverlay">
-    <img class="waitingAnimation" src="/assets/waiting.gif" alt="" />
-    <h4 class="waitingText">Waiting for opponent to complete the positioning phase...</h4>
-</div>
-
-<div [hidden]="!this.gameWinner" class="waitingOverlay">
-    <img class="winningAnimation" src="/assets/winning.gif" alt="" />
-    <h4 class="winningText">
-        {{this.gameWinner ? this.gameWinner.username : ""}} won the game!
-        <br>
-        <button type="submit" class="btn btn-success mt-2 mb-2 ms-2 me-2" (click)="navigateHome()">
-            Leave
-            <i class="fas fa-right-from-bracket"></i>
-        </button>
-    </h4>
-</div>
-
-<div class="positioningGridContainer" *ngIf="!isGameStarted">
-
-    <span #ships id="hotbar" class="hotbar">
-        <span>
-            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 0)" (dragend)="onDragEnd($event, 2, 0)" (dblclick)="rotateShip($event, 2, 0)"></div>
-            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 1)" (dragend)="onDragEnd($event, 2, 1)" (dblclick)="rotateShip($event, 2, 1)"></div>
-            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 2)" (dragend)="onDragEnd($event, 2, 2)" (dblclick)="rotateShip($event, 2, 2)"></div>
-            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 3)" (dragend)="onDragEnd($event, 2, 3)" (dblclick)="rotateShip($event, 2, 3)"></div>
-            <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 4)" (dragend)="onDragEnd($event, 2, 4)" (dblclick)="rotateShip($event, 2, 4)"></div>
-        </span>
-        <span>
-            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 0)" (dragend)="onDragEnd($event, 3, 0)" (dblclick)="rotateShip($event, 3, 0)"></div>
-            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 1)" (dragend)="onDragEnd($event, 3, 1)" (dblclick)="rotateShip($event, 3, 1)"></div>
-            <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 2)" (dragend)="onDragEnd($event, 3, 2)" (dblclick)="rotateShip($event, 3, 2)"></div>
-        </span>
-        <span>
-            <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 0)" (dragend)="onDragEnd($event, 4, 0)" (dblclick)="rotateShip($event, 4, 0)"></div>
-            <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 1)" (dragend)="onDragEnd($event, 4, 1)" (dblclick)="rotateShip($event, 4, 1)"></div>
-        </span>
-        <span>
-            <div class="carrier" draggable="true" (dragstart)="onDragStart($event, 5, 0)" (dragend)="onDragEnd($event, 5, 0)" (dblclick)="rotateShip($event, 5, 0)"></div>
-        </span>
-        <button type="submit" class="btn btn-danger mb-2 ms-2 me-2" (click)="randomizePosition()">
-            Randomize Position
-            <i class="fas fa-shuffle"></i>
-        </button>
-        <button type="submit" class="btn btn-success mb-2 ms-2 me-2" (click)="submitPosition()">
-            Confirm Position
-            <i class="fas fa-check"></i>
-        </button>
-    </span>
+    <div [hidden]="this.game && this.game.isUser1Connected && this.game.isUser2Connected" class="waitingOverlay">
+        <img class="waitingAnimation" src="/assets/waiting.gif" alt="" />
+        <h4 class="waitingText">Waiting for opponent to connect...</h4>
+    </div>
     
-    <span #board class="positioningGrid">
-        <ng-container *ngFor="let row of positioningBoard; let i = index;">
-            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" id="{{i}}{{j}}" [style.grid-row]="i+1" [style.grid-column]="j+2" (dragenter)="onDragEnter($event)">
-                {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+    <div [hidden]="!this.isGameStarted || this.isPositioningPhaseConcluded" class="waitingOverlay">
+        <img class="waitingAnimation" src="/assets/waiting.gif" alt="" />
+        <h4 class="waitingText">Waiting for opponent to complete the positioning phase...</h4>
+    </div>
+    
+    <div [hidden]="!this.gameWinner" class="waitingOverlay">
+        <img class="winningAnimation" src="/assets/winning.gif" alt="" />
+        <h4 class="winningText">
+            {{this.gameWinner ? this.gameWinner.username : ""}} won the game!
+            <br>
+            <button type="submit" class="btn btn-success mt-2 mb-2 ms-2 me-2" (click)="navigateHome()">
+                Leave
+                <i class="fas fa-right-from-bracket"></i>
+            </button>
+        </h4>
+    </div>
+    
+    <div class="positioningGridContainer" *ngIf="!isGameStarted">
+    
+        <span #ships id="hotbar" class="hotbar">
+            <span>
+                <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 0)" (dragend)="onDragEnd($event, 2, 0)" (dblclick)="rotateShip($event, 2, 0)"></div>
+                <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 1)" (dragend)="onDragEnd($event, 2, 1)" (dblclick)="rotateShip($event, 2, 1)"></div>
+                <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 2)" (dragend)="onDragEnd($event, 2, 2)" (dblclick)="rotateShip($event, 2, 2)"></div>
+                <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 3)" (dragend)="onDragEnd($event, 2, 3)" (dblclick)="rotateShip($event, 2, 3)"></div>
+                <div class="destroyer" draggable="true" (dragstart)="onDragStart($event, 2, 4)" (dragend)="onDragEnd($event, 2, 4)" (dblclick)="rotateShip($event, 2, 4)"></div>
             </span>
-            <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
-            <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
-        </ng-container>
-    </span>
-
-</div>
-
-<div class="gameContainer" *ngIf="isGameStarted">
-    <span #board1 class="board1">
-        <ng-container *ngFor="let row of (this.us.get_id() == this.game.user1 ? game.board1 : (this.us.get_id() == this.game.user2 ? game.board2 : positioningBoard)); let i = index;">
-            <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+1">
+            <span>
+                <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 0)" (dragend)="onDragEnd($event, 3, 0)" (dblclick)="rotateShip($event, 3, 0)"></div>
+                <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 1)" (dragend)="onDragEnd($event, 3, 1)" (dblclick)="rotateShip($event, 3, 1)"></div>
+                <div class="cruiser" draggable="true" (dragstart)="onDragStart($event, 3, 2)" (dragend)="onDragEnd($event, 3, 2)" (dblclick)="rotateShip($event, 3, 2)"></div>
             </span>
-        </ng-container>
-    </span>
-    <span #board2 class="board2">
-        <ng-container *ngFor="let row of game.board2; let i = index;">
-            <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" (click)="targetCell($event)">
-                {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+            <span>
+                <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 0)" (dragend)="onDragEnd($event, 4, 0)" (dblclick)="rotateShip($event, 4, 0)"></div>
+                <div class="battleship" draggable="true" (dragstart)="onDragStart($event, 4, 1)" (dragend)="onDragEnd($event, 4, 1)" (dblclick)="rotateShip($event, 4, 1)"></div>
             </span>
-            <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
-            <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
-        </ng-container>
-    </span>
-    <button type="submit" class="fireButton" [ngClass]="{'red' : ((us.get_id() == game.user1 && game.isUser1Turn) || (us.get_id() == game.user2 && !game.isUser1Turn))}" [disabled]="!targeted || ((us.get_id() == game.user1 && !game.isUser1Turn) || (us.get_id() == game.user2 && game.isUser1Turn))" (click)="fire()">
-        <p>
-            Fire
-            <i class="fas fa-crosshairs"></i>
-        </p>
-    </button>
-    <div class="gameChatContainer"> 
-        <div class="chat-container bg-light">
-            <div *ngFor="let message of this.messages.slice().reverse()" style="margin: 5px" > 
-                <div class="messageStyle">       
-                    <p class="card-text"><b>{{ message.username }}</b> : {{message.text}}</p>
+            <span>
+                <div class="carrier" draggable="true" (dragstart)="onDragStart($event, 5, 0)" (dragend)="onDragEnd($event, 5, 0)" (dblclick)="rotateShip($event, 5, 0)"></div>
+            </span>
+            <button type="submit" class="btn btn-danger mb-2 ms-2 me-2" (click)="randomizePosition()">
+                Randomize Position
+                <i class="fas fa-shuffle"></i>
+            </button>
+            <button type="submit" class="btn btn-success mb-2 ms-2 me-2" (click)="submitPosition()">
+                Confirm Position
+                <i class="fas fa-check"></i>
+            </button>
+        </span>
+        
+        <span #board class="positioningGrid">
+            <ng-container *ngFor="let row of positioningBoard; let i = index;">
+                <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" id="{{i}}{{j}}" [style.grid-row]="i+1" [style.grid-column]="j+2" (dragenter)="onDragEnter($event)">
+                    {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+                </span>
+                <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
+                <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
+            </ng-container>
+        </span>
+    
+    </div>
+    
+    <div class="gameContainer" *ngIf="isGameStarted">
+        <span #board1 class="board1">
+            <ng-container *ngFor="let row of (this.us.get_id() == this.game.user1 ? game.board1 : (this.us.get_id() == this.game.user2 ? game.board2 : positioningBoard)); let i = index;">
+                <span *ngFor="let col of row, let j = index" [ngClass]="{'occupied' : col}" [style.grid-row]="i+1" [style.grid-column]="j+1">
+                </span>
+            </ng-container>
+        </span>
+        <span #board2 class="board2">
+            <ng-container *ngFor="let row of game.board2; let i = index;">
+                <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" (click)="targetCell($event)">
+                    {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+                </span>
+                <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
+                <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
+            </ng-container>
+        </span>
+        <button type="submit" class="fireButton" [ngClass]="{'red' : ((us.get_id() == game.user1 && game.isUser1Turn) || (us.get_id() == game.user2 && !game.isUser1Turn))}" [disabled]="!targeted || ((us.get_id() == game.user1 && !game.isUser1Turn) || (us.get_id() == game.user2 && game.isUser1Turn))" (click)="fire()">
+            <p>
+                Fire
+                <i class="fas fa-crosshairs"></i>
+            </p>
+        </button>
+        <div class="gameChatContainer"> 
+            <div class="chat-container bg-light">
+                <div *ngFor="let message of this.messages.slice().reverse()" style="margin: 5px" > 
+                    <div class="messageStyle">       
+                        <p class="card-text">
+                            <i class="fas fa-gamepad" *ngIf="(message.id == this.game.user1 || message.id == this.game.user2)"> </i>
+                            <i class="fas fa-eye" *ngIf="(message.id != this.game.user1 && message.id != this.game.user2)"> </i>
+                            <b [ngClass]="{'red' : (message.id == this.game.user1 || message.id == this.game.user2)}">
+                                {{ message.username }}
+                            </b>: {{message.text}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="send-container">
+                <div class="row">
+                  <div class="form-group col">
+                    <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
+                    rows="1" (keyup.enter)="send_message()" placeholder="Enter your message here"></textarea>
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-primary" (click)="send_message()" >
+                      <i class="fas fa-paper-plane"></i>
+                    </button>
+                  </div>
                 </div>
             </div>
         </div>
-        <div class="send-container">
-            <div class="row">
-              <div class="form-group col">
-                <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
-                rows="1" (keyup.enter)="send_message()" placeholder="Enter your message here"></textarea>
-              </div>
-              <div class="col-auto">
-                <button type="submit" class="btn btn-primary" (click)="send_message()" >
-                  <i class="fas fa-paper-plane"></i>
-                </button>
-              </div>
-            </div>
-          </div>
     </div>
 </div>
+
+<ng-template #spectatorMode>
+    <div class="gameContainer">
+        <span #board1 class="board2">
+            <ng-container *ngFor="let row of game.board1; let i = index;">
+                <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" [ngClass]="{'occupied' : col}" (click)="targetCell($event)">
+                    {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+                </span>
+                <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
+                <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
+            </ng-container>
+        </span>
+        <span #board2 class="board2">
+            <ng-container *ngFor="let row of game.board2; let i = index;">
+                <span *ngFor="let col of row, let j = index" [style.grid-row]="i+1" [style.grid-column]="j+2" [ngClass]="{'occupied' : col}" (click)="targetCell($event)">
+                    {{stringRef.fromCharCode('A'.charCodeAt(0) + j)}}{{i+1}}
+                </span>
+                <label [style.grid-row]="11" [style.grid-column]="i+2">{{stringRef.fromCharCode('A'.charCodeAt(0) + i)}}</label>
+                <label [style.grid-row]="i+1" [style.grid-column]="1">{{i+1}}</label>
+            </ng-container>
+        </span>
+        <div class="gameChatContainer"> 
+            <div class="chat-container bg-light">
+                <div *ngFor="let message of this.messages.slice().reverse()" style="margin: 5px" > 
+                    <div class="messageStyle">       
+                        <p class="card-text">
+                            <i class="fas fa-gamepad" *ngIf="(message.id == this.game.user1 || message.id == this.game.user2)"> </i>
+                            <i class="fas fa-eye" *ngIf="(message.id != this.game.user1 && message.id != this.game.user2)"> </i>
+                            <b [ngClass]="{'red' : (message.id == this.game.user1 || message.id == this.game.user2)}">
+                                {{ message.username }}
+                            </b>: {{message.text}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="send-container">
+                <div class="row">
+                  <div class="form-group col">
+                    <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
+                    rows="1" (keyup.enter)="send_message()" placeholder="Enter your message here"></textarea>
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-primary" (click)="send_message()" >
+                      <i class="fas fa-paper-plane"></i>
+                    </button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
