@@ -15,7 +15,7 @@
     <div [hidden]="!this.gameWinner" class="waitingOverlay">
         <img class="winningAnimation" src="/assets/winning.gif" alt="" />
         <h4 class="winningText">
-            {{this.gameWinner ? this.gameWinner.username : ""}} won the game!
+            {{this.gameWinner}} won the game!
             <br>
             <button type="submit" class="btn btn-success mt-2 mb-2 ms-2 me-2" (click)="navigateHome()">
                 Leave
@@ -109,6 +109,11 @@
                   <div class="form-group col">
                     <textarea class="form-control" [(ngModel)]="message" #messagetx id="messagetext" 
                     rows="1" (keyup.enter)="send_message()" placeholder="Enter your message here"></textarea>
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-danger" (click)="surrender()" >
+                      <i class="fas fa-flag"></i>
+                    </button>
                   </div>
                   <div class="col-auto">
                     <button type="submit" class="btn btn-primary" (click)="send_message()" >

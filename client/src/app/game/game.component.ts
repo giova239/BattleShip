@@ -6,7 +6,7 @@ import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
-//TODO: spectator mode, surrender button, expire game or leave surrender, time management
+//TODO: expire game or leave surrender, time management
 
 @Component({
   selector: 'app-game',
@@ -180,15 +180,7 @@ export class GameComponent implements OnInit {
 
           }else if(m && m.event && m.event == "win"){
     
-            if(this.game.isUser1Turn){
-              this.us.get_user_by_id(this.game.user2).subscribe(u => {
-                this.gameWinner = u;
-              })
-            }else{
-              this.us.get_user_by_id(this.game.user1).subscribe(u => {
-                this.gameWinner = u;
-              })
-            }
+            this.gameWinner = m.content.winner;
 
           }else if(m && m.event && m.event == "gameMessage"){
             
@@ -719,5 +711,9 @@ export class GameComponent implements OnInit {
 
   navigateHome(){
     this.router.navigate(["/home/"])
+  }
+
+  surrender(){
+    this.gs.surrender(this.gameID).subscribe();
   }
 }

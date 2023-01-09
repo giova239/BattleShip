@@ -74,4 +74,10 @@ export class GameHttpService {
     );
   }
 
+  surrender(gameID: string): Observable<Game> {
+    return this.http.post<Game>( this.us.url + '/surrender/' + gameID, {}, this.create_options() ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

@@ -764,11 +764,11 @@ app.post('/fire/:gameID/:move', auth, (req,res,next) =>{
           })
         }
         if(win){
-          ios.to(req.params.gameID).emit('win', {});
           if(data.isUser1Turn){
             user.getModel().findById(data.user2).then( (u2)=> {
               u2.wins++;
               u2.save()
+              ios.to(req.params.gameID).emit('win', {winner: u2.username});
             });
             user.getModel().findById(data.user1).then( (u1)=> {
               u1.losses++;
@@ -778,6 +778,7 @@ app.post('/fire/:gameID/:move', auth, (req,res,next) =>{
             user.getModel().findById(data.user2).then( (u1)=> {
               u1.wins++;
               u1.save()
+              ios.to(req.params.gameID).emit('win', {winner: u1.username});
             });
             user.getModel().findById(data.user1).then( (u2)=> {
               u2.losses++;
@@ -802,6 +803,37 @@ app.post('/gameChat/:gameID', auth, (req,res,next) =>{
     if(req.body.text != null && req.body.text != ""){
       ios.to(req.params.gameID).emit('gameMessage', {id: req.user.id, username: req.user.username, text: req.body.text});
     }
+    return res.status(200).json({});
+  }).catch(error => {
+    return next({ statusCode:404, error: true, errormessage: "DB error: "+ error });
+  })
+
+});
+
+app.post('/surrender/:gameID', auth, (req,res,next) =>{
+
+  game.getModel().findById(req.params.gameID).then(data => {
+      if(req.user.id == data.user1.toString()){
+        user.getModel().findById(data.user2).then( (u2)=> {
+          u2.wins++;
+          u2.save()
+          ios.to(req.params.gameID).emit('win', {winner: u2.username});
+        });
+        user.getModel().findById(data.user1).then( (u1)=> {
+          u1.losses++;
+          u1.save()
+        });
+      }else if(req.user.id == data.user2.toString()){
+        user.getModel().findById(data.user2).then( (u1)=> {
+          u1.wins++;
+          u1.save()
+          ios.to(req.params.gameID).emit('win', {winner: u1.username});
+        });
+        user.getModel().findById(data.user1).then( (u2)=> {
+          u2.losses++;
+          u2.save()
+        });
+      }
     return res.status(200).json({});
   }).catch(error => {
     return next({ statusCode:404, error: true, errormessage: "DB error: "+ error });
