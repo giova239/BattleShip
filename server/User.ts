@@ -16,6 +16,7 @@ export interface User extends mongoose.Document {
     losses: number,
     hits: number,
     misses: number,
+    temporaryPwd: boolean,
     setPassword: (pwd:string)=>void,
     validatePassword: (pwd:string)=>boolean,
     hasAdminRole: ()=>boolean,
@@ -27,7 +28,8 @@ export interface User extends mongoose.Document {
 var userSchema = new mongoose.Schema( {
     username: {
         type: mongoose.SchemaTypes.String,
-        required: true
+        required: true,
+        unique: true
     },
     mail: {
         type: mongoose.SchemaTypes.String,
@@ -73,6 +75,11 @@ var userSchema = new mongoose.Schema( {
         type: mongoose.SchemaTypes.Number,
         required: false,
         default: 0
+    },
+    temporaryPwd: {
+        type: mongoose.SchemaTypes.Boolean,
+        required: false,
+        default: false
     }
 })
 

@@ -44,6 +44,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/profile/' + id]);
   }
 
+  public navigate_newModerator(){
+    this.router.navigate(['/newModerator']);
+  }
+
   accept_challenge(){
     this.router.navigate(['/game/', this.incomingChallenge.gameID]);
   }

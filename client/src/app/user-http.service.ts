@@ -99,6 +99,14 @@ export class UserHttpService {
 
   }
 
+  newModerator( user ): Observable<any> {
+    return this.http.post( this.url + '/users', user, this.create_options() ).pipe(
+      tap( (data) => {
+        console.log(JSON.stringify(data) );
+      })
+    );
+  }
+
   get_token() {
     return this.token;
   }

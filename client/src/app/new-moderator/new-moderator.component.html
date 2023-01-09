@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<br><br><br><br><br>
+
+<div *ngIf="this.us.is_moderator(); else elseBlock">
+    <div class="container" style="width: 400px; margin-top: 20px;" >
+
+        <form class="form-signin">
+          
+          <div class="text-center">  
+            <i class="fa-solid fa-4x fa-screwdriver-wrench"></i>
+            <h1 class="h3 mb-3 font-weight-normal">Create new Moderator</h1>
+          </div>
+          
+          <div class="form-group">
+            <label for="inputUsername">Username</label>
+            <input type="text" #field1="ngModel" required name="field1" [(ngModel)]="user.field1" class="form-control" id="inputField1" placeholder="Username">
+          </div>
+        
+          <div class="form-group">
+            <label for="inputPassword">Temporary Password</label>
+            <input type="text" #field2="ngModel" required name="field2" [(ngModel)]="user.field2" class="form-control" id="inputField2" placeholder="Password">
+          </div>
+        
+          <div *ngIf="errmessage" class="alert alert-danger" role="alert">
+            Login error: {{errmessage}}
+          </div>
+
+          <div *ngIf="vldmessage" class="alert alert-success" role="alert">
+            {{vldmessage}}
+          </div>
+        
+          <div class="container text-center mt-2">
+            <button class="btn btn-lg btn-primary btn-block" [disabled]="this.user.field1=='' || this.user.field2==''" (click)="createNewModerator();" >Create</button>
+          </div>
+        
+        </form>
+        </div>
+</div>
+
+<ng-template #elseBlock>
+    YOU ARE NOT A MODERATOR
+</ng-template>

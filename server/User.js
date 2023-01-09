@@ -5,7 +5,8 @@ const crypto = require("crypto");
 var userSchema = new mongoose.Schema({
     username: {
         type: mongoose.SchemaTypes.String,
-        required: true
+        required: true,
+        unique: true
     },
     mail: {
         type: mongoose.SchemaTypes.String,
@@ -51,6 +52,11 @@ var userSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.Number,
         required: false,
         default: 0
+    },
+    temporaryPwd: {
+        type: mongoose.SchemaTypes.Boolean,
+        required: false,
+        default: false
     }
 });
 // Here we add some methods to the user Schema

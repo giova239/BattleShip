@@ -20,6 +20,7 @@ import { GameComponent } from './game/game.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ProfileComponent } from './profile/profile.component';
+import { NewModeratorComponent } from './new-moderator/new-moderator.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { ProfileComponent } from './profile/profile.component';
     GameComponent,
     HomePageComponent,
     NavbarComponent,
-    ProfileComponent
+    ProfileComponent,
+    NewModeratorComponent
   ],
   imports: [
     BrowserModule,

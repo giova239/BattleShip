@@ -15,8 +15,8 @@ export class UserLoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  login( mail: string, password: string, remember: boolean ) {
-    this.us.login( mail, password, remember).subscribe( (d) => {
+  login( user: string, password: string, remember: boolean ) {
+    this.us.login( user, password, remember).subscribe( (d) => {
       console.log('Login granted: ' + JSON.stringify(d) );
       console.log('User service token: ' + this.us.get_token() );
       this.errmessage = undefined;

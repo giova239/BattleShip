@@ -5,7 +5,7 @@
     <h1 class="h3 mb-3 font-weight-normal">Log-in</h1>
 
     <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" #mailtxt id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+    <input type="text" #usertxt id="inputUser" class="form-control" placeholder="Username" required autofocus>
     
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" #passwdtxt id="inputPassword" class="form-control mt-3" placeholder="Password" required>
@@ -20,7 +20,7 @@
       Login error: {{errmessage}}
     </div>
     
-    <button class="btn btn-lg btn-primary btn-block" (click)="login( mailtxt.value, passwdtxt.value, checkr.checked );" >Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" (click)="login( usertxt.value, passwdtxt.value, checkr.checked );" >Login</button>
     <p><a routerLink="/signup">You don't have an account? click here to sign-up</a></p>
   </div>
 </div>

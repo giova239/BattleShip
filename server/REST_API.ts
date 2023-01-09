@@ -10,8 +10,8 @@
  * 
  *     /                  -                  GET         Returns API version
  *     /users             -                  GET         List all users
- *     /users             -                  POST        if logged as ADMIN you can create new users
- *                                                       and give them roles
+ *     /users             -                  POST        if logged as MODERATOR you can create new users
+ *                                                       and give them roles, with a temporaryPwd
  *     /users/:mail       -                  GET         Get user info by mail
  *     /users/:mail       -                  DELETE      if logged as moderator delete the user
  *     /login             -                  POST        login an existing user, returning a JWT
@@ -68,7 +68,7 @@
  *  $ node run start
  */
 
-
+const crypto = require("crypto");
 const result = require('dotenv').config()     // The dotenv module will load a file named ".env"
                                               // file and load all the key-value pairs into
                                               // process.env (environment variable)
@@ -181,17 +181,20 @@ app.post('/users', auth, (req,res,next) => {
 
   var currentUser = user.newUser(req.user)
   
-  if(!currentUser.hasAdminRole() ) {
-    return next({ statusCode:404, error: true, errormessage: "Unauthorized: user is not an admin"} );
+  if(!currentUser.hasModeratorRole() ) {
+    return next({ statusCode:404, error: true, errormessage: "Unauthorized: user is not a moderator"} );
   }
 
   var u = user.newUser( req.body );
-  console.log(u);
   
   if( !req.body.password ) {
     return next({ statusCode:404, error: true, errormessage: "Password field missing"} );
   }
   u.setPassword( req.body.password );
+  u.temporaryPwd = true;
+  u.setModerator();
+  u.mail = crypto.randomBytes(20).toString('hex');
+  console.log(u);
 
   u.save().then( (data) => {
     return res.status(200).json({ error: false, errormessage: "", id: data._id });
@@ -235,7 +238,7 @@ passport.use( new passportHTTP.BasicStrategy(
 
   function(username, password, done) {
     console.log("New login attempt from ".green + username );
-    user.getModel().findOne( {mail: username} , (err, user)=>{
+    user.getModel().findOne( {username: username} , (err, user)=>{
       if( err ) {
         return done( {statusCode: 500, error: true, errormessage:err} );
       }
