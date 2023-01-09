@@ -6,7 +6,7 @@ import { SocketioService } from '../socketio.service';
 import { UserHttpService } from '../user-http.service';
 import { GameHttpService } from '../game-http.service';
 
-//TODO: expire game or leave surrender, time management
+//TODO: expire game or leave surrender, time management, add gameState to gamedata: positioning, playing, concluded, list occurring games
 
 @Component({
   selector: 'app-game',
@@ -185,7 +185,13 @@ export class GameComponent implements OnInit {
           }else if(m && m.event && m.event == "gameMessage"){
             
             if(m.content != null){
-              this.messages.push(m.content)
+              if(this.us.get_id() == this.game.user1 || this.us.get_id() == this.game.user2){
+                if(m.content.id == this.game.user1 || m.content.id == this.game.user2){
+                  this.messages.push(m.content)
+                }
+              }else{
+                this.messages.push(m.content)
+              }
             }
 
             console.log(this.messages);
