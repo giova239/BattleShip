@@ -31,36 +31,38 @@
                           <p class="text-muted">{{this.user ? ((this.user.roles && this.user.roles.length>0) ? this.user.roles : "none") : "..."}}</p>
                         </div>
                       </div>
-                      <h6>Stats</h6>
-                      <hr class="mt-0 mb-4">
-                      <div class="row pt-1">
-                        <div class="col-4 mb-3">
-                          <h6>Wins</h6>
-                          <p class="text-muted">{{this.user ? this.user.wins : "..."}}</p>
+                      <ng-template [ngIf]="this.friendState == 2 || this.us.is_moderator()">
+                        <h6>Stats</h6>
+                        <hr class="mt-0 mb-4">
+                        <div class="row pt-1">
+                          <div class="col-4 mb-3">
+                            <h6>Wins</h6>
+                            <p class="text-muted">{{this.user ? this.user.wins : "..."}}</p>
+                          </div>
+                          <div class="col-4 mb-3">
+                            <h6>Losses</h6>
+                            <p class="text-muted">{{this.user ? this.user.wins : "..."}}</p>
+                          </div>
+                          <div class="col-4 mb-3">
+                            <h6>Win rate</h6>
+                            <p class="text-muted">{{this.user ? (((this.user.wins*100)/(this.user.wins+this.user.losses)).toFixed(2)+"%") : "..."}}</p>
+                          </div>
                         </div>
-                        <div class="col-4 mb-3">
-                          <h6>Losses</h6>
-                          <p class="text-muted">{{this.user ? this.user.wins : "..."}}</p>
+                        <div class="row pt-2">
+                          <div class="col-4 mb-3">
+                            <h6>Hits</h6>
+                            <p class="text-muted">{{this.user ? this.user.hits : "..."}}</p>
+                          </div>
+                          <div class="col-4 mb-3">
+                            <h6>Misses</h6>
+                            <p class="text-muted">{{this.user ? this.user.misses : "..."}}</p>
+                          </div>
+                          <div class="col-4 mb-3">
+                            <h6>Hit rate</h6>
+                            <p class="text-muted">{{this.user ? (((this.user.hits*100)/(this.user.hits+this.user.misses)).toFixed(2)+"%") : "..."}}</p>
+                          </div>
                         </div>
-                        <div class="col-4 mb-3">
-                          <h6>Win rate</h6>
-                          <p class="text-muted">{{this.user ? (((this.user.wins*100)/(this.user.wins+this.user.losses)).toFixed(2)+"%") : "..."}}</p>
-                        </div>
-                      </div>
-                      <div class="row pt-2">
-                        <div class="col-4 mb-3">
-                          <h6>Hits</h6>
-                          <p class="text-muted">{{this.user ? this.user.hits : "..."}}</p>
-                        </div>
-                        <div class="col-4 mb-3">
-                          <h6>Misses</h6>
-                          <p class="text-muted">{{this.user ? this.user.misses : "..."}}</p>
-                        </div>
-                        <div class="col-4 mb-3">
-                          <h6>Hit rate</h6>
-                          <p class="text-muted">{{this.user ? (((this.user.hits*100)/(this.user.hits+this.user.misses)).toFixed(2)+"%") : "..."}}</p>
-                        </div>
-                      </div>
+                      </ng-template>
                     </div>
                   </div>
                 </div>
