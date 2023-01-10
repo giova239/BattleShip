@@ -610,41 +610,56 @@ app.post('/readMessages/:userID', auth, (req,res,next) =>{
 /*----------------------------------------------------------------------------------------------------*/
 
 app.post('/matchmaking', auth, (req,res,next) =>{
-
-  try{
-    var u1 = req.user.id;
-  }catch(error){
-    return next({ statusCode:404, error: true, errormessage: "Invalid UserID"});
-  }
-
-  if(matchmakingQueue.length > 0){
-    const index = matchmakingQueue.indexOf(u1);
-    if (index > -1) {
-      matchmakingQueue.splice(index, 1);
-    }else{
-      const u2 = matchmakingQueue.shift();
-      console.log("matched " + u1 + " and " + u2);
-      var g = game.newGame({
-        user1: u1,
-        user2: u2,
-        board1: new Array(10).fill(new Array(10).fill(false)),
-        board2: new Array(10).fill(new Array(10).fill(false)),
-        isUser1Turn: Math.random() < 0.5
+  user.getModel().findById(req.user.id).then(u => {
+    let u1 = {id:u._id.toString(), winrate:(u.wins/(u.losses+u.wins))}
+    if(isNaN(u1.winrate)) u1.winrate=0;
+    if(matchmakingQueue.length > 0){
+      const index = matchmakingQueue.findIndex(e => {
+        let val = e.id === u1.id
+        return val
       });
-      g.save().then( data => {
-        ios.to(u1).emit('matchFound', data);
-        ios.to(u2).emit('matchFound', data);
-      }).catch( (reason) => {   
-        return next({ statusCode:404, error: true, errormessage: "DB error: "+ reason });
-      })
+      if (index > -1) {
+        matchmakingQueue.splice(index, 1);
+      }else{
+        var notFound = true;
+        var i = 0;
+        let u2;
+        while(notFound && i < matchmakingQueue.length){
+          u2 = matchmakingQueue[i]
+          let winrateDisparity = Math.abs(u1.winrate - u2.winrate);
+          console.log("winrateDisparity of " + u1.id + " and " + u2.id + " is: " + winrateDisparity);
+          if(winrateDisparity < 0.3){
+            notFound = false;
+            matchmakingQueue.splice(i, 1)
+          }else{
+            i++;
+          }
+        }
+        if(notFound){
+          matchmakingQueue.push(u1)
+        }else{
+          console.log("matched " + u1.id + " and " + u2.id);
+          var g = game.newGame({
+            user1: u1.id,
+            user2: u2.id,
+            board1: new Array(10).fill(new Array(10).fill(false)),
+            board2: new Array(10).fill(new Array(10).fill(false)),
+            isUser1Turn: Math.random() < 0.5
+          });
+          g.save().then( data => {
+            ios.to(u1.id).emit('matchFound', data);
+            ios.to(u2.id).emit('matchFound', data);
+          }).catch( (reason) => {   
+            return next({ statusCode:404, error: true, errormessage: "DB error: "+ reason });
+          })
+        }
+      }
+    }else{
+      matchmakingQueue.push(u1)
     }
-  }else{
-    matchmakingQueue.push(u1)
-  }
-
-  console.log(matchmakingQueue);
-
-  return res.status(200).json({});
+    console.log(matchmakingQueue);
+    return res.status(200).json({});
+  }).catch(err => next({ statusCode:404, error: true, errormessage: "error: " + err}))
 
 });
 
