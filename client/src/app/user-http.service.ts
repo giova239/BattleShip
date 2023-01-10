@@ -56,8 +56,6 @@ export class UserHttpService {
   }
 
   login( mail: string, password: string, remember: boolean ): Observable<any> {
-
-    console.log('Login: ' + mail + ' ' + password );
     const options = {
       headers: new HttpHeaders({
         authorization: 'Basic ' + btoa( mail + ':' + password),
@@ -181,6 +179,13 @@ export class UserHttpService {
 
   get_user_by_id(id: string){
     return this.http.get<JSON>( this.url + '/users/' + id,  this.create_options() ).pipe(
+      tap( (data) => console.log(JSON.stringify(data))) ,
+      catchError(this.handleError)
+    );
+  }
+
+  delete_user(id : string){
+    return this.http.delete<JSON>( this.url + '/users/' + id, this.create_options() ).pipe(
       tap( (data) => console.log(JSON.stringify(data))) ,
       catchError(this.handleError)
     );

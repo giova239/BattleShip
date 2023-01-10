@@ -12,10 +12,14 @@
                     <img src="assets/profile.png"
                       alt="Avatar" class="img-fluid my-3" style="width: 80px;" />
                     <h5 class="mb-4">{{this.user ? this.user.username : "..."}}</h5>
-                    <button type="button" [hidden]="this.friendState == 3" [ngClass]="{'btn-success': this.friendState==0, 'btn-light': this.friendState==1, 'btn-danger': this.friendState==2}" class="btn mb-4" data-bs-toggle="modal" data-bs-target="#addFriendModal" style="margin-right: 10px;" (click)="friendButtonClicked()">
+                    <button type="button" [hidden]="this.friendState == 3" [ngClass]="{'btn-success': this.friendState==0, 'btn-light': this.friendState==1, 'btn-danger': this.friendState==2}" class="btn mb-4" style="margin-right: 10px;" (click)="friendButtonClicked()">
                         {{this.friendState == 0 ? "Add friend" : (this.friendState == 1 ? "Friend request sent" : "Remove friend")}}
                         <i [ngClass]="{'fa-user-plus': this.friendState==0, 'fa-user-lock': this.friendState==1, 'fa-user-minus': this.friendState==2}"class="fas ms-2"></i>
                     </button>
+                    <button type="button" [hidden]="!this.us.is_moderator() || this.user.roles.includes('MODERATOR') || this.friendState == 3" class="btn btn-danger mb-4" style="margin-right: 10px;" (click)="ban()">
+                      BAN
+                      <i class="fas fa-user-slash ms-2"></i>
+                  </button>
                   </div>
                   <div class="col-md-8">
                     <div class="card-body p-4">
@@ -31,7 +35,7 @@
                           <p class="text-muted">{{this.user ? ((this.user.roles && this.user.roles.length>0) ? this.user.roles : "none") : "..."}}</p>
                         </div>
                       </div>
-                      <ng-template [ngIf]="this.friendState == 2 || this.us.is_moderator()">
+                      <ng-template [ngIf]="this.friendState == 2 || this.friendState == 3 || this.us.is_moderator()">
                         <h6>Stats</h6>
                         <hr class="mt-0 mb-4">
                         <div class="row pt-1">

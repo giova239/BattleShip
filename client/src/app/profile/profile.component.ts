@@ -55,4 +55,12 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  ban(){
+    if(this.us.is_moderator() && !this.user.roles.includes('MODERATOR') && this.friendState != 3){
+      this.us.delete_user(this.userID).subscribe(resp => {
+        console.log(resp);
+      })
+    }
+  }
+
 }

@@ -13,8 +13,8 @@
  *     /users             -                  GET         List all users
  *     /users             -                  POST        if logged as MODERATOR you can create new users
  *                                                       and give them roles, with a temporaryPwd
- *     /users/:mail       -                  GET         Get user info by mail
- *     /users/:mail       -                  DELETE      if logged as moderator delete the user
+ *     /users/:userID     -                  GET         Get user info by mail
+ *     /users/:userID     -                  DELETE      if logged as moderator delete the user
  *     /login             -                  POST        login an existing user, returning a JWT
  *     /register          -                  POST        creates a new User with no role
  * -----------------------------------------------------------------------------------------------------
@@ -166,16 +166,16 @@ app.get('/users/:id', auth, (req, res, next) => {
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
     });
 });
-app.delete('/users/:mail', auth, (req, res, next) => {
+app.delete('/users/:id', auth, (req, res, next) => {
     var currentUser = user.newUser(req.user);
     if (!currentUser.hasModeratorRole()) {
         return next({ statusCode: 404, error: true, errormessage: "Unauthorized: user is not a moderator" });
     }
-    user.getModel().deleteOne({ mail: req.params.mail, roles: [] }).then(q => {
+    user.getModel().deleteOne({ _id: req.params.id, roles: [] }).then(q => {
         if (q.deletedCount > 0)
-            return res.status(200).json({ error: false, errormessage: "" });
+            return res.status(200).json({ error: false, errormessage: "user deleted" });
         else
-            return res.status(404).json({ error: true, errormessage: "Invalid mail" });
+            return res.status(404).json({ error: true, errormessage: "Invalid id" });
     }).catch((reason) => {
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
     });
