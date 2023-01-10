@@ -1,3 +1,55 @@
+<div *ngIf="this.user && this.user.temporaryPwd" class="temporaryPwdOverlay">
+  <div class="container temporaryPwdForm" >
+
+    <form class="form-signin">
+      
+      <div class="text-center">
+        <h1 class="h3 mb-3 font-weight-normal">You must setup your profile before continuing!</h1>
+      </div>
+    
+    
+      <div class="form-group">
+        <label for="inputField1">Email address</label>
+        <input type="text" #field1="ngModel" name="field1" [(ngModel)]="newCredentials.field1" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" class="form-control" required id="inputField1" placeholder="Enter email">
+      </div>
+    
+      <div [hidden]="field1.valid || field1.pristine"
+          class="alert alert-danger">
+        Mail is not valid
+      </div>
+      
+      <div class="form-group">
+        <label for="inputField2">Username</label>
+        <input type="text" #field2="ngModel" required name="field2" [(ngModel)]="newCredentials.field2" class="form-control" id="inputField2" placeholder="Enter username">
+      </div>
+    
+      <div [hidden]="field2.valid || field2.pristine"
+          class="alert alert-danger">
+        Username is required
+      </div>
+    
+      <div class="form-group">
+        <label for="inputField3">Password</label>
+        <input type="text" #field3="ngModel" required name="field3" [(ngModel)]="newCredentials.field3" class="form-control" id="inputField3" placeholder="Password">
+      </div>
+    
+      <div [hidden]="field3.valid || field3.pristine"
+          class="alert alert-danger">
+        Password is required
+      </div>
+    
+      <div *ngIf="errmessage" class="alert alert-danger" role="alert">
+        {{errmessage.errormessage}}
+      </div>
+    
+      <div class="container text-center mt-2 mb-2">
+        <button class="btn btn-lg btn-primary btn-block" [disabled]=" !field1.valid || !field2.valid || !field3.valid" (click)="updateCredentials();" >Update credentials</button>
+      </div>
+    
+    </form>
+    </div>
+</div>
+
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand text-white" style="user-select: none;" (click)="navigate_home()">Battleship</a>

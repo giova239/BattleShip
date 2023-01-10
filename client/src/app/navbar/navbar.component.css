@@ -1,0 +1,27 @@
+.temporaryPwdOverlay{
+    z-index: 2000;
+    position: fixed;
+    width: 100vw;
+    left:0;
+    height: 100vh;
+    top: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.temporaryPwdForm{
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  
+.ng-invalid:not(form)  {
+border-left: 5px solid #a94442; /* red */
+}

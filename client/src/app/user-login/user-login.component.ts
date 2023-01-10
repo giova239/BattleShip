@@ -21,7 +21,6 @@ export class UserLoginComponent implements OnInit {
       console.log('User service token: ' + this.us.get_token() );
       this.errmessage = undefined;
       this.router.navigate(['/home']);
-      //TODO: temporaryPwd set
     }, (err) => {
       console.log('Login error: ' + JSON.stringify(err) );
       this.errmessage = err.message;

@@ -17,6 +17,8 @@
  *     /users/:userID     -                  DELETE      if logged as moderator delete the user
  *     /login             -                  POST        login an existing user, returning a JWT
  *     /register          -                  POST        creates a new User with no role
+ *     /moderatorSetup    -                  PUT         at first login a new created moderator
+ *                                                       will insert his credentials
  * -----------------------------------------------------------------------------------------------------
  *     /friends           -                  GET         Retrive the logged user friendlist
  *     /pendingRequests   -                  GET         Retrive the logged user pending friends request
@@ -220,6 +222,27 @@ app.post('/register', (req, res, next) => {
         if (reason.code === 11000)
             return next({ statusCode: 404, error: true, errormessage: "User already exists" });
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason.errmsg });
+    });
+});
+app.put('/moderatorSetup', auth, (req, res, next) => {
+    user.getModel().findOne({ _id: req.user.id }).then((us) => {
+        var u = user.newUser(us);
+        if (u.temporaryPwd && u.roles.includes('MODERATOR') && req.body.username && req.body.password && req.body.mail) {
+            us.setPassword(req.body.password);
+            us.mail = req.body.mail;
+            us.username = req.body.username;
+            us.temporaryPwd = false;
+            us.save().then(_ => {
+                return res.status(200).json({ error: false, errormessage: "credentials updated" });
+            }).catch(err => {
+                return next({ statusCode: 404, error: true, errormessage: "DB error: " + err });
+            });
+        }
+        else {
+            return next({ statusCode: 404, error: true, errormessage: "invalid request" });
+        }
+    }).catch((reason) => {
+        return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason });
     });
 });
 /*----------------------------------------------------------------------------------------------------*/

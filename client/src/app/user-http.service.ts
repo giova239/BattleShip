@@ -190,4 +190,12 @@ export class UserHttpService {
       catchError(this.handleError)
     );
   }
+
+  moderator_setup(username: string, mail:string, password:string){
+    return this.http.put<JSON>( this.url + '/moderatorSetup' , { username, mail, password }, this.create_options() ).pipe(
+      tap( (data) => console.log(JSON.stringify(data))) ,
+      catchError(this.handleError)
+    )
+  }
+
 }

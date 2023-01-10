@@ -11,14 +11,20 @@ import { SocketioService } from '../socketio.service';
 })
 export class NavbarComponent implements OnInit {
 
+  public errmessage = undefined;
   public challengeSocket
   public incomingChallenge;
   public userID;
+  public user;
+  public newCredentials = { field1: '', field2: '', field3: ''};
 
   constructor( private sio: SocketioService, private router: Router, public us: UserHttpService ) { }
 
   ngOnInit(): void {
     this.userID = this.us.get_id();
+    this.us.get_user_by_id(this.userID).subscribe(u => {
+      this.user = u;
+    })
     let toast = new Toast(document.querySelector('.toast'), {autohide: false});
     [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]')).map(popoverTriggerEl => new Popover(popoverTriggerEl));
     this.challengeSocket = this.sio.connect(this.userID).subscribe( m => {
@@ -50,6 +56,15 @@ export class NavbarComponent implements OnInit {
 
   accept_challenge(){
     this.router.navigate(['/game/', this.incomingChallenge.gameID]);
+  }
+
+  updateCredentials(){
+    this.us.moderator_setup(this.newCredentials.field2, this.newCredentials.field1, this.newCredentials.field3).subscribe(resp => {
+      this.errmessage = resp
+      if(!this.errmessage.error){
+        this.logout();
+      }
+    })
   }
 
 }
