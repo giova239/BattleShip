@@ -342,18 +342,17 @@ app.get('/pendingRequests', auth, (req,res,next) =>{
   
 });
 
-app.post('/friends', auth, (req,res,next) => {
+app.post('/friends/:userID', auth, (req,res,next) => {
 
   user.getModel().findById(req.user.id).then(currentUser => {
 
-    let friendID: string;
-    friendID = req.body.friendID;
+    let userID = req.params.userID;
 
-    if(friendID===currentUser._id.toString()){
+    if(userID===currentUser._id.toString()){
       return next({ statusCode:404, error: true, errormessage: "You can't add yourself as a friend" });
     }
 
-    user.getModel().findById(friendID).then(friend => {
+    user.getModel().findById(userID).then(friend => {
 
       if(friend.pendingRequests.includes(currentUser._id)){
         return next({ statusCode:404, error: true, errormessage: "Friend request already sent" });
@@ -563,7 +562,7 @@ app.get('/unreadMessages/:userID', auth, (req,res,next) =>{
 
 })
 
-app.post('/readMessages/:userID', auth, (req,res,next) =>{
+app.put('/readMessages/:userID', auth, (req,res,next) =>{
 
   try{
     var u1 = ObjectId(req.user.id);

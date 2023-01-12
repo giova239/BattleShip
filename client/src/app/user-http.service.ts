@@ -149,9 +149,8 @@ export class UserHttpService {
     );
   }
 
-  post_friends(id : string){
-    console.log(id);
-    return this.http.post<JSON>( this.url + '/friends', {friendID: id},  this.create_options() ).pipe(
+  post_friends(friendID : string){
+    return this.http.post<JSON>( this.url + '/friends/' + friendID, {},  this.create_options() ).pipe(
       tap( (data) => console.log(JSON.stringify(data))) ,
       catchError(this.handleError)
     );
