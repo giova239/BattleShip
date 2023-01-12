@@ -27,6 +27,7 @@ export class UserHttpService {
     if ( !this.token || this.token.length < 1 ) {
       console.log("No token found in local storage");
       this.token = ""
+      this.router.navigate(['/']);
     } else {
       console.log("JWT loaded from local storage.")
     }

@@ -209,9 +209,13 @@ export class GameComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
-    this.gameSocket.unsubscribe();
-    this.updateUserConnection(false);
+    try{
+      this.sub.unsubscribe();
+      this.gameSocket.unsubscribe();
+      this.updateUserConnection(false);
+    }catch(err){
+      console.log(err);
+    }
   }
 
   onDragStart(e, size, index){

@@ -47,7 +47,11 @@ export class FriendListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.friendListSocket.unsubscribe();
+    try{
+      this.friendListSocket.unsubscribe();
+    }catch(err){
+      console.log(err);
+    }
   }
 
   public get_friends(){

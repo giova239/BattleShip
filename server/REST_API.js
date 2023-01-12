@@ -494,10 +494,8 @@ app.post('/matchmaking', auth, (req, res, next) => {
         if (matchmakingQueue.length > 0) {
             const index = matchmakingQueue.findIndex(e => {
                 let val = e.id === u1.id;
-                console.log(e.id + " === " + u1.id + " -> " + val);
                 return val;
             });
-            console.log(index);
             if (index > -1) {
                 matchmakingQueue.splice(index, 1);
             }
