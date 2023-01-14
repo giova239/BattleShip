@@ -31,3 +31,4 @@ npm start
 cd server
 npm start
 ```
+## The website will be up and running on http://localhost:4200/
