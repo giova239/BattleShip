@@ -1,5 +1,7 @@
 # BattleShip
 
+[Documentation](https://github.com/giova239/BattleShip/blob/main/Giovanni_Stevanato_880077.pdf)
+
 ## To run the web application:
 
 ### install the required modules
